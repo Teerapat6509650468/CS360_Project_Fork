@@ -23,10 +23,12 @@ The web application serves as a platform for managing and facilitating pet adopt
 - Feature 5: (draft)
 
 ### Technologies Used
-- **Backend:** Strapi V4
+- **Backend:** Strapi V4 ([Pet Adoption Backend](https://github.com/hubertnare/pet-adoption-backend.git))
 - **Frontend:** React.js 
 - **Hosting/Deployment:** AWS EC2
 - **Database:**  SQLite
+
+The backend for this project is based on the Pet Adoption Backend developed by Hubertnare, which is built using Strapi V4. We appreciate their contribution and have integrated their solution into our project.
 
 ## How to deploy and run the project manually
 1. 
