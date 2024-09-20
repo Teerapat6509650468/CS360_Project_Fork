@@ -64,6 +64,7 @@ cd CS360_Project/backend
 ```
 6. build and run backend
 ```bash
+yarn
 yarn build
 yarn start
 ```
@@ -75,6 +76,7 @@ cd CS360_Project
 ```
 10.build and run the frontend
 ```bash
+yarn
 yarn build
 yarn start
 ```
