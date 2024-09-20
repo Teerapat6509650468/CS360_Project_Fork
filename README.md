@@ -74,7 +74,11 @@ yarn start
 ```bash
 cd CS360_Project
 ```
-10.build and run the frontend
+10. create .evn and copy script from .env.example
+ ```bash
+nano .evn
+```   
+11. build and run the frontend
 ```bash
 yarn
 yarn build
