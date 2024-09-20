@@ -6,7 +6,11 @@ import {
     TextField,
     Box,
     Button,
-    Paper
+    Paper,
+    Select,
+    FormControl,
+    InputLabel,
+    MenuItem
 } from '@mui/material';
 
 // icons components
@@ -66,14 +70,25 @@ export default function CreatePetEntry() {
                     variant="filled"
                     onChange={(e)=>setName(e.target.value)}
                 />
-                <TextField
-                    required
-                    id="filled-animal"
-                    label="Animal"
-                    variant="filled"
-                    helperText="Cat, Dog, Bird"
-                    onChange={(e)=>setAnimal(e.target.value)}
-                />
+                <FormControl variant="filled" sx={{ m: 1, width: '50ch' }}>
+                    <InputLabel id="select-animal-label">Animal *</InputLabel>
+                    <Select
+                        labelId="select-animal-label"
+                        id="filled-animal"
+                        value={animal}
+                        onChange={(e) => setAnimal(e.target.value)}
+                        variant="filled"
+                        sx={{ textAlign: 'left' }} 
+                        inputProps={{ sx: { textAlign: 'left' } }} 
+                    >
+                        <MenuItem value="">
+                            <em>None</em>
+                        </MenuItem>
+                        <MenuItem value="Cat">Cat</MenuItem>
+                        <MenuItem value="Dog">Dog</MenuItem>
+                        <MenuItem value="Bird">Bird</MenuItem>
+                    </Select>
+                </FormControl>
                 <TextField
                     required
                     id="filled-breed-input"
@@ -96,14 +111,24 @@ export default function CreatePetEntry() {
                     variant="filled"
                     onChange={(e)=>setAge(e.target.value)}
                 />
-                <TextField
-                    required
-                    id="sex"
-                    label="Sex"
-                    helperText="Male, Female"
-                    variant="filled"
-                    onChange={(e)=>setSex(e.target.value)}
-                />
+                <FormControl variant="filled" sx={{ m: 1, width: '50ch' }}>
+                    <InputLabel id="select-sex-label">Sex *</InputLabel>
+                    <Select
+                        labelId="select-sex-label"
+                        id="sex"
+                        value={sex}
+                        onChange={(e) => setSex(e.target.value)}
+                        variant="filled"
+                        sx={{ textAlign: 'left' }} 
+                        inputProps={{ sx: { textAlign: 'left' } }} 
+                    >
+                        <MenuItem value="">
+                            <em>None</em>
+                        </MenuItem>
+                        <MenuItem value="Male">Male</MenuItem>
+                        <MenuItem value="Female">Female</MenuItem>
+                    </Select>
+                </FormControl>
             </div>
             <div>
                 <Button onClick={handleCreateNewPet} variant="outlined" startIcon={<Add />}>
