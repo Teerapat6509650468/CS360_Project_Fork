@@ -90,7 +90,8 @@ yarn start
 3.
 
 ภาพ screen capture ของหน้าเว็บแอปพลิเคชันซึ่ง deploy ไว้บน EC2
-![ภาพ screen capture ของหน้าเว็บแอปพลิเคชันซึ่ง deploy ไว้บน EC2](https://github.com/user-attachments/assets/ed95ded1-f72c-4cad-9fbc-fa325ba86a68)
+
+![Screenshot 2024-09-21 205426](https://github.com/user-attachments/assets/489a9f86-c1af-4c7d-99d5-5bac137d5aab)
 
 
 
