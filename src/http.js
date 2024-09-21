@@ -5,7 +5,7 @@ import axios from 'axios';
 const getIP = async () =>{
     const ip = (await axios.get('https://api.ipify.org/?format=json')).data.ip;
     return ip
-}
+};
 
 
 export default axios.create({
