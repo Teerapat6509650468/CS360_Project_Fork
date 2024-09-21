@@ -62,22 +62,22 @@ git clone https://github.com/Kwandao6509650245/CS360_Project.git
 ```bash
 cd CS360_Project/backend
 ```
-6. build and run backend
+6. create .evn and copy script from .env.example
+ ```bash
+nano .evn
+``` 
+7. build and run backend
 ```bash
 yarn
 yarn build
 yarn start
 ```
-7. open a new terminal
-8. connect to the same EC2 instance
-9. change to the project folder
+8. open a new terminal
+9. connect to the same EC2 instance
+10. change to the project folder
 ```bash
 cd CS360_Project
-```
-10. create .evn and copy script from .env.example
- ```bash
-nano .evn
-```   
+``` 
 11. build and run the frontend
 ```bash
 yarn
