@@ -9,7 +9,7 @@ const getIP = async () =>{
 
 
 export default axios.create({
-    baseURL: http://${ip}:1337/,
+    baseURL: `http://${ip}:1337/`,
     headers: {
         "Content-type": "application/json"
     }
