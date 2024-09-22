@@ -19,7 +19,7 @@ The web application serves as a platform for managing and facilitating pet adopt
 - Feature 2: User Feedback Notification System for Successful Pet Addition, Editing, and Deletion Actions 
 - Feature 3: Enhanced Dropdown Menu for Gender and Animal Species Selection 
 - Feature 4: Enhanced Age Input with Validation, Month Support, and Unknown Age Option 
-- Feature 5: (draft)
+
 
 ### Technologies Used
 - **Backend:** Strapi V4 ([Pet Adoption Backend](https://github.com/hubertnare/pet-adoption-backend.git))
@@ -202,6 +202,7 @@ http://<your-ec2-public-ip>:1337
 ```
 - Replace <your-ec2-public-ip> with the actual public IP address of your EC2 instance.
 
+***
   
 ภาพ screen capture ของหน้าเว็บแอปพลิเคชันซึ่ง deploy ไว้บน EC2
 
