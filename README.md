@@ -146,10 +146,63 @@ http://<your-ec2-public-ip>:1337
 - Replace <your-ec2-public-ip> with the actual public IP address of your EC2 instance.
   
 ## How to deploy and run the project using the provided bash script [Specify the bash script path in the repo] 
-1.
-2.
-3.
+**1. Connect to EC2 Instance**
+- Open terminal and connect to EC2 instance using SSH :
+```bash
+ssh -i <your-key.pem> ec2-user@<your-ec2-instance-ip>
+```
+**2. Git installation**
+- Verify if Git is already installed :
+```bash
+git --version
+```
+- If this command return an error or indicate they aren’t installed, proceed to the next step to install it.
+- Insatll Git
+```bash
+sudo apt update  
+sudo apt install git
+```
+- After installation, verify that Git have been installed successfully by running :
+```bash
+git --version 
+```
+**3. Clone the Project from GitHub**
+- Clone the repository :
+```bash
+git clone https://github.com/Kwandao6509650245/CS360_Project.git
+```
 
+**4. Change to the Project Directory**
+- Navigate to the project directory :
+```bash
+cd CS360_Project
+```
+**5. Run the bash script**
+- Before running the script, ensure it has executable permissions :
+```bash
+chmod +x deploy.sh
+```
+- Execute the script :
+```bash
+./deploy.sh
+```
+- If the script requires superuser permissions, prepend it with sudo :
+```bash
+sudo ./deploy.sh
+```
+**6. Access the Backend and Frontend**
+- Once both the backend and frontend are running, you can access them via your web browser :
+- Open frontend :
+```
+http://<your-ec2-public-ip>:3000
+```
+- Open backend :
+```
+http://<your-ec2-public-ip>:1337
+```
+- Replace <your-ec2-public-ip> with the actual public IP address of your EC2 instance.
+
+  
 ภาพ screen capture ของหน้าเว็บแอปพลิเคชันซึ่ง deploy ไว้บน EC2
 
 ![Screenshot 2024-09-21 205426](https://github.com/user-attachments/assets/489a9f86-c1af-4c7d-99d5-5bac137d5aab)
