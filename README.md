@@ -33,7 +33,7 @@ The backend for this project is based on the Pet Adoption Backend developed by H
 
 1. Log in to AWS Console
 2. Launch a new EC2 instance <br>
- **Application and OS Images** : Ubuntu Server 22.04 LTS (HVM), SSD Volume Type <br>
+ **Application and OS Images** : Ubuntu Server 24.04 LTS (HVM), SSD Volume Type <br>
   **Instance type** : t2.medium  <br>
   **Network setting** : create security group  <br>
 -   Type:  `SSH`,  Protocol:  `TCP`,  Port Range  `22`,  Source:  `::/0`
