@@ -151,39 +151,18 @@ http://<your-ec2-public-ip>:1337
 ```bash
 ssh -i <your-key.pem> ec2-user@<your-ec2-instance-ip>
 ```
-**2. Git installation**
-- Verify if Git is already installed :
+**2. Set Up the Bash Script** 
+- Change the URL in deploy.sh url with the public IP of your EC2 instance:
 ```bash
-git --version
+cd CS360_Project
+nano deploy.sh
 ```
-- If this command return an error or indicate they aren’t installed, proceed to the next step to install it.
-- Insatll Git
+- Replace old IP address (line 4) with your EC2 instance's public IP (e.g., "your-ec2-public-ip") and then
+save and exit the editor (for nano, use CTRL + s, then  CTRL + x).
 ```bash
-sudo apt update  
-sudo apt install git
+URL="your-ec2-public-ip"
 ```
-- After installation, verify that Git have been installed successfully by running :
-```bash
-git --version 
-```
-**3. Clone the Project from GitHub**
-- Clone the repository :
-```bash
-git clone https://github.com/Kwandao6509650245/CS360_Project.git
-```
-
-**4. Set Up the Frontend** 
-- Change to the project directory and Change the IP address in http.js Before building the frontend, open the http.js file and update the url variable with the public IP of your EC2 instance:
-```bash
-cd CS360_Project/src/http.js
-nano http.js
-```
-- Replace old IP address with your EC2 instance's public IP (e.g., "your-ec2-public-ip") and then
-save and exit the editor (for nano, use CTRL + o, Enter, then  CTRL + x).
-```javascript
-var url="your-ec2-public-ip";
-```
-**5. Run the bash script**
+**3. Run the bash script**
 - Before running the script, ensure it has executable permissions :
 ```bash
 chmod +x deploy.sh
@@ -196,7 +175,7 @@ chmod +x deploy.sh
 ```bash
 sudo ./deploy.sh
 ```
-**6. Access the Backend and Frontend**
+**4. Access the Backend and Frontend**
 - Once both the backend and frontend are running, you can access them via your web browser :
 - Open frontend :
 ```
