@@ -105,7 +105,7 @@ cd CS360_Project/backend
 ```
 - Create or modify the .env file and copy the content from .env.example :
 ```bash
-nano .env
+cp .env.example .env
 ```
 **7. Build and Run the Backend**
 - Install dependencies, build and start the backend server :
