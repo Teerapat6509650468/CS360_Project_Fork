@@ -2,7 +2,7 @@
 
 ## Group Information
 
-- **Group Name:** Riyal or Fakay? (draft) 
+- **Group Name:** Riyal or Fakay?  
 
 ## Members
 
