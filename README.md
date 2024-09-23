@@ -118,11 +118,11 @@ yarn start
 - Open a new terminal and connect to the same EC2 instance. 
 - Change to the project directory and Change the IP address in http.js Before building the frontend, open the http.js file and update the url variable with the public IP of your EC2 instance:
 ```bash
-cd CS360_Project/frontend/src/http.js
+cd CS360_Project/src/http.js
 nano http.js
 ```
 - Replace old IP address with your EC2 instance's public IP (e.g., "your-ec2-public-ip") and then
-save and exit the editor (for nano, use CTRL + X, then Y, then Enter).
+save and exit the editor (for nano, use CTRL + o, Enter, then  CTRL + x).
 ```javascript
 var url="your-ec2-public-ip";
 ```
@@ -172,10 +172,16 @@ git --version
 git clone https://github.com/Kwandao6509650245/CS360_Project.git
 ```
 
-**4. Change to the Project Directory**
-- Navigate to the project directory :
+**4. Set Up the Frontend** 
+- Change to the project directory and Change the IP address in http.js Before building the frontend, open the http.js file and update the url variable with the public IP of your EC2 instance:
 ```bash
-cd CS360_Project
+cd CS360_Project/src/http.js
+nano http.js
+```
+- Replace old IP address with your EC2 instance's public IP (e.g., "your-ec2-public-ip") and then
+save and exit the editor (for nano, use CTRL + o, Enter, then  CTRL + x).
+```javascript
+var url="your-ec2-public-ip";
 ```
 **5. Run the bash script**
 - Before running the script, ensure it has executable permissions :
