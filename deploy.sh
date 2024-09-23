@@ -119,6 +119,7 @@ installGit
 installNvm
 installNode16
 installPM2
+cd ~
 ProjectSetup
 
 echo "Script completed!"
