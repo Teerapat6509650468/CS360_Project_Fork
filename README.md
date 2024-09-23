@@ -155,10 +155,13 @@ ssh -i <your-key.pem> ec2-user@<your-ec2-instance-ip>
 - Change the URL in deploy.sh url with the public IP of your EC2 instance:
 ```bash
 cd CS360_Project
+
 chmod +x install-package.sh
+chmod +x deploy.sh
+
 ./install-package.sh
 source ~/.bashrc
-chmod +x deploy.sh
+
 nano deploy.sh
 ```
 - Replace old IP address (line 4) with your EC2 instance's public IP (e.g., "your-ec2-public-ip") and then
