@@ -151,18 +151,168 @@ http://<your-ec2-public-ip>:1337
 ```bash
 ssh -i <your-key.pem> ec2-user@<your-ec2-instance-ip>
 ```
+
 **2. Set Up the Bash Script** 
+- Setup install_package.sh
+```bash
+nano install_package.sh
+
+echo "Update the System."
+sudo apt update -y
+
+# Function to check for Git installation
+installGit() {
+  echo "Checking Git..."
+  if ! command -v git &> /dev/null; then
+    echo "Git not found."
+    sudo apt install git
+  else
+    echo "Git is already installed."
+  fi
+}
+# Function to install NVM
+installNvm() {
+  if ! command -v nvm &> /dev/null; then  # Check if NVM is installed first
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+  else
+    echo "NVM is already installed."
+  fi
+}
+
+# Function to install Node.js version 16
+installNode16() {
+  nvm install 16
+  nvm use 16
+  echo "Node.js version 16 installed and activated."
+}
+
+installYarn() {
+  if ! command -v yarn &> /dev/null; then  # Check if NVM is installed first
+    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+    sudo apt update
+    sudo apt install --no-install-recommends yarn
+  else
+    echo "NVM is already installed."
+  fi
+
+}
+
+installPM2() {
+  if ! command -v pm2 &> /dev/null; then
+    echo "installing pm2"
+    npm install pm2 -g
+  else
+    echo "pm2 is already installed."
+  fi
+}
+
+echo "checking package.."
+installGit
+installNvm
+installNode16
+installYarn
+installPM2
+```
+- Setup deploy.sh
+```bash
+nano deploy.sh
+
+#!/bin/bash
+
+REPO_URL="https://github.com/Kwandao6509650245/CS360_Project.git"
+URL="localhost"
+
+frontendSetup() {
+echo "Installing frontend"
+yarn
+}
+
+backendSetup() {
+echo "Installing backend"
+cd backend
+yarn
+cd ..
+}
+
+projectConfig() {
+cd src
+sed -i "s/var url=\"[^\"]*\";/var url=\"$URL\";/g" http.js
+cd ..
+cd backend
+cp .env.example .env
+cd ..
+}
+
+deploy() {
+yarn build
+cd backend
+yarn build
+cd ..
+pm2 start ecosystem.config.js
+yarn start
+}
+
+configPM2() {
+    local current_dir=$(pwd)
+    echo "Configuring ecosystem.config.js file..."
+    pm2 init
+
+    echo "Creating ecosystem.config.js..."
+    cat <<EOL > ecosystem.config.js
+    module.exports = {
+      apps: [
+        {
+          name: 'pet-adoption-backend',
+          cwd: '$current_dir/backend',
+          script: 'npm',
+          args: 'start',
+          env: {
+            APP_KEYS: process.env.APP_KEYS,
+            API_TOKEN_SALT: process.env.API_TOKEN_SALT,
+            ADMIN_JWT_SECRET: process.env.ADMIN_JWT_SECRET,
+            JWT_SECRET: process.env.JWT_SECRET,
+      NODE_ENV: 'production',
+      },
+    },
+  ],
+};
+EOL
+}
+
+# Function to set up the project
+ProjectSetup() {
+  echo "Cloning project repository..."
+  # Modify directory name if needed (e.g., git clone ... my_project_name)
+  git clone $REPO_URL
+
+  cd CS360_Project
+  frontendSetup
+  backendSetup
+  projectConfig
+  configPM2
+  deploy
+}
+
+# Call the functions in the desired order
+ProjectSetup
+
+echo "Script completed!"
+```
 - Change the URL in deploy.sh url with the public IP of your EC2 instance:
 ```bash
 cd CS360_Project
 
 chmod +x install-package.sh
-chmod +x deploy-with-repo.sh
+chmod +x deploy.sh
 
 ./install-package.sh
 source ~/.bashrc
 
-nano deploy-with-repo.sh
+nano deploy.sh
 ```
 - Replace old IP address (line 4) with your EC2 instance's public IP (e.g., "your-ec2-public-ip") and then
 save and exit the editor (for nano, use CTRL + s, then  CTRL + x).
@@ -172,11 +322,11 @@ URL="your-ec2-public-ip"
 **3. Run the bash script**
 - Execute the script :
 ```bash
-./deploy-with-repo.sh
+./deploy.sh
 ```
 - If the script requires superuser permissions, prepend it with sudo :
 ```bash
-sudo ./deploy-with-repo.sh
+sudo ./deploy.sh
 ```
 **4. Access the Backend and Frontend**
 - Once both the backend and frontend are running, you can access them via your web browser :
