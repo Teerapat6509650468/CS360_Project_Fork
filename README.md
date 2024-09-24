@@ -153,86 +153,109 @@ ssh -i <your-key.pem> ec2-user@<your-ec2-instance-ip>
 ```
 
 **2. Set Up the Bash Script** 
-- Setup install_package.sh
+- Setup deploy-script.sh
 ```bash
-nano install_package.sh
+touch deploy-script.sh
+chmod +x deploy-script.sh
+nano deploy-script.sh
+```
+- Setup code in deploy-script.sh
+```bash
+#!/bin/bash
 
-echo "Update the System."
+source ~/.bashrc
+
+REPO_URL="https://github.com/Kwandao6509650245/CS360_Project.git"
+public_ip=$(curl -s http://checkip.amazonaws.com)
+
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+CYAN='\033[0;36m'
+NC='\033[0m'
+
+echo -e "${CYAN}=============================="
+echo -e "   Starting installation...   "
+echo -e "==============================${NC}"
 sudo apt update -y
 
 # Function to check for Git installation
 installGit() {
-  echo "Checking Git..."
+
   if ! command -v git &> /dev/null; then
-    echo "Git not found."
+    echo -e "${YELLOW}git not found. Installing git...${NC}"
     sudo apt install git
+    echo -e "${GREEN}git installed successfully!${NC}"
   else
-    echo "Git is already installed."
+    echo -e "${GREEN}git is already installed.${NC}"
   fi
 }
+
 # Function to install NVM
 installNvm() {
   if ! command -v nvm &> /dev/null; then  # Check if NVM is installed first
+    echo -e "${YELLOW}nvm not found. Installing nvm...${NC}"
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
     export NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+    echo -e "${GREEN}nvm installed successfully!${NC}"
   else
-    echo "NVM is already installed."
+    echo -e "${GREEN}nvm is already installed.${NC}"
   fi
 }
 
 # Function to install Node.js version 16
 installNode16() {
-  nvm install 16
-  nvm use 16
-  echo "Node.js version 16 installed and activated."
+  if command -v node &> /dev/null; then
+    NODE_VERSION=$(node -v | grep -o '^v16')
+    if [ "$NODE_VERSION" = "v16" ]; then
+      echo -e "${GREEN}Node.js v16 is already installed.${NC}"
+    else
+      echo -e "${YELLOW}Node.js is installed but not v16. Installing Node.js v16...${NC}"
+      nvm install 16
+      nvm use 16
+      echo -e "${GREEN}Node.js v16 installed successfully!${NC}"
+    fi
+  else
+    echo -e "${YELLOW}Node.js not found. Installing Node.js v16...${NC}"
+    nvm install 16
+    nvm use 16
+    echo -e "${GREEN}Node.js v16 installed successfully!${NC}"
+  fi
 }
 
 installYarn() {
-  if ! command -v yarn &> /dev/null; then  # Check if NVM is installed first
+  if ! command -v yarn &> /dev/null; then  
+    echo -e "${YELLOW}yarn not found. Installing yarn...${NC}"
     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
     sudo apt update
     sudo apt install --no-install-recommends yarn
+    echo -e "${GREEN}yarn installed successfully!${NC}"
   else
-    echo "NVM is already installed."
+    echo -e "${GREEN}yarn is already installed.${NC}"
   fi
 
 }
 
 installPM2() {
   if ! command -v pm2 &> /dev/null; then
+    echo -e "${YELLOW}pm2 not found. Installing pm2...${NC}"
     echo "installing pm2"
     npm install pm2 -g
+    echo -e "${GREEN}pm2 installed successfully!${NC}"
   else
-    echo "pm2 is already installed."
+    echo -e "${GREEN}pm2 is already installed.${NC}"
   fi
 }
 
-echo "checking package.."
-installGit
-installNvm
-installNode16
-installYarn
-installPM2
-```
-- Setup deploy.sh
-```bash
-nano deploy.sh
-
-#!/bin/bash
-
-REPO_URL="https://github.com/Kwandao6509650245/CS360_Project.git"
-URL="localhost"
-
 frontendSetup() {
-echo "Installing frontend"
+echo -e "${CYAN}Installing frontend dependencies...${NC}"
 yarn
 }
 
 backendSetup() {
-echo "Installing backend"
+echo -e "${CYAN}Installing backend dependencies...${NC}"
 cd backend
 yarn
 cd ..
@@ -240,7 +263,7 @@ cd ..
 
 projectConfig() {
 cd src
-sed -i "s/var url=\"[^\"]*\";/var url=\"$URL\";/g" http.js
+sed -i "s/var url=\"[^\"]*\";/var url=\"$public_ip\";/g" http.js
 cd ..
 cd backend
 cp .env.example .env
@@ -285,8 +308,7 @@ EOL
 
 # Function to set up the project
 ProjectSetup() {
-  echo "Cloning project repository..."
-  # Modify directory name if needed (e.g., git clone ... my_project_name)
+  echo -e "${CYAN}Cloning project repository...${NC}"
   git clone $REPO_URL
 
   cd CS360_Project
@@ -298,35 +320,23 @@ ProjectSetup() {
 }
 
 # Call the functions in the desired order
+
+installGit
+installNvm
+installNode16
+installYarn
+installPM2
 ProjectSetup
 
-echo "Script completed!"
+echo -e "${GREEN}=============================="
+echo -e "   COMPLETED!!!   "
+echo -e "==============================${NC}"
 ```
-- Change the URL in deploy.sh url with the public IP of your EC2 instance:
-```bash
-cd CS360_Project
 
-chmod +x install_package.sh
-chmod +x deploy.sh
-
-./install_package.sh
-source ~/.bashrc
-
-nano deploy.sh
-```
-- Replace old IP address (line 4) with your EC2 instance's public IP (e.g., "your-ec2-public-ip") and then
-save and exit the editor (for nano, use CTRL + s, then  CTRL + x).
-```bash
-URL="your-ec2-public-ip"
-```
 **3. Run the bash script**
 - Execute the script :
 ```bash
-./deploy.sh
-```
-- If the script requires superuser permissions, prepend it with sudo :
-```bash
-sudo ./deploy.sh
+source deploy-script.sh
 ```
 **4. Access the Backend and Frontend**
 - Once both the backend and frontend are running, you can access them via your web browser :
