@@ -306,10 +306,10 @@ echo "Script completed!"
 ```bash
 cd CS360_Project
 
-chmod +x install-package.sh
+chmod +x install_package.sh
 chmod +x deploy.sh
 
-./install-package.sh
+./install_package.sh
 source ~/.bashrc
 
 nano deploy.sh
