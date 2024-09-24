@@ -157,12 +157,12 @@ ssh -i <your-key.pem> ec2-user@<your-ec2-instance-ip>
 cd CS360_Project
 
 chmod +x install-package.sh
-chmod +x deploy.sh
+chmod +x deploy-with-repo.sh
 
 ./install-package.sh
 source ~/.bashrc
 
-nano deploy.sh
+nano deploy-with-repo.sh
 ```
 - Replace old IP address (line 4) with your EC2 instance's public IP (e.g., "your-ec2-public-ip") and then
 save and exit the editor (for nano, use CTRL + s, then  CTRL + x).
@@ -172,11 +172,11 @@ URL="your-ec2-public-ip"
 **3. Run the bash script**
 - Execute the script :
 ```bash
-./deploy.sh
+./deploy-with-repo.sh
 ```
 - If the script requires superuser permissions, prepend it with sudo :
 ```bash
-sudo ./deploy.sh
+sudo ./deploy-with-repo.sh
 ```
 **4. Access the Backend and Frontend**
 - Once both the backend and frontend are running, you can access them via your web browser :
