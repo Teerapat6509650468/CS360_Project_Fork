@@ -3,7 +3,7 @@
 source ~/.bashrc
 
 REPO_URL="https://github.com/Kwandao6509650245/CS360_Project.git"
-URL="localhost"
+public_ip=$(curl -s http://checkip.amazonaws.com)
 
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -100,7 +100,7 @@ cd ..
 
 projectConfig() {
 cd src
-sed -i "s/var url=\"[^\"]*\";/var url=\"$URL\";/g" http.js
+sed -i "s/var url=\"[^\"]*\";/var url=\"$public_ip\";/g" http.js
 cd ..
 cd backend
 cp .env.example .env
