@@ -121,7 +121,7 @@ yarn start
 cd CS360_Project/src/http.js
 nano http.js
 ```
-- Replace old IP address with your EC2 instance's public IP (e.g., "your-ec2-public-ip") and then
+- Replace old IP address (line 3) with your EC2 instance's public IP (e.g., "your-ec2-public-ip") and then
 save and exit the editor (for nano, use CTRL + o, Enter, then  CTRL + x).
 ```javascript
 var url="your-ec2-public-ip";
