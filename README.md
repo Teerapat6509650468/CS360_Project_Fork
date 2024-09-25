@@ -5,12 +5,12 @@
 - **Group Name:** Riyal or Fakay?  
 
 ## Members
-|name|student ID|
-|-|-|
-| Panapol  Jumjerm        | 6509650146 | <br>
-| Kwandao  Khunburee      | 6509650245 | <br>
-| Punnapa  Triratdilokkul | 6509650559 | <br>
-| Teerapat Kirdpaiboon    | 6509650468 | <br>
+| name                    | student ID |
+| ----------------------- | ---------- |
+| Panapol  Jumjerm        | 6509650146 | <br> |
+| Kwandao  Khunburee      | 6509650245 | <br> |
+| Punnapa  Triratdilokkul | 6509650559 | <br> |
+| Teerapat Kirdpaiboon    | 6509650468 | <br> |
 
 ## Project Goal
 The web application serves as a platform for managing and facilitating pet adoptions. It allows users to easily create, view, and manage pet profiles, including details such as name, age, species, breed, location and gender. By providing an organized and intuitive interface for handling pet information, the application enhances the pet adoption process, making it more efficient for both potential adopters and shelters. The goal is to connect pets with their future families more effectively and to support shelters in managing their adoption processes seamlessly. 
