@@ -145,7 +145,10 @@ http://<your-ec2-public-ip>:1337
 ```
 - Replace <your-ec2-public-ip> with the actual public IP address of your EC2 instance.
   
-## How to deploy and run the project using the provided bash script [Specify the bash script path in the repo] 
+## How to deploy and run the project using the provided bash script [Specify the bash script path in the repo]
+
+Follow these steps to deploy and run the project using the provided bash script. Ensure you are connected to your EC2 instance before proceeding. 
+
 **1. Connect to EC2 Instance**
 - Open terminal and connect to EC2 instance using SSH :
 ```bash
@@ -153,13 +156,47 @@ ssh -i <your-key.pem> ec2-user@<your-ec2-instance-ip>
 ```
 
 **2. Set Up the Bash Script** 
-- Setup deploy-script.sh
+
+There are two scenarios to set up and run the bash script. You can either use an existing repository, or clone it automatically within the script.
+
+- Option 1: Use the Existing Cloned Repository
+If you have already cloned the repository, follow these steps 
+**1. Set up and run the script**
+- Navigate to the utils/ directory:
+```bash
+cd utils/
+```
+-change permission deploy-script.sh and run script
+```bash
+chmod +x deploy-script.sh
+source deploy-script.sh
+```
+
+**2. Access the Backend and Frontend**
+- Once both the backend and frontend are running, you can access them via your web browser :
+- Open frontend :
+```
+http://<your-ec2-public-ip>:3000
+```
+- Open backend :
+```
+http://<your-ec2-public-ip>:1337
+```
+- Replace <your-ec2-public-ip> with the actual public IP address of your EC2 instance.
+
+***
+
+- Option 2: Clone the Repository Automatically and Run the Script
+If you prefer to clone the repository automatically as part of the script, follow these steps to create and set up the deploy-script.sh:
+
+- Create and edit the deploy-script.sh file: 
 ```bash
 touch deploy-script.sh
 chmod +x deploy-script.sh
 nano deploy-script.sh
 ```
-- Setup code in deploy-script.sh
+
+- Add the following script to the file (or copy it from utils/deploy-script.sh):
 ```bash
 #!/bin/bash
 
@@ -266,7 +303,27 @@ cd src
 sed -i "s/var url=\"[^\"]*\";/var url=\"$public_ip\";/g" http.js
 cd ..
 cd backend
-cp .env.example .env
+generate_secret_key() {
+    openssl rand -base64 32
+}
+
+# Define the path to your .env file
+ENV_FILE=".env"
+
+# Create the .env file or clear the existing content
+echo "Creating or overwriting the .env file..."
+> $ENV_FILE
+
+# Populate the .env file with secret keys
+echo "HOST=0.0.0.0" >> $ENV_FILE
+echo "PORT=1337" >> $ENV_FILE
+echo 'APP_KEYS="'"$(generate_secret_key)"','"$(generate_secret_key)"'"' >> $ENV_FILE
+echo "API_TOKEN_SALT=$(generate_secret_key)" >> $ENV_FILE
+echo "ADMIN_JWT_SECRET=$(generate_secret_key)" >> $ENV_FILE
+echo "TRANSFER_TOKEN_SALT=$(generate_secret_key)" >> $ENV_FILE
+echo "JWT_SECRET=$(generate_secret_key)" >> $ENV_FILE
+
+echo ".env file generated with secret keys."
 cd ..
 }
 
