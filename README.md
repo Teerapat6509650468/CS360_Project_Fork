@@ -7,7 +7,7 @@
 ## Members
 | name                    | student ID |
 | ----------------------- | ---------- |
-| Panapol  Jumjerm        | 6509650146 | <br> |
+| Panapol  Junjerm        | 6509650146 | <br> |
 | Kwandao  Khunburee      | 6509650245 | <br> |
 | Punnapa  Triratdilokkul | 6509650559 | <br> |
 | Teerapat Kirdpaiboon    | 6509650468 | <br> |
