@@ -200,7 +200,7 @@ From the list of roles, select the `Public` role, which governs permissions for 
 - Configure Permissions
 After selecting the Public role, you will see a list of available API permissions.
 
-  - Scroll down to the API you want to enable for public access.
+  - Scroll down to the API (Pet) to enable for public access.
   - Tick the box for `Select All` to allow public access to all actions within that API.
   
 - Save Changes
@@ -266,7 +266,7 @@ From the list of roles, select the `Public` role, which governs permissions for 
 - Configure Permissions
 After selecting the Public role, you will see a list of available API permissions.
 
-  - Scroll down to the API you want to enable for public access.
+  - Scroll down to the API (Pet) to enable for public access.
   - Tick the box for `Select All` to allow public access to all actions within that API.
   
 - Save Changes
@@ -517,7 +517,7 @@ From the list of roles, select the `Public` role, which governs permissions for 
 - Configure Permissions
 After selecting the Public role, you will see a list of available API permissions.
 
-  - Scroll down to the API you want to enable for public access.
+  - Scroll down to the API (Pet) to enable for public access.
   - Tick the box for `Select All` to allow public access to all actions within that API.
   
 - Save Changes
