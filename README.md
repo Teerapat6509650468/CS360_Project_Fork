@@ -126,7 +126,7 @@ openssl rand -base64 32
 openssl rand -base64 32
 ```
 - Update the .env file <br>
-After generating the secret keys, replace the toBeModified placeholders in the .env file. It should look like this after modification :
+After generating the secret keys, replace the toBeModified placeholders in the .env file :
 ```bash
 #open .env file for modify
 nano .env
@@ -152,7 +152,7 @@ yarn start
 - Open a new terminal and connect to the same EC2 instance. 
 - Change to the project directory and Change the IP address in http.js Before building the frontend, open the http.js file and update the url variable with the public IP of your EC2 instance :
 ```bash
-cd CS360_Project/src/http.js
+cd CS360_Project/src
 nano http.js
 ```
 - Replace old IP address (line 3) with your EC2 instance's public IP (e.g., "your-ec2-public-ip") and then
