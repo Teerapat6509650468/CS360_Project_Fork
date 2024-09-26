@@ -178,6 +178,33 @@ http://<your-ec2-public-ip>:3000
 http://<your-ec2-public-ip>:1337
 ```
 - Replace <your-ec2-public-ip> with the actual public IP address of your EC2 instance.
+
+**11. Enable API in Strapi** <br>
+By following these steps, you will be able to create, update, delete, and view data through the API without requiring authentication. <br>
+
+- Access the Strapi Admin Panel
+Open your browser and navigate to the Strapi Admin Panel, typically found at `http://<your-ec2-public-ip>:1337/admin` or another URL where your Strapi instance is running.
+
+- Go to the Settings Menu
+Once in the Admin Panel, click on the `Settings` option in the left sidebar.
+
+- Select the User & Permissions Plugin
+In the Settings page, find and click on the `User & Permissions Plugin` under the `PLUGIN` section.
+
+- Click on Roles
+After selecting the User & Permissions Plugin, choose the `Roles` submenu. This will show a list of roles within Strapi.
+
+- Choose the Public Role
+From the list of roles, select the `Public` role, which governs permissions for users who do not log in or register.
+
+- Configure Permissions
+After selecting the Public role, you will see a list of available API permissions.
+
+  - Scroll down to the API you want to enable for public access.
+  - Tick the box for `Select All` to allow public access to all actions within that API.
+  
+- Save Changes
+Once you have configured the permissions as needed, click the `Save` button in the lower-right corner to apply the changes.
   
 ## How to deploy and run the project using the provided bash script [Specify the bash script path in the repo]
 
@@ -217,6 +244,33 @@ http://<your-ec2-public-ip>:3000
 http://<your-ec2-public-ip>:1337
 ```
 - Replace <your-ec2-public-ip> with the actual public IP address of your EC2 instance.
+
+**3. Enable API in Strapi** <br>
+By following these steps, you will be able to create, update, delete, and view data through the API without requiring authentication. <br>
+
+- Access the Strapi Admin Panel
+Open your browser and navigate to the Strapi Admin Panel, typically found at `http://<your-ec2-public-ip>:1337/admin` or another URL where your Strapi instance is running.
+
+- Go to the Settings Menu
+Once in the Admin Panel, click on the `Settings` option in the left sidebar.
+
+- Select the User & Permissions Plugin
+In the Settings page, find and click on the `User & Permissions Plugin` under the `PLUGIN` section.
+
+- Click on Roles
+After selecting the User & Permissions Plugin, choose the `Roles` submenu. This will show a list of roles within Strapi.
+
+- Choose the Public Role
+From the list of roles, select the `Public` role, which governs permissions for users who do not log in or register.
+
+- Configure Permissions
+After selecting the Public role, you will see a list of available API permissions.
+
+  - Scroll down to the API you want to enable for public access.
+  - Tick the box for `Select All` to allow public access to all actions within that API.
+  
+- Save Changes
+Once you have configured the permissions as needed, click the `Save` button in the lower-right corner to apply the changes.
 
 <hr>
 
@@ -441,6 +495,33 @@ http://<your-ec2-public-ip>:3000
 http://<your-ec2-public-ip>:1337
 ```
 - Replace <your-ec2-public-ip> with the actual public IP address of your EC2 instance.
+
+**4. Enable API in Strapi** <br>
+By following these steps, you will be able to create, update, delete, and view data through the API without requiring authentication. <br>
+
+- Access the Strapi Admin Panel
+Open your browser and navigate to the Strapi Admin Panel, typically found at `http://<your-ec2-public-ip>:1337/admin` or another URL where your Strapi instance is running.
+
+- Go to the Settings Menu
+Once in the Admin Panel, click on the `Settings` option in the left sidebar.
+
+- Select the User & Permissions Plugin
+In the Settings page, find and click on the `User & Permissions Plugin` under the `PLUGIN` section.
+
+- Click on Roles
+After selecting the User & Permissions Plugin, choose the `Roles` submenu. This will show a list of roles within Strapi.
+
+- Choose the Public Role
+From the list of roles, select the `Public` role, which governs permissions for users who do not log in or register.
+
+- Configure Permissions
+After selecting the Public role, you will see a list of available API permissions.
+
+  - Scroll down to the API you want to enable for public access.
+  - Tick the box for `Select All` to allow public access to all actions within that API.
+  
+- Save Changes
+Once you have configured the permissions as needed, click the `Save` button in the lower-right corner to apply the changes.
 
 ***
   
