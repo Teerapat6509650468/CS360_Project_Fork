@@ -225,7 +225,7 @@ If you have already cloned the repository, follow these steps <br><br>
 **1. Set up and run the script**
 - Navigate to the utils/ directory :
 ```bash
-cd utils/
+cd CS360_Project/utils/
 ```
 - Change permission deploy-script.sh and run script :
 ```bash
