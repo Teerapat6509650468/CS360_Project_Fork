@@ -47,9 +47,10 @@ The backend for this project is based on the Pet Adoption Backend developed by H
 ## System Requirements
 
 1. Git installation
-2. Node.js installation (Version 12.x.x - 16.x.x) 
-- npm: installed automatically with Node.js
-- yarn : for faster package management
+2. Node.js installation (version 12.x.x - 16.x.x) 
+- npm: installed automatically with Node.js (version 8.19.4)
+- yarn : for faster package management (version 1.22.22)
+3. PM2 is included in the deployment through a Bash script. (version 5.4.2)
   
 ## How to deploy and run the project manually 
 
@@ -131,6 +132,7 @@ After generating the secret keys, replace the toBeModified placeholders in the .
 nano .env
 ```
 ```bash
+#Copy the 6 generated secret keys from the previous step 
 HOST=0.0.0.0
 PORT=1337
 APP_KEYS="generated_key1,generated_key2"
@@ -148,13 +150,13 @@ yarn start
 ```
 **8. Set Up the Frontend**
 - Open a new terminal and connect to the same EC2 instance. 
-- Change to the project directory and Change the IP address in http.js Before building the frontend, open the http.js file and update the url variable with the public IP of your EC2 instance:
+- Change to the project directory and Change the IP address in http.js Before building the frontend, open the http.js file and update the url variable with the public IP of your EC2 instance :
 ```bash
 cd CS360_Project/src/http.js
 nano http.js
 ```
 - Replace old IP address (line 3) with your EC2 instance's public IP (e.g., "your-ec2-public-ip") and then
-save and exit the editor (for nano, use CTRL + o, Enter, then  CTRL + x).
+save and exit the editor (for nano, use CTRL + o, Enter, then  CTRL + x) :
 ```javascript
 var url="your-ec2-public-ip";
 ```
@@ -166,7 +168,7 @@ yarn build
 yarn start
 ```
 **10. Access the Backend and Frontend**
-- Once both the backend and frontend are running, you can access them via your web browser :
+- Once both the backend and frontend are running, you can access them via your web browser.
 - Open frontend :
 ```
 http://<your-ec2-public-ip>:3000
@@ -194,11 +196,11 @@ There are two scenarios to set up and run the bash script. You can either use an
 **Option 1: Use the Existing Cloned Repository** <br>
 If you have already cloned the repository, follow these steps <br><br>
 **1. Set up and run the script**
-- Navigate to the utils/ directory:
+- Navigate to the utils/ directory :
 ```bash
 cd utils/
 ```
-- Change permission deploy-script.sh and run script
+- Change permission deploy-script.sh and run script :
 ```bash
 chmod +x deploy-script.sh
 source deploy-script.sh
@@ -222,14 +224,14 @@ http://<your-ec2-public-ip>:1337
 If you prefer to clone the repository automatically as part of the script, follow these steps to create and set up the deploy-script.sh <br><br>
 
 **1. Set up the bash script**
-- Create and edit the deploy-script.sh file: 
+- Create and edit the deploy-script.sh file : 
 ```bash
 touch deploy-script.sh
 chmod +x deploy-script.sh
 nano deploy-script.sh
 ```
 
-- Add the following script to the file (or copy it from utils/deploy-script.sh):
+- Add the following script to the file (or copy it from utils/deploy-script.sh) :
 ```bash
 #!/bin/bash
 
