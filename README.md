@@ -5,11 +5,12 @@
 - **Group Name:** Riyal or Fakay?  
 
 ## Members
-
-| Panapol  Jumjerm        | 6509650146 | <br>
-| Kwandao  Khunburee      | 6509650245 | <br>
-| Punnapa  Triratdilokkul | 6509650559 | <br>
-| Teerapat Kirdpaiboon    | 6509650468 | <br>
+| name                    | student ID |
+| ----------------------- | ---------- |
+| Panapol  Junjerm        | 6509650146 | <br> |
+| Kwandao  Khunburee      | 6509650245 | <br> |
+| Punnapa  Triratdilokkul | 6509650559 | <br> |
+| Teerapat Kirdpaiboon    | 6509650468 | <br> |
 
 ## Project Goal
 The web application serves as a platform for managing and facilitating pet adoptions. It allows users to easily create, view, and manage pet profiles, including details such as name, age, species, breed, location and gender. By providing an organized and intuitive interface for handling pet information, the application enhances the pet adoption process, making it more efficient for both potential adopters and shelters. The goal is to connect pets with their future families more effectively and to support shelters in managing their adoption processes seamlessly. 
@@ -46,9 +47,10 @@ The backend for this project is based on the Pet Adoption Backend developed by H
 ## System Requirements
 
 1. Git installation
-2. Node.js installation (Version 12.x.x - 16.x.x) 
-- npm: installed automatically with Node.js
-- yarn : for faster package management
+2. Node.js installation (version 12.x.x - 16.x.x) 
+- npm: installed automatically with Node.js (version 8.19.4)
+- yarn : for faster package management (version 1.22.22)
+3. PM2 is included in the deployment through a Bash script. (version 5.4.2)
   
 ## How to deploy and run the project manually 
 
@@ -107,6 +109,38 @@ cd CS360_Project/backend
 ```bash
 cp .env.example .env
 ```
+- Generate Secret Keys <br>
+Use the following command to generate 6 secret keys :
+```bash
+#generated_key1
+openssl rand -base64 32
+#generated_key2
+openssl rand -base64 32
+#generated_key3
+openssl rand -base64 32
+#generated_key4
+openssl rand -base64 32
+#generated_key5
+openssl rand -base64 32
+#generated_key6
+openssl rand -base64 32
+```
+- Update the .env file <br>
+After generating the secret keys, replace the toBeModified placeholders in the .env file :
+```bash
+#open .env file for modify
+nano .env
+```
+```bash
+#Copy the 6 generated secret keys from the previous step 
+HOST=0.0.0.0
+PORT=1337
+APP_KEYS="generated_key1,generated_key2"
+API_TOKEN_SALT=generated_key3
+ADMIN_JWT_SECRET=generated_key4
+TRANSFER_TOKEN_SALT=generated_key5
+JWT_SECRET=generated_key6
+```
 **7. Build and Run the Backend**
 - Install dependencies, build and start the backend server :
 ```bash
@@ -116,13 +150,13 @@ yarn start
 ```
 **8. Set Up the Frontend**
 - Open a new terminal and connect to the same EC2 instance. 
-- Change to the project directory and Change the IP address in http.js Before building the frontend, open the http.js file and update the url variable with the public IP of your EC2 instance:
+- Change to the project directory and Change the IP address in http.js Before building the frontend, open the http.js file and update the url variable with the public IP of your EC2 instance :
 ```bash
-cd CS360_Project/src/http.js
+cd CS360_Project/src
 nano http.js
 ```
 - Replace old IP address (line 3) with your EC2 instance's public IP (e.g., "your-ec2-public-ip") and then
-save and exit the editor (for nano, use CTRL + o, Enter, then  CTRL + x).
+save and exit the editor (for nano, use CTRL + o, Enter, then  CTRL + x) :
 ```javascript
 var url="your-ec2-public-ip";
 ```
@@ -134,7 +168,7 @@ yarn build
 yarn start
 ```
 **10. Access the Backend and Frontend**
-- Once both the backend and frontend are running, you can access them via your web browser :
+- Once both the backend and frontend are running, you can access them via your web browser.
 - Open frontend :
 ```
 http://<your-ec2-public-ip>:3000
@@ -144,8 +178,38 @@ http://<your-ec2-public-ip>:3000
 http://<your-ec2-public-ip>:1337
 ```
 - Replace <your-ec2-public-ip> with the actual public IP address of your EC2 instance.
+
+**11. Enable API in Strapi** <br>
+By following these steps, you will be able to create, update, delete, and view data through the API without requiring authentication. <br>
+
+- Access the Strapi Admin Panel
+Open your browser and navigate to the Strapi Admin Panel, typically found at `http://<your-ec2-public-ip>:1337/admin` or another URL where your Strapi instance is running.
+
+- Go to the Settings Menu
+Once in the Admin Panel, click on the `Settings` option in the left sidebar.
+
+- Select the User & Permissions Plugin
+In the Settings page, find and click on the `User & Permissions Plugin` under the `PLUGIN` section.
+
+- Click on Roles
+After selecting the User & Permissions Plugin, choose the `Roles` submenu. This will show a list of roles within Strapi.
+
+- Choose the Public Role
+From the list of roles, select the `Public` role, which governs permissions for users who do not log in or register.
+
+- Configure Permissions
+After selecting the Public role, you will see a list of available API permissions.
+
+  - Scroll down to the API `Pet` to enable for public access.
+  - Tick the box for `Select All` to allow public access to all actions within that API.
   
-## How to deploy and run the project using the provided bash script [Specify the bash script path in the repo] 
+- Save Changes
+Once you have configured the permissions as needed, click the `Save` button in the lower-right corner to apply the changes.
+  
+## How to deploy and run the project using the provided bash script [Specify the bash script path in the repo]
+
+Follow these steps to deploy and run the project using the provided bash script. Ensure you are connected to your EC2 instance before proceeding. <br>
+
 **1. Connect to EC2 Instance**
 - Open terminal and connect to EC2 instance using SSH :
 ```bash
@@ -153,13 +217,75 @@ ssh -i <your-key.pem> ec2-user@<your-ec2-instance-ip>
 ```
 
 **2. Set Up the Bash Script** 
-- Setup deploy-script.sh
+
+There are two scenarios to set up and run the bash script. You can either use an existing repository, or clone it automatically within the script.
+
+**Option 1: Use the Existing Cloned Repository** <br>
+If you have already cloned the repository, follow these steps <br><br>
+**1. Set up and run the script**
+- Navigate to the utils/ directory :
+```bash
+cd CS360_Project/utils/
+```
+- Change permission deploy-script.sh and run script :
+```bash
+chmod +x deploy-script.sh
+source deploy-script.sh
+```
+
+**2. Access the Backend and Frontend**
+- Once both the backend and frontend are running, you can access them via your web browser.
+- Open frontend :
+```
+http://<your-ec2-public-ip>:3000
+```
+- Open backend :
+```
+http://<your-ec2-public-ip>:1337
+```
+- Replace <your-ec2-public-ip> with the actual public IP address of your EC2 instance.
+
+**3. Enable API in Strapi** <br>
+By following these steps, you will be able to create, update, delete, and view data through the API without requiring authentication. <br>
+
+- Access the Strapi Admin Panel
+Open your browser and navigate to the Strapi Admin Panel, typically found at `http://<your-ec2-public-ip>:1337/admin` or another URL where your Strapi instance is running.
+
+- Go to the Settings Menu
+Once in the Admin Panel, click on the `Settings` option in the left sidebar.
+
+- Select the User & Permissions Plugin
+In the Settings page, find and click on the `User & Permissions Plugin` under the `PLUGIN` section.
+
+- Click on Roles
+After selecting the User & Permissions Plugin, choose the `Roles` submenu. This will show a list of roles within Strapi.
+
+- Choose the Public Role
+From the list of roles, select the `Public` role, which governs permissions for users who do not log in or register.
+
+- Configure Permissions
+After selecting the Public role, you will see a list of available API permissions.
+
+  - Scroll down to the API `Pet` to enable for public access.
+  - Tick the box for `Select All` to allow public access to all actions within that API.
+  
+- Save Changes
+Once you have configured the permissions as needed, click the `Save` button in the lower-right corner to apply the changes.
+
+<hr>
+
+**Option 2: Clone the Repository Automatically and Run the Script** <br>
+If you prefer to clone the repository automatically as part of the script, follow these steps to create and set up the deploy-script.sh <br><br>
+
+**1. Set up the bash script**
+- Create and edit the deploy-script.sh file : 
 ```bash
 touch deploy-script.sh
 chmod +x deploy-script.sh
 nano deploy-script.sh
 ```
-- Setup code in deploy-script.sh
+
+- Add the following script to the file (or copy it from utils/deploy-script.sh) :
 ```bash
 #!/bin/bash
 
@@ -266,7 +392,27 @@ cd src
 sed -i "s/var url=\"[^\"]*\";/var url=\"$public_ip\";/g" http.js
 cd ..
 cd backend
-cp .env.example .env
+generate_secret_key() {
+    openssl rand -base64 32
+}
+
+# Define the path to your .env file
+ENV_FILE=".env"
+
+# Create the .env file or clear the existing content
+echo "Creating or overwriting the .env file..."
+> $ENV_FILE
+
+# Populate the .env file with secret keys
+echo "HOST=0.0.0.0" >> $ENV_FILE
+echo "PORT=1337" >> $ENV_FILE
+echo 'APP_KEYS="'"$(generate_secret_key)"','"$(generate_secret_key)"'"' >> $ENV_FILE
+echo "API_TOKEN_SALT=$(generate_secret_key)" >> $ENV_FILE
+echo "ADMIN_JWT_SECRET=$(generate_secret_key)" >> $ENV_FILE
+echo "TRANSFER_TOKEN_SALT=$(generate_secret_key)" >> $ENV_FILE
+echo "JWT_SECRET=$(generate_secret_key)" >> $ENV_FILE
+
+echo ".env file generated with secret keys."
 cd ..
 }
 
@@ -333,13 +479,13 @@ echo -e "   COMPLETED!!!   "
 echo -e "==============================${NC}"
 ```
 
-**3. Run the bash script**
+**2. Run the bash script**
 - Execute the script :
 ```bash
 source deploy-script.sh
 ```
-**4. Access the Backend and Frontend**
-- Once both the backend and frontend are running, you can access them via your web browser :
+**3. Access the Backend and Frontend**
+- Once both the backend and frontend are running, you can access them via your web browser.
 - Open frontend :
 ```
 http://<your-ec2-public-ip>:3000
@@ -349,6 +495,33 @@ http://<your-ec2-public-ip>:3000
 http://<your-ec2-public-ip>:1337
 ```
 - Replace <your-ec2-public-ip> with the actual public IP address of your EC2 instance.
+
+**4. Enable API in Strapi** <br>
+By following these steps, you will be able to create, update, delete, and view data through the API without requiring authentication. <br>
+
+- Access the Strapi Admin Panel
+Open your browser and navigate to the Strapi Admin Panel, typically found at `http://<your-ec2-public-ip>:1337/admin` or another URL where your Strapi instance is running.
+
+- Go to the Settings Menu
+Once in the Admin Panel, click on the `Settings` option in the left sidebar.
+
+- Select the User & Permissions Plugin
+In the Settings page, find and click on the `User & Permissions Plugin` under the `PLUGIN` section.
+
+- Click on Roles
+After selecting the User & Permissions Plugin, choose the `Roles` submenu. This will show a list of roles within Strapi.
+
+- Choose the Public Role
+From the list of roles, select the `Public` role, which governs permissions for users who do not log in or register.
+
+- Configure Permissions
+After selecting the Public role, you will see a list of available API permissions.
+
+  - Scroll down to the API `Pet` to enable for public access.
+  - Tick the box for `Select All` to allow public access to all actions within that API.
+  
+- Save Changes
+Once you have configured the permissions as needed, click the `Save` button in the lower-right corner to apply the changes.
 
 ***
   
