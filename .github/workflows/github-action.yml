@@ -1,11 +1,12 @@
 name: pet-adoption automated tests
 run-name: ${{ github.actor }} is testing out pet-adoption automated tests
-#on: [push]
 on:
   push:
-    branches: [ main ]
+    branches: 
+      - '*'
   pull_request:
-    branches: [ main ]
+    branches:
+      - '*'
 
 jobs:
   Run-npm-on-OS:
