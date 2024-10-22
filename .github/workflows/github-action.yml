@@ -9,7 +9,7 @@ on:
       - '*'
 
 jobs:
-  Run-npm-on-OS:
+  Run-npm-on-Ubuntu:
     runs-on: ubuntu-24.04
 
     steps:
@@ -34,7 +34,7 @@ jobs:
 
     #Install project dependencies
     - name: Install project dependencies
-      run: npm ci
+      run: npm install
 
     - name: Build the project
       run: npm run build --if-present
