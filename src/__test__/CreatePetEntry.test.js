@@ -119,4 +119,15 @@ describe('CreatePetEntry Component', () => {
             })
         );               
     });
+
+    test('does not call createNewPet if required fields are not filled', async () => {
+        render(<CreatePetEntry />);
+
+        // Leave the fields empty and click the button
+        const addButton = screen.getByRole('button', { name: /add pet entry/i });
+        await userEvent.click(addButton);
+
+        // Check if createNewPet was NOT called
+        expect(mockCreateNewPet).not.toHaveBeenCalled();
+    });
 });
