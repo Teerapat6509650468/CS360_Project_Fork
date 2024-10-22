@@ -25,6 +25,7 @@ describe('CreatePetEntry Component', () => {
         });
     });
 
+    // it should always pass this test case.
     test('renders the form elements correctly', () => {
         render(<CreatePetEntry />);
 
@@ -37,6 +38,7 @@ describe('CreatePetEntry Component', () => {
         expect(screen.getByRole('button', { name: /add pet entry/i })).toBeInTheDocument();
     });
 
+    // TC1 : Handles input changes from Create Pet Entry
     test('handles input changes', async () => {
         render(<CreatePetEntry />);
 
@@ -78,6 +80,7 @@ describe('CreatePetEntry Component', () => {
         expect(await screen.findByText('Male')).toBeInTheDocument(); // Ensure the selected value is displayed
     });
 
+    // TC2 : Calls createNewPet on button click with correct data
     test('calls createNewPet on button click with correct data', async () => {
         render(<CreatePetEntry />);
 
@@ -120,6 +123,7 @@ describe('CreatePetEntry Component', () => {
         );               
     });
 
+    // TC3 : Does not call createNewPet if required fields are not filled
     test('does not call createNewPet if required fields are not filled', async () => {
         render(<CreatePetEntry />);
 

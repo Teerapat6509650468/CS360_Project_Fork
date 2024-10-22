@@ -37,6 +37,7 @@ describe('EditPetEntry Component', () => {
         });
     });
 
+    // it should always pass this test case.
     test('renders the form elements correctly', () => {
         render(<EditPetEntry />);
 
@@ -49,6 +50,7 @@ describe('EditPetEntry Component', () => {
         expect(screen.getByRole('button', { name: /edit pet entry/i })).toBeInTheDocument();
     });
 
+    // TC4 : Handles input changes from Edit Pet Entry
     test('handles input changes', async () => {
         render(<EditPetEntry />);
 
@@ -90,6 +92,7 @@ describe('EditPetEntry Component', () => {
         expect(await screen.findByText('Male')).toBeInTheDocument(); // Ensure the selected value is displayed
     });
 
+    // TC5 : Calls updatePet on button click with correct data
     test('calls updatePet on button click with correct data', async () => {
         render(<EditPetEntry />);
 
@@ -133,6 +136,7 @@ describe('EditPetEntry Component', () => {
         );
     });
 
+    // TC6 : Should not have the same values as the initial mock repo after editing
     test('should not have the same values as the initial mock repo after editing', async () => {
         render(<EditPetEntry />);
 
