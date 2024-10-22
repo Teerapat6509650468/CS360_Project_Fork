@@ -36,6 +36,13 @@ export default function CreatePetEntry() {
 
     const handleCreateNewPet = (event) => {
         event.preventDefault(); // Prevent default form submission
+
+        // Validate required fields
+        if (!name || !animal || !breed || !age || !location || !sex) {
+            console.log("All fields are required.");
+            return; // Don't proceed if validation fails
+        }
+        
         const data = JSON.stringify({
             "data": {
                 "name": name,
