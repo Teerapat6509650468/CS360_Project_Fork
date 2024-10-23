@@ -1,6 +1,5 @@
 name: pet-adoption automated tests
-run-name: ${{ github.actor }} is testing out GitHub Actions
-#on: [push]
+run-name: ${{ github.actor }} is testing out pet-adoption automated tests
 on:
   push:
     branches: 
@@ -10,7 +9,7 @@ on:
       - '*'
 
 jobs:
-  Run-npm-on-OS:
+  Run-npm-on-Ubuntu:
     runs-on: ubuntu-24.04
 
     steps:
