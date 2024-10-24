@@ -40,6 +40,7 @@ export default function CreatePetEntry() {
         // Validate required fields
         if (!name || !animal || !breed || !age || !location || !sex) {
             console.log("All fields are required.");
+            alert("All fields are required.");
             return; // Don't proceed if validation fails
         }
         
