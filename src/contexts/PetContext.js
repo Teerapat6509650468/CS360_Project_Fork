@@ -115,7 +115,6 @@ export const PetProvider = ({children}) => {
     // change navigation value
     const changeNavValue = (value) => {
         set_nav_value(value);
-        window.location.reload();
     };
 
     // get pet id value
