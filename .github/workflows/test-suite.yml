@@ -9,12 +9,15 @@ on:
       - '*'
 
 jobs:
-  Run-npm-on-Ubuntu:
-    runs-on: ubuntu-24.04
-
+  build:
+    strategy:
+      matrix:
+        os: [macos-latest, ubuntu-24.04]
+        
+    runs-on: ${{ matrix.os }} 
+    
     steps:
-
-    - run: echo "This job is now running on a ${{ runner.os }}"
+    - run: echo "This job is now running on a ${{ matrix.os }}"
     - run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
     #Check out the latest code from repository
     - name: Check out the latest code from repository.
