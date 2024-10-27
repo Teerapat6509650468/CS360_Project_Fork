@@ -9,7 +9,7 @@ on:
       - '*'
 
 jobs:
-  Run-npm-on-Ubuntu:
+  Run-Test-Suite:
     runs-on: ${{ matrix.os }}
 
     strategy:
