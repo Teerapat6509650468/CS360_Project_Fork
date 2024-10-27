@@ -10,7 +10,12 @@ on:
 
 jobs:
   Run-npm-on-Ubuntu:
-    runs-on: ubuntu-24.04
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, windows-latest]
+        node-version: [16.x, 22.x, node]
 
     steps:
 
@@ -26,10 +31,10 @@ jobs:
         ls ${{ github.workspace }}
 
     #Setup Node.js environment
-    - name: Setup Node.js 16.x on Ubuntu
+    - name: Setup Node.js ${{ matrix.node-version }} on ${{ runner.os }}
       uses: actions/setup-node@v4
       with:
-        node-version: 16.x
+        node-version: ${{ matrix.node-version }}
         cache: 'npm'
 
     #Install project dependencies
