@@ -6,5 +6,8 @@ module.exports = {
     moduleNameMapper: {
       '\\.(css|less|scss|sass)$': 'identity-obj-proxy',  // Mock CSS and style imports
     },
+    testPathIgnorePatterns: [
+      "<rootDir>/backend/", // Ignore backend tests
+    ],
   };
   
