@@ -23,17 +23,10 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "jest",
+    "test": "npm run test:frontend && npm run test:backend",
+    "test:frontend": "jest --config ./jest.config.js",
+    "test:backend": "cd backend && jest --config ./jest.config.js",
     "eject": "react-scripts eject"
-  },
-  "jest": {
-    "testEnvironment": "jsdom",
-    "transform": {
-      "^.+\\.(js|jsx)$": "babel-jest"
-    },
-    "moduleNameMapper": {
-      "\\.(css|less|scss|sass)$": "identity-obj-proxy"
-    }
   },
   "eslintConfig": {
     "extends": [
