@@ -46,20 +46,19 @@ jobs:
     - name: Install project dependencies
       working-directory: ./backend
       run: npm install
-
-    #Run test suite
-    - name: Run test suite
-      env:
-          APP_KEYS: ${{ secrets.APP_KEYS }}              
-          API_TOKEN_SALT: ${{ secrets.API_TOKEN_SALT }}  
-          ADMIN_JWT_SECRET: ${{ secrets.ADMIN_JWT_SECRET }} 
-          TRANSFER_TOKEN_SALT: ${{ secrets.TRANSFER_TOKEN_SALT }} 
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}        
-      run: npm test
-
-    #Run test suite
-    - name: Run test suite
+ 
+    #Set up env for backend
+    - name: Set up env backend
       working-directory: ./backend
+      run: |
+        echo "APP_KEYS=${{ secrets.APP_KEYS }}" >> .env
+        echo "API_TOKEN_SALT=${{ secrets.API_TOKEN_SALT }}" >> .env
+        echo "ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }}" >> .env
+        echo "TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }}" >> .env
+        echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+
+    #Run test suite
+    - name: Run test suite
       env:
           APP_KEYS: ${{ secrets.APP_KEYS }}              
           API_TOKEN_SALT: ${{ secrets.API_TOKEN_SALT }}  
@@ -67,5 +66,5 @@ jobs:
           TRANSFER_TOKEN_SALT: ${{ secrets.TRANSFER_TOKEN_SALT }} 
           JWT_SECRET: ${{ secrets.JWT_SECRET }}        
       run: npm test
-    
+   
     - run: echo "This job's status is ${{ job.status }}."
