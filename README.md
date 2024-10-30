@@ -687,16 +687,78 @@ The `test-suite.yml` file used for GitHub Actions CI is stored in `.github/workf
 ```
 
 ## Test Coverage
-This repository includes thorough test coverage across two key areas:
+
 - **Unit Testing**: Focuses on individual functions or modules to confirm they work as expected in isolation. Each unit is tested with a range of inputs to ensure reliable and consistent behavior, catching issues early in development.
+
+```
+         PASS  src/__test__/CreatePetEntry.test.js (12.769 s)
+	  ● Console
+	    console.log
+	      Submitting data:  {"data":{"name":"Buddy","animal":"Dog","breed":"Golden Retriever","age":"3","location":"Bangkok","sex":"Male"}}
+	      at handleCreateNewPet (src/components/CreatePetEntry.js:58:17)
+	    console.log
+	      All fields are required.
+	      at handleCreateNewPet (src/components/CreatePetEntry.js:42:21)
+	
+	 PASS  src/__test__/EditPetEntry.test.js (13.49 s)
+	-------------------|---------|----------|---------|---------|-------------------
+	File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+	-------------------|---------|----------|---------|---------|-------------------
+	All files          |   97.67 |      100 |   94.44 |   97.67 |                   
+	 BottomNav.js      |      75 |      100 |      50 |      75 | 20                
+	 CreatePetEntry.js |     100 |      100 |     100 |     100 |                   
+	 EditPetEntry.js   |     100 |      100 |     100 |     100 |                   
+	-------------------|---------|----------|---------|---------|-------------------
+	
+	Test Suites: 2 passed, 2 total
+	Tests:       8 passed, 8 total
+	Snapshots:   0 total
+	Time:        14.75 s
+```
 
 - **Integration Testing**: Verifies that different parts of the API interact correctly. By testing how modules work together, integration testing ensures data flows smoothly between components, identifying issues that may appear when components are combined.
 
--**Continuous Integration**
+```
+	 PASS  tests/pet.test.js (7.835 s)
+	  Pet API
+	    ✓ should create a new pet entry (88 ms)
+	    ✓ should update an existing pet entry (44 ms)
+	    ✓ should retrieve all pets (13 ms)
+	    ✓ should handle missing required fields (10 ms)
+	    ✓ should handle updating non-existing pet (12 ms)
+	    ✓ should retrieve a pet by ID (12 ms)
+	    ✓ should delete a pet entry (31 ms)
+	    ✓ should handle retrieving a non-existing pet by ID (13 ms)
+	
+	-------------------------|---------|----------|---------|---------|-------------------
+	File                     | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+	-------------------------|---------|----------|---------|---------|-------------------
+	All files                |     100 |      100 |     100 |     100 |                   
+	 config                  |     100 |      100 |     100 |     100 |                   
+	  admin.js               |     100 |      100 |     100 |     100 |                   
+	  api.js                 |     100 |      100 |     100 |     100 |                   
+	  database.js            |     100 |      100 |     100 |     100 |                   
+	  middlewares.js         |     100 |      100 |     100 |     100 |                   
+	  server.js              |     100 |      100 |     100 |     100 |                   
+	 src                     |     100 |      100 |     100 |     100 |                   
+	  index.js               |     100 |      100 |     100 |     100 |                   
+	 src/api/pet/controllers |     100 |      100 |     100 |     100 |                   
+	  pet.js                 |     100 |      100 |     100 |     100 |                   
+	 src/api/pet/routes      |     100 |      100 |     100 |     100 |                   
+	  pet.js                 |     100 |      100 |     100 |     100 |                   
+	 src/api/pet/services    |     100 |      100 |     100 |     100 |                   
+	  pet.js                 |     100 |      100 |     100 |     100 |                   
+	-------------------------|---------|----------|---------|---------|-------------------
+	Test Suites: 1 passed, 1 total
+	Tests:       8 passed, 8 total
+	Snapshots:   0 total
+	Time:        7.96 s
+```
+- **Continuous Integration**
   As part of our CI setup, every push or pull request automatically triggers the test suite using GitHub Actions (configured in `.github/workflows/test-suite.yml`). This CI process runs both unit and integration tests across multiple environments, providing:
 	- **Immediate Feedback**: Notifications alert us to any failed tests, enabling quick fixes and reducing the risk of breaking changes.
 	- **Cross-Platform Compatibility**: The CI pipeline runs tests on different operating systems (e.g., `macOS`, `Ubuntu`, `Windows`) and Node.js versions, ensuring consistent performance across environments.
-
+ 
 ## Viewing Test Results 
 
 You can view test results both in the CI pipeline on GitHub and locally in your terminal. Here’s how:
