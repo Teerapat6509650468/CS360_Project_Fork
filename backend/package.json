@@ -8,7 +8,7 @@
     "start": "strapi start",
     "build": "strapi build",
     "strapi": "strapi",
-    "test": "jest --forceExit"
+    "test": "jest --forceExit --coverage"
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.25.9",

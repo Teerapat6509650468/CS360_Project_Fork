@@ -25,8 +25,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "npm run test:frontend && npm run test:backend",
-    "test:frontend": "jest --config ./jest.config.js",
-    "test:backend": "cd backend && jest --config ./jest.config.js",
+    "test:frontend": "jest --config ./jest.config.js --coverage",
+    "test:backend": "cd backend && jest --config ./jest.config.js --coverage",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
