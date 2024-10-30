@@ -17,7 +17,7 @@ The web application serves as a platform for managing and facilitating pet adopt
 
 ### Features
 - Feature 1: Dark/Light Mode Toggle 
-- Feature 2: User Feedback Notification System for Successful Pet Addition, Editing, and Deletion Actions 
+- Feature 2: User alert System for Successful Pet Addition, Editing, and Deletion Actions 
 - Feature 3: Enhanced Dropdown Menu for Gender and Animal Species Selection 
 - Feature 4: Enhanced Age Input with Validation, Month Support, and Unknown Age Option 
 
