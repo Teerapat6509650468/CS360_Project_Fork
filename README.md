@@ -582,11 +582,31 @@ Our team uses the following tools for testing :
 
 
 ## Running Tests
+
+- **For Integration Testing Steps:**
+
+1. Ensure that you have modified the `.env` file.
+2. Change `http.js` to use your public IPv4 address (if you are testing on your machine, it should be set to `localhost`).
+3. Run the Strapi app.
+4. Complete the registration process.
+5. Access the Strapi Admin Panel:
+
+   - Go to your Strapi admin panel (usually at `http://<your-ip-address>:1337/admin`).
+   - Navigate to the **Roles** section:
+     - Go to **Settings**.
+     - Click on **Users & Permissions Plugin**.
+     - Select **Roles**.
+   
+6. Edit the Role:
+   - Select the role that your request is using (e.g., Public or Authenticated).
+   - Ensure that the role has permission to create entries for your pet collection type. Look for permissions related to the **create** action for the pets model.
+
 - **Running Tests Locally**: Before pushing code, you can run tests locally with these commands:
 
 ```bash
 npm test
 ```
+
 - **CI Pipeline Process**:
   1. Every time there’s a push or pull request to any branch (indicated by '*' in the `.yml` file), the pipeline triggers automatically.
   2. GitHub Actions starts running the Run-Test-Suite job, following each step in sequence: checking out code, setting up the environment, installing dependencies, and running the test suite.
