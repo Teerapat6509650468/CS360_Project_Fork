@@ -594,11 +594,24 @@ npm test
 
 
 ## Test File Structure
-
-The unit test and integration test files in this project are stored in the `src/__test__` folder:
-
 ### Unit Tests
-
+The unit test files in this project are stored in the `src/__test__` folder:
+```
+src/
+├── __test__/
+│   ├── CreatePetEntry.test.js
+│   ├── EditPetEntry.test.js
+│   └── unit-test-troubleshooting.txt
+├── component/
+├── contexts/
+├── main/
+├── app.js
+├── app.css
+├── http.js
+├── index.css
+└── index.js
+  
+```
 **CreatePetEntry.test.js**
 - Handles input changes for Create Pet Entry.
 - Calls `createNewPet` on button click with correct data.
@@ -610,8 +623,30 @@ The unit test and integration test files in this project are stored in the `src/
 - Should not have the same values as the initial mock repo after editing.
 
 ### Integration Tests
-
-**PetIntegration.test.js**
+The integration test files in this project are stored in the `backend/tests` folder:
+```
+backend/
+├── config/
+├── public/
+├── src/
+├── tests/
+│   ├── pet.test.js
+│   └── setupStrapi.js
+├── .editorconfig
+├── .env.example
+├── .eslintignore
+├── .eslintrc
+├── .gitignore
+├── README.md
+├── babel.config.js
+├── favicon.ico
+├── integration-testing-step.txt  # A guide for setting up and performing integration testing 
+├── jest.config.js
+├── package-lock.json
+├── package.json
+└── yarn.lock
+```
+**Pet.test.js**
 - **Create a New Pet Entry**: Tests POST `/api/pets` to create a new entry and checks the created data.
 - **Update a Pet Entry**: Tests PUT `/api/pets/:id` to update an existing pet’s data.
 - **Retrieve All Pets**: Tests GET `/api/pets` to retrieve all pet entries.
@@ -624,7 +659,12 @@ The unit test and integration test files in this project are stored in the `src/
 
 The `test-suite.yml` file used for GitHub Actions CI is stored in `.github/workflows`:
 - This file is configured to handle CI for our testing pipeline.
-
+```
+.github/
+└── workflows/
+    ├── github-actions-demo.yml
+    └── test-suite.yml
+```
 
 ## Test Coverage
 This repository includes thorough test coverage across two key areas:
@@ -632,8 +672,8 @@ This repository includes thorough test coverage across two key areas:
 
 - **Integration Testing**: Verifies that different parts of the API interact correctly. By testing how modules work together, integration testing ensures data flows smoothly between components, identifying issues that may appear when components are combined.
 
+-**Continuous Integration**
   As part of our CI setup, every push or pull request automatically triggers the test suite using GitHub Actions (configured in `.github/workflows/test-suite.yml`). This CI process runs both unit and integration tests across multiple environments, providing:
-
 	- **Immediate Feedback**: Notifications alert us to any failed tests, enabling quick fixes and reducing the risk of breaking changes.
 	- **Cross-Platform Compatibility**: The CI pipeline runs tests on different operating systems (e.g., `macOS`, `Ubuntu`, `Windows`) and Node.js versions, ensuring consistent performance across environments.
 
@@ -679,11 +719,11 @@ You can view test results both in the CI pipeline on GitHub and locally in your 
 Add new test files within the `src/__test__` directory, following these steps:
 
 1. **Create Test Files**:
-   - For **unit tests**, add files under `src/__test__/unit/`.
-   - For **integration tests**, place files under `src/__test__/integration/`.
+   - For **unit tests**, add files under `src/__test__/`.
+   - For **integration tests**, place files under `backend/tests/`.
    - Each test file should follow a naming convention that reflects its purpose. For example:
-     - `NewComponent.test.js` for unit tests.
-     - `APIEndpointIntegration.test.js` for integration tests.
+     - `AAA.test.js` for unit tests.
+     - `BBB.test.js` for integration tests.
 
 2. **Write Test Cases**:
    - Define test cases that validate specific functions, components, or API endpoints.
@@ -707,23 +747,3 @@ Add new test files within the `src/__test__` directory, following these steps:
   
 6. **Merge to Main Branch**:
    - After ensuring that all tests pass successfully, you can merge your branch into the main branch.
-
-
-
-
-
-
-
-  
-
-
-
-
-
-
-
-
-
-
-
-
