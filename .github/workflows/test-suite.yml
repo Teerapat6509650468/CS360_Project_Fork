@@ -56,5 +56,16 @@ jobs:
           TRANSFER_TOKEN_SALT: ${{ secrets.TRANSFER_TOKEN_SALT }} 
           JWT_SECRET: ${{ secrets.JWT_SECRET }}        
       run: npm test
+
+    #Run test suite
+    - name: Run test suite
+      working-directory: ./backend
+      env:
+          APP_KEYS: ${{ secrets.APP_KEYS }}              
+          API_TOKEN_SALT: ${{ secrets.API_TOKEN_SALT }}  
+          ADMIN_JWT_SECRET: ${{ secrets.ADMIN_JWT_SECRET }} 
+          TRANSFER_TOKEN_SALT: ${{ secrets.TRANSFER_TOKEN_SALT }} 
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}        
+      run: npm test
     
     - run: echo "This job's status is ${{ job.status }}."
