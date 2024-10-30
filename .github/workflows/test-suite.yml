@@ -17,6 +17,7 @@ jobs:
       matrix:
         os: [ubuntu-24.04, windows-latest, macos-latest]
         node-version: [16.x, 22.x, node]
+      fail-fast: false
         
     steps:
     - run: echo "This job is now running on a ${{ matrix.os }}"
