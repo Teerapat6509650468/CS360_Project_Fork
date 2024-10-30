@@ -42,6 +42,11 @@ jobs:
     - name: Install project dependencies
       run: npm install
 
+    #Install project dependencies
+    - name: Install project dependencies
+      working-directory: ./backend
+      run: npm install
+
     #Run test suite
     - name: Run test suite
       env:
