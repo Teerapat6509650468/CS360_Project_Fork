@@ -17,7 +17,7 @@ The web application serves as a platform for managing and facilitating pet adopt
 
 ### Features
 - Feature 1: Dark/Light Mode Toggle 
-- Feature 2: User alert System for Successful Pet Addition, Editing, and Deletion Actions 
+- Feature 2: User alert window for Successful Pet Addition, Editing, and Deletion Actions 
 - Feature 3: Enhanced Dropdown Menu for Gender and Animal Species Selection 
 - Feature 4: Enhanced Age Input with Validation, Month Support, and Unknown Age Option 
 
@@ -285,10 +285,17 @@ Our team uses the following tools for testing :
 ## Setting Up Tests
 
 - For local, to set up the testing environment, make sure you have Yarn installed. Then, install the required packages by running:
-
+	1. Install denpendency for frontend
     ```bash
     yarn 
     ```
+	2.Install denpendency for backend
+    ```bash
+		cd backend/
+    yarn 
+    ```
+	3. Create .env file 
+
 
 - In our project, the CI pipeline automatically runs whenever code is updated (through push or pull requests) in every branch and follows these steps:
 
