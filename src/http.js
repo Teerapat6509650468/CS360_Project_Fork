@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-var url="localhost";
+var url = "localhost";
 
 export default axios.create({
 
-    baseURL: "http://" + url +":1337/",
+    baseURL: "http://" + url + ":1337/",
     headers: {
         "Content-type": "application/json"
     }
