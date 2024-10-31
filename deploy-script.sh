@@ -98,21 +98,22 @@ yarn
 cd ..
 }
 
+generateSecretkey() {
+    openssl rand -base64 32
+}
+
+
 projectConfig() {
 cd src
 sed -i "s/var url=\"[^\"]*\";/var url=\"$public_ip\";/g" http.js
 cd ..
 cd backend
-generate_secret_key() {
-    openssl rand -base64 32
-}
 
 # Define the path to your .env file
 ENV_FILE=".env"
 
 # Create the .env file or clear the existing content
 echo "Creating or overwriting the .env file..."
-> $ENV_FILE
 
 # Populate the .env file with secret keys
 echo "HOST=0.0.0.0" >> $ENV_FILE
@@ -165,8 +166,7 @@ EOL
 
 # Function to set up the project
 ProjectSetup() {
-  echo -e "${CYAN}Cloning project repository...${NC}"
-  git clone $REPO_URL
+  echo -e "${CYAN}Setting up project ...${NC}"
 
   cd CS360_Project
   frontendSetup
