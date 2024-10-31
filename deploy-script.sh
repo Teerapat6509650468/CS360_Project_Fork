@@ -114,15 +114,17 @@ ENV_FILE=".env"
 
 # Create the .env file or clear the existing content
 echo "Creating or overwriting the .env file..."
+# Clear the .env file first
+> $ENV_FILE
 
 # Populate the .env file with secret keys
 echo "HOST=0.0.0.0" >> $ENV_FILE
 echo "PORT=1337" >> $ENV_FILE
-echo 'APP_KEYS="'"$(generate_secret_key)"','"$(generate_secret_key)"'"' >> $ENV_FILE
-echo "API_TOKEN_SALT=$(generate_secret_key)" >> $ENV_FILE
-echo "ADMIN_JWT_SECRET=$(generate_secret_key)" >> $ENV_FILE
-echo "TRANSFER_TOKEN_SALT=$(generate_secret_key)" >> $ENV_FILE
-echo "JWT_SECRET=$(generate_secret_key)" >> $ENV_FILE
+echo 'APP_KEYS="'"$(generateSecretkey)"','"$(generateSecretkey)"'"' >> $ENV_FILE
+echo "API_TOKEN_SALT=$(generateSecretkey)" >> $ENV_FILE
+echo "ADMIN_JWT_SECRET=$(generateSecretkey)" >> $ENV_FILE
+echo "TRANSFER_TOKEN_SALT=$(generateSecretkey)" >> $ENV_FILE
+echo "JWT_SECRET=$(generateSecretkey)" >> $ENV_FILE
 
 echo ".env file generated with secret keys."
 cd ..
