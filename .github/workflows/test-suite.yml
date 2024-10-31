@@ -1,0 +1,70 @@
+name: pet-adoption automated tests
+run-name: ${{ github.actor }} is testing out pet-adoption automated tests
+on:
+  push:
+    branches: 
+      - '*'
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+
+  Run-Test-Suite:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, windows-latest, macos-latest]
+        node-version: [16.x, 22.x, node]
+      fail-fast: false
+        
+    steps:
+    - run: echo "This job is now running on a ${{ matrix.os }}"
+    - run: echo "The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+    #Check out the latest code from repository
+    - name: Check out the latest code from repository.
+      uses: actions/checkout@v4
+
+    - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
+    - name: List files in the repository
+      run: |
+        ls ${{ github.workspace }}
+
+    #Setup Node.js environment
+    - name: Setup Node.js ${{ matrix.node-version }} on ${{ runner.os }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    #Install project dependencies
+    - name: Install project dependencies
+      run: npm install
+
+    #Install project dependencies
+    - name: Install project dependencies
+      working-directory: ./backend
+      run: npm install
+ 
+    #Set up env for backend
+    - name: Set up env backend
+      working-directory: ./backend
+      run: |
+        echo "APP_KEYS=${{ secrets.APP_KEYS }}" >> .env
+        echo "API_TOKEN_SALT=${{ secrets.API_TOKEN_SALT }}" >> .env
+        echo "ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }}" >> .env
+        echo "TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }}" >> .env
+        echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+
+    #Run test suite
+    - name: Run test suite
+      env:
+          APP_KEYS: ${{ secrets.APP_KEYS }}              
+          API_TOKEN_SALT: ${{ secrets.API_TOKEN_SALT }}  
+          ADMIN_JWT_SECRET: ${{ secrets.ADMIN_JWT_SECRET }} 
+          TRANSFER_TOKEN_SALT: ${{ secrets.TRANSFER_TOKEN_SALT }} 
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}        
+      run: npm test
+   
+    - run: echo "This job's status is ${{ job.status }}."

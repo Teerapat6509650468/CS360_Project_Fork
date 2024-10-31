@@ -17,7 +17,7 @@ The web application serves as a platform for managing and facilitating pet adopt
 
 ### Features
 - Feature 1: Dark/Light Mode Toggle 
-- Feature 2: User Feedback Notification System for Successful Pet Addition, Editing, and Deletion Actions 
+- Feature 2: User alert window for Successful Pet Addition, Editing, and Deletion Actions 
 - Feature 3: Enhanced Dropdown Menu for Gender and Animal Species Selection 
 - Feature 4: Enhanced Age Input with Validation, Month Support, and Unknown Age Option 
 
@@ -208,20 +208,15 @@ Once you have configured the permissions as needed, click the `Save` button in t
   
 ## How to deploy and run the project using the provided bash script [Specify the bash script path in the repo]
 
-Follow these steps to deploy and run the project using the provided bash script. Ensure you are connected to your EC2 instance before proceeding. <br>
+Ensure you are connected to your EC2 instance before proceeding. <br>
 
-**1. Connect to EC2 Instance**
+**Connect to EC2 Instance**
 - Open terminal and connect to EC2 instance using SSH :
 ```bash
 ssh -i <your-key.pem> ec2-user@<your-ec2-instance-ip>
 ```
 
-**2. Set Up the Bash Script** 
-
-There are two scenarios to set up and run the bash script. You can either use an existing repository, or clone it automatically within the script.
-
-**Option 1: Use the Existing Cloned Repository** <br>
-If you have already cloned the repository, follow these steps <br><br>
+Follow these steps to deploy and run the project using the provided bash script. <br>
 **1. Set up and run the script**
 - Navigate to the utils/ directory :
 ```bash
@@ -272,257 +267,6 @@ After selecting the Public role, you will see a list of available API permission
 - Save Changes
 Once you have configured the permissions as needed, click the `Save` button in the lower-right corner to apply the changes.
 
-<hr>
-
-**Option 2: Clone the Repository Automatically and Run the Script** <br>
-If you prefer to clone the repository automatically as part of the script, follow these steps to create and set up the deploy-script.sh <br><br>
-
-**1. Set up the bash script**
-- Create and edit the deploy-script.sh file : 
-```bash
-touch deploy-script.sh
-chmod +x deploy-script.sh
-nano deploy-script.sh
-```
-
-- Add the following script to the file (or copy it from utils/deploy-script.sh) :
-```bash
-#!/bin/bash
-
-source ~/.bashrc
-
-REPO_URL="https://github.com/Kwandao6509650245/CS360_Project.git"
-public_ip=$(curl -s http://checkip.amazonaws.com)
-
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-CYAN='\033[0;36m'
-NC='\033[0m'
-
-echo -e "${CYAN}=============================="
-echo -e "   Starting installation...   "
-echo -e "==============================${NC}"
-sudo apt update -y
-
-# Function to check for Git installation
-installGit() {
-
-  if ! command -v git &> /dev/null; then
-    echo -e "${YELLOW}git not found. Installing git...${NC}"
-    sudo apt install git
-    echo -e "${GREEN}git installed successfully!${NC}"
-  else
-    echo -e "${GREEN}git is already installed.${NC}"
-  fi
-}
-
-# Function to install NVM
-installNvm() {
-  if ! command -v nvm &> /dev/null; then  # Check if NVM is installed first
-    echo -e "${YELLOW}nvm not found. Installing nvm...${NC}"
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-    export NVM_DIR="$HOME/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-    echo -e "${GREEN}nvm installed successfully!${NC}"
-  else
-    echo -e "${GREEN}nvm is already installed.${NC}"
-  fi
-}
-
-# Function to install Node.js version 16
-installNode16() {
-  if command -v node &> /dev/null; then
-    NODE_VERSION=$(node -v | grep -o '^v16')
-    if [ "$NODE_VERSION" = "v16" ]; then
-      echo -e "${GREEN}Node.js v16 is already installed.${NC}"
-    else
-      echo -e "${YELLOW}Node.js is installed but not v16. Installing Node.js v16...${NC}"
-      nvm install 16
-      nvm use 16
-      echo -e "${GREEN}Node.js v16 installed successfully!${NC}"
-    fi
-  else
-    echo -e "${YELLOW}Node.js not found. Installing Node.js v16...${NC}"
-    nvm install 16
-    nvm use 16
-    echo -e "${GREEN}Node.js v16 installed successfully!${NC}"
-  fi
-}
-
-installYarn() {
-  if ! command -v yarn &> /dev/null; then  
-    echo -e "${YELLOW}yarn not found. Installing yarn...${NC}"
-    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-    echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-    sudo apt update
-    sudo apt install --no-install-recommends yarn
-    echo -e "${GREEN}yarn installed successfully!${NC}"
-  else
-    echo -e "${GREEN}yarn is already installed.${NC}"
-  fi
-
-}
-
-installPM2() {
-  if ! command -v pm2 &> /dev/null; then
-    echo -e "${YELLOW}pm2 not found. Installing pm2...${NC}"
-    echo "installing pm2"
-    npm install pm2 -g
-    echo -e "${GREEN}pm2 installed successfully!${NC}"
-  else
-    echo -e "${GREEN}pm2 is already installed.${NC}"
-  fi
-}
-
-frontendSetup() {
-echo -e "${CYAN}Installing frontend dependencies...${NC}"
-yarn
-}
-
-backendSetup() {
-echo -e "${CYAN}Installing backend dependencies...${NC}"
-cd backend
-yarn
-cd ..
-}
-
-projectConfig() {
-cd src
-sed -i "s/var url=\"[^\"]*\";/var url=\"$public_ip\";/g" http.js
-cd ..
-cd backend
-generate_secret_key() {
-    openssl rand -base64 32
-}
-
-# Define the path to your .env file
-ENV_FILE=".env"
-
-# Create the .env file or clear the existing content
-echo "Creating or overwriting the .env file..."
-> $ENV_FILE
-
-# Populate the .env file with secret keys
-echo "HOST=0.0.0.0" >> $ENV_FILE
-echo "PORT=1337" >> $ENV_FILE
-echo 'APP_KEYS="'"$(generate_secret_key)"','"$(generate_secret_key)"'"' >> $ENV_FILE
-echo "API_TOKEN_SALT=$(generate_secret_key)" >> $ENV_FILE
-echo "ADMIN_JWT_SECRET=$(generate_secret_key)" >> $ENV_FILE
-echo "TRANSFER_TOKEN_SALT=$(generate_secret_key)" >> $ENV_FILE
-echo "JWT_SECRET=$(generate_secret_key)" >> $ENV_FILE
-
-echo ".env file generated with secret keys."
-cd ..
-}
-
-deploy() {
-yarn build
-cd backend
-yarn build
-cd ..
-pm2 start ecosystem.config.js
-yarn start
-}
-
-configPM2() {
-    local current_dir=$(pwd)
-    echo "Configuring ecosystem.config.js file..."
-    pm2 init
-
-    echo "Creating ecosystem.config.js..."
-    cat <<EOL > ecosystem.config.js
-    module.exports = {
-      apps: [
-        {
-          name: 'pet-adoption-backend',
-          cwd: '$current_dir/backend',
-          script: 'npm',
-          args: 'start',
-          env: {
-            APP_KEYS: process.env.APP_KEYS,
-            API_TOKEN_SALT: process.env.API_TOKEN_SALT,
-            ADMIN_JWT_SECRET: process.env.ADMIN_JWT_SECRET,
-            JWT_SECRET: process.env.JWT_SECRET,
-      NODE_ENV: 'production',
-      },
-    },
-  ],
-};
-EOL
-}
-
-# Function to set up the project
-ProjectSetup() {
-  echo -e "${CYAN}Cloning project repository...${NC}"
-  git clone $REPO_URL
-
-  cd CS360_Project
-  frontendSetup
-  backendSetup
-  projectConfig
-  configPM2
-  deploy
-}
-
-# Call the functions in the desired order
-
-installGit
-installNvm
-installNode16
-installYarn
-installPM2
-ProjectSetup
-
-echo -e "${GREEN}=============================="
-echo -e "   COMPLETED!!!   "
-echo -e "==============================${NC}"
-```
-
-**2. Run the bash script**
-- Execute the script :
-```bash
-source deploy-script.sh
-```
-**3. Access the Backend and Frontend**
-- Once both the backend and frontend are running, you can access them via your web browser.
-- Open frontend :
-```
-http://<your-ec2-public-ip>:3000
-```
-- Open backend :
-```
-http://<your-ec2-public-ip>:1337
-```
-- Replace <your-ec2-public-ip> with the actual public IP address of your EC2 instance.
-
-**4. Enable API in Strapi** <br>
-By following these steps, you will be able to create, update, delete, and view data through the API without requiring authentication. <br>
-
-- Access the Strapi Admin Panel
-Open your browser and navigate to the Strapi Admin Panel, typically found at `http://<your-ec2-public-ip>:1337/admin` or another URL where your Strapi instance is running.
-
-- Go to the Settings Menu
-Once in the Admin Panel, click on the `Settings` option in the left sidebar.
-
-- Select the User & Permissions Plugin
-In the Settings page, find and click on the `User & Permissions Plugin` under the `PLUGIN` section.
-
-- Click on Roles
-After selecting the User & Permissions Plugin, choose the `Roles` submenu. This will show a list of roles within Strapi.
-
-- Choose the Public Role
-From the list of roles, select the `Public` role, which governs permissions for users who do not log in or register.
-
-- Configure Permissions
-After selecting the Public role, you will see a list of available API permissions.
-
-  - Scroll down to the API `Pet` to enable for public access.
-  - Tick the box for `Select All` to allow public access to all actions within that API.
-  
-- Save Changes
-Once you have configured the permissions as needed, click the `Save` button in the lower-right corner to apply the changes.
-
 ***
   
 ภาพ screen capture ของหน้าเว็บแอปพลิเคชันซึ่ง deploy ไว้บน EC2
@@ -530,21 +274,330 @@ Once you have configured the permissions as needed, click the `Save` button in t
 ![Screenshot 2024-09-21 205426](https://github.com/user-attachments/assets/489a9f86-c1af-4c7d-99d5-5bac137d5aab)
 
 
+## Unit and Integration Testing Overview
+Our team uses the following tools for testing :
+- **Jest**: Used for unit testing individual functions or modules, ensuring that each component works as expected in isolation.
+- **Supertest**: Handles integration testing, focusing on how different parts of the application interact, especially useful for testing API endpoints.
+- **Babel**: Transpiles ES6+ JavaScript code to ensure compatibility with Jest, allowing the use of modern JavaScript features in tests.
+- **GitHub Actions**: Automates testing in CI/CD. Each push and pull request triggers the GitHub Actions workflow, running our test suite in various environments (e.g., macos-latest, ubuntu-24.04). This setup ensures consistent test results across platforms and notifies us immediately if any tests fail, providing valuable feedback on code quality before merging.
 
 
+## Setting Up Tests
+
+- For local, to set up the testing environment, make sure you have Yarn installed. Then, install the required packages by running:
+	1. Install denpendency for frontend
+    ```bash
+    yarn 
+    ```
+	2. Install denpendency for backend
+    ```bash
+    cd backend/
+    yarn 
+    ```
+	3. Create or modify the .env file:
+	- Run the deploy-script.sh script to set up the environment, or
+	- Generate a secret key manually with:
+     ``` bash
+     openssl rand -base64 32
+     ```
+- for the CI pipeline ensure to setting up GitHub secret first:
+  1. Go to your repository on GitHub.
+  2. Navigate to Settings > Secrets and variables > Actions.
+  3. Click New repository secret.
+  4. Provide a name (e.g., `APP_KEYS`, `API_TOKEN_SALT`, `ADMIN_JWT_SECRET`, `TRANSFER_TOKEN_SALT`, `JWT_SECRET`) and value (the secret data itself).
+  5. Save the secret.
+  6. The names of the secrets are case-sensitive, so ensure consistency in naming when referring to them in workflows.
+
+- In our project, the CI pipeline automatically runs whenever code is updated (through push or pull requests) in every branch and follows these steps:
+
+    1. **Trigger (on:)**  
+       The pipeline automatically runs on any `push` or `pull_request` event to any branch (`'*'`). This ensures the workflow is triggered for all updates across branches.
+
+    2. **Job Setup (Run-Test-Suite)**  
+       - The job is configured to run on different operating systems using a matrix strategy (`ubuntu-24.04`, `windows-latest`, `macos-latest`), ensuring compatibility across environments. Different Node.js versions (`16.x`, `22.x`, and `node`) are also tested, ensuring the code runs smoothly on multiple versions of Node.js.
+       - fail-fast: false lets all matrix combinations run, even if one fails, providing complete test results.
+
+    3. **Steps**:
+        - **System Information**:
+            - `echo "This job is now running on a ${{ matrix.os }}"` outputs the OS currently in use for easier debugging and identification.
+            - Displays the branch name and repository using `echo`, showing contextual information for the test.
+        
+        - **Checkout Code**:  
+          Uses `actions/checkout@v4` to pull the latest code from the repository into the runner environment, ensuring the job has the most recent code.
+        
+        - **Setup Node.js**:  
+          - Installs Node.js on the runner according to the specified `matrix.node-version`. The `cache: 'npm'` option is used to save previously downloaded packages and speed up future runs.
+        
+        - **List Repository Files**:  
+          - Lists all files in the repository with `ls`, helping confirm that the code is available and accessible for subsequent steps.
+        
+        - **Install Dependencies**:  
+          - Runs `npm install` to install all project dependencies as specified in `package-lock.json`, ensuring consistent dependency versions.
+          - Installs project dependencies in the root for frontend and then specifically in the ./backend folder for backend.
+          - 
+        - **Environment Setup for Backend**:  
+          - Creating a .env file within the ./backend folder and securely injecting secret environment variables from GitHub secret for Strapi API authentication, tokens, and other sensitive keys is essential for maintaining security and functionality.
+            
+        - **Run Test Suite**:  
+          - Runs `npm test` to execute the automated tests.
+          - The environment variables (`APP_KEYS`, `API_TOKEN_SALT`, `ADMIN_JWT_SECRET`, `TRANSFER_TOKEN_SALT`, `JWT_SECRET`) are set using GitHub secrets, securely providing necessary values for tests.
+        
+        - **If tests fail**, an error is logged specifying which tests failed on each OS and Node.js version.
+        
+        - **Display Job Status**:  
+          - Logs the job’s final status (e.g., success or failure) using `echo`, providing a summary of the job outcome for easier troubleshooting.
 
 
+## Running Tests
+- **Running Tests Locally**: Run tests locally with these commands:
 
+```bash
+#unit test
+npm test
+```
+
+```bash
+#integration test
+cd backend/
+npm test
+```
+
+- **CI Pipeline Process**:
+  1. Every time there’s a push or pull request to any branch (indicated by '*' in the `test-suite.yml` file), the pipeline triggers automatically.
+  2. GitHub Actions starts running the Run-Test-Suite job, following each step in sequence: checking out code, setting up the environment, installing dependencies, and running the test suite.
+  3. The matrix strategy makes the pipeline test the code across multiple operating systems and Node.js versions, as specified, to confirm compatibility across all environments.
+
+
+## Test File Structure
+### Unit Tests
+The unit test files in this project are stored in the `src/__test__` folder:
+```
+src/
+├── __test__/
+│   ├── CreatePetEntry.test.js
+│   ├── EditPetEntry.test.js
+│   └── unit-test-troubleshooting.txt
+├── component/
+├── contexts/
+├── main/
+├── app.js
+├── app.css
+├── http.js
+├── index.css
+└── index.js
   
+```
+**CreatePetEntry.test.js**
+- Handles input changes for Create Pet Entry.
+- Calls `createNewPet` on button click with correct data.
+- Does not call `createNewPet` if required fields are not filled.
+
+**EditPetEntry.test.js**
+- Handles input changes for Edit Pet Entry.
+- Calls `updatePet` on button click with correct data.
+- Should not have the same values as the initial mock repo after editing.
+
+### Integration Tests
+The integration test files in this project are stored in the `backend/tests` folder:
+```
+backend/
+├── config/
+├── public/
+├── src/
+├── tests/
+│   ├── pet.test.js
+│   └── setupStrapi.js
+├── .editorconfig
+├── .env.example
+├── .eslintignore
+├── .eslintrc
+├── .gitignore
+├── README.md
+├── babel.config.js
+├── favicon.ico
+├── integration-testing-step.txt  # A guide for setting up and performing integration testing 
+├── jest.config.js
+├── package-lock.json
+├── package.json
+└── yarn.lock
+```
+**Pet.test.js**
+- **Create a New Pet Entry**: Tests POST `/api/pets` to create a new entry and checks the created data.
+- **Update a Pet Entry**: Tests PUT `/api/pets/:id` to update an existing pet’s data.
+- **Retrieve All Pets**: Tests GET `/api/pets` to retrieve all pet entries.
+- **Handle Missing Fields**: Tests POST `/api/pets` with missing data to check for error handling.
+- **Retrieve a Pet by ID**: Tests GET `/api/pets/:id` to fetch a specific pet.
+- **Delete a Pet Entry**: Tests DELETE `/api/pets/:id` to ensure a pet entry is deleted properly.
+- **Handle Non-Existing Pet Requests**: Checks PUT and GET requests for non-existing pet IDs, ensuring proper error responses.
+
+### CI Configuration
+
+The `test-suite.yml` file used for GitHub Actions CI is stored in `.github/workflows`:
+- This file is configured to handle CI for our testing pipeline.
+```
+.github/
+└── workflows/
+    ├── github-actions-demo.yml
+    └── test-suite.yml
+```
+
+## Test Coverage
+
+- **Unit Testing**: Focuses on individual functions or modules to confirm they work as expected in isolation. Each unit is tested with a range of inputs to ensure reliable and consistent behavior, catching issues early in development.
+
+```
+PASS  src/__test__/CreatePetEntry.test.js (12.769 s)
+  ● Console
+    console.log
+      Submitting data:  {"data":{"name":"Buddy","animal":"Dog","breed":"Golden Retriever","age":"3","location":"Bangkok","sex":"Male"}}
+      at handleCreateNewPet (src/components/CreatePetEntry.js:58:17)
+    console.log
+      All fields are required.
+      at handleCreateNewPet (src/components/CreatePetEntry.js:42:21)
+
+ PASS  src/__test__/EditPetEntry.test.js (13.49 s)
+ -------------------|---------|----------|---------|---------|-------------------
+ File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+ -------------------|---------|----------|---------|---------|-------------------
+ All files          |   97.67 |      100 |   94.44 |   97.67 |                   
+  BottomNav.js      |      75 |      100 |      50 |      75 | 20                
+  CreatePetEntry.js |     100 |      100 |     100 |     100 |                   
+  EditPetEntry.js   |     100 |      100 |     100 |     100 |                   
+ -------------------|---------|----------|---------|---------|-------------------
+
+ Test Suites: 2 passed, 2 total
+ Tests:       8 passed, 8 total
+ Snapshots:   0 total
+ Time:        14.75 s
+```
+
+- **Integration Testing**: Verifies that different parts of the API interact correctly. By testing how modules work together, integration testing ensures data flows smoothly between components, identifying issues that may appear when components are combined.
+
+```
+PASS  tests/pet.test.js (7.835 s)
+  Pet API
+    ✓ should create a new pet entry (88 ms)
+    ✓ should update an existing pet entry (44 ms)
+    ✓ should retrieve all pets (13 ms)
+    ✓ should handle missing required fields (10 ms)
+    ✓ should handle updating non-existing pet (12 ms)
+    ✓ should retrieve a pet by ID (12 ms)
+    ✓ should delete a pet entry (31 ms)
+    ✓ should handle retrieving a non-existing pet by ID (13 ms)
+
+ -------------------------|---------|----------|---------|---------|-------------------
+ File                     | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+ -------------------------|---------|----------|---------|---------|-------------------
+ All files                |     100 |      100 |     100 |     100 |                   
+  config                  |     100 |      100 |     100 |     100 |                   
+   admin.js               |     100 |      100 |     100 |     100 |                   
+   api.js                 |     100 |      100 |     100 |     100 |                   
+   database.js            |     100 |      100 |     100 |     100 |                   
+   middlewares.js         |     100 |      100 |     100 |     100 |                   
+   server.js              |     100 |      100 |     100 |     100 |                   
+  src                     |     100 |      100 |     100 |     100 |                   
+   index.js               |     100 |      100 |     100 |     100 |                   
+  src/api/pet/controllers |     100 |      100 |     100 |     100 |                   
+   pet.js                 |     100 |      100 |     100 |     100 |                   
+  src/api/pet/routes      |     100 |      100 |     100 |     100 |                   
+   pet.js                 |     100 |      100 |     100 |     100 |                   
+  src/api/pet/services    |     100 |      100 |     100 |     100 |                   
+   pet.js                 |     100 |      100 |     100 |     100 |                   
+ -------------------------|---------|----------|---------|---------|-------------------
+ Test Suites: 1 passed, 1 total
+ Tests:       8 passed, 8 total
+ Snapshots:   0 total
+ Time:        7.96 s
+```
+- **Continuous Integration**
+  As part of our CI setup, every push or pull request automatically triggers the test suite using GitHub Actions (configured in `.github/workflows/test-suite.yml`). This CI process runs both unit and integration tests across multiple environments, providing:
+	- **Immediate Feedback**: Notifications alert us to any failed tests, enabling quick fixes and reducing the risk of breaking changes.
+	- **Cross-Platform Compatibility**: The CI pipeline runs tests on different operating systems (e.g., `macOS`, `Ubuntu`, `Windows`) and Node.js versions, ensuring consistent performance across environments.
+ ![Screenshot 2024-11-01 000330](https://github.com/user-attachments/assets/639fe6aa-ac1a-4350-965f-25d0362fd518)
+
+ 
+## Viewing Test Results 
+
+You can view test results both in the CI pipeline on GitHub and locally in your terminal. by following this steps:
+
+### 1. Viewing Test Results in GitHub Actions
+   - **Go to the Repository on GitHub**:
+     - Navigate to your project repository where the CI pipeline is set up.
+   - **Access the “Actions” Tab**:
+     - In this tab, you’ll see all triggered workflows, such as those from pushes or pull requests.
+     - The latest workflow appears at the top with statuses like ✔️ success, ❌ failure, or ⏳ in progress.
+   - **Select the Workflow**:
+     - Click on the workflow to see its details. This opens a page showing each job created from the `test-suite.yml` file (e.g., build).
+   - **View the Job Log**:
+     - Click on the job (e.g., build) to check logs for each step.
+     - Logs show details for steps like dependency installation, test execution, and any errors or failures.
+   - **Notifications and Test Reports**:
+     - If a test fails, GitHub Actions provides error details, showing which assertions did not pass.
+    ![Screenshot 2024-11-01 003733](https://github.com/user-attachments/assets/c72dbf9e-3b75-42af-a8f0-d2862a48eb4c)
 
 
+### 2. Viewing Test Results in Terminal (Local Testing)
+   - **Run Tests Locally**:
+     - Run tests with the command:
+```bash
+#unit test
+npm test
+```
 
+```bash
+#integration test
+cd backend/
+npm test
+```
 
+     - Results will appear in the terminal in real-time.
 
+   - **Test Results**:
+     - The terminal shows detailed results, including:
+       - Number of tests passed and failed
+       - Time taken per test
+       - Error details for any failed assertions
+         
+   - **Summary**:
+     - At the end, the terminal provides a summary, such as `Tests: 10 passed, 2 failed`, giving an overview of the test outcomes.
+![Screenshot 2024-11-01 002436](https://github.com/user-attachments/assets/92a88b19-0fe7-46a4-80f8-a794b0e43118)
+![Screenshot 2024-11-01 002814](https://github.com/user-attachments/assets/1c0f2e3b-a6b2-4acb-8d12-20857bda9f90)
 
+## Adding New Tests
 
+Add new test files within the `src/__test__` directory, following these steps:
 
+1. **Create Test Files**:
+   - For **unit tests**, add files under `src/__test__/`.
+   - For **integration tests**, place files under `backend/tests/`.
+   - Each test file should follow a naming convention that reflects its purpose. For example:
+     - `AAA.test.js` for unit tests.
+     - `BBB.test.js` for integration tests.
 
+2. **Write Test Cases**:
+   - Define test cases that validate specific functions, components, or API endpoints.
+    - Use Jest’s `describe` and `it` functions to organize tests for unit testing.
+   - For integration tests with Supertest.
 
+3. **Run Tests Locally**:
+   - Ensure that new tests pass locally by running:
+     
+```bash
+#unit test
+npm test
+```
+```bash
+#integration test
+cd backend/
+npm test
+```
 
-
+4. **Commit and Push**:
+   - After validating new tests locally, select the branch associated with the new test (e.g., `sprint2-unit-test`).
+   - Commit and push the code to trigger CI tests in GitHub Actions. This will run the test suite across different environments, reinforcing compatibility and quality.
+ 
+5. **Review Test Results**:
+   - Monitor the GitHub Actions workflow to confirm that all tests pass.
+  
+6. **Merge to Main Branch**:
+   - After ensuring that all tests pass successfully, you can merge your branch into the main branch.
