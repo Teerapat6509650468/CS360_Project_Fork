@@ -289,12 +289,35 @@ Our team uses the following tools for testing :
     ```bash
     yarn 
     ```
-	2.Install denpendency for backend
+	2. Install denpendency for backend
     ```bash
 		cd backend/
     yarn 
     ```
-	3. Create .env file 
+	3. Create or modify the .env file:
+	-	Run the deploy-script.sh script to set up the environment, or
+	- Generate a secret key manually with:
+		``` bash
+		openssl rand -base64 32
+		```
+
+- For setting up Integration Testing Steps:
+
+1. Ensure that you have modified the `.env` file.
+2. Change `http.js` to use your public IPv4 address (if you are testing on your machine, it should be set to `localhost`).
+3. Run the Strapi app.
+4. Complete the registration process.
+5. Access the Strapi Admin Panel:
+
+   - Go to your Strapi admin panel (usually at `http://<your-ip-address>:1337/admin`).
+   - Navigate to the **Roles** section:
+     - Go to **Settings**.
+     - Click on **Users & Permissions Plugin**.
+     - Select **Roles**.
+   
+6. Edit the Role:
+   - Select the role that your request is using (e.g., Public or Authenticated).
+   - Ensure that the role has permission to create entries for your pet collection type. Look for permissions related to the **create** action for the pets model.
 
 
 - In our project, the CI pipeline automatically runs whenever code is updated (through push or pull requests) in every branch and follows these steps:
@@ -333,28 +356,16 @@ Our team uses the following tools for testing :
 
 
 ## Running Tests
-
-- **For Integration Testing Steps:**
-
-1. Ensure that you have modified the `.env` file.
-2. Change `http.js` to use your public IPv4 address (if you are testing on your machine, it should be set to `localhost`).
-3. Run the Strapi app.
-4. Complete the registration process.
-5. Access the Strapi Admin Panel:
-
-   - Go to your Strapi admin panel (usually at `http://<your-ip-address>:1337/admin`).
-   - Navigate to the **Roles** section:
-     - Go to **Settings**.
-     - Click on **Users & Permissions Plugin**.
-     - Select **Roles**.
-   
-6. Edit the Role:
-   - Select the role that your request is using (e.g., Public or Authenticated).
-   - Ensure that the role has permission to create entries for your pet collection type. Look for permissions related to the **create** action for the pets model.
-
-- **Running Tests Locally**: Before pushing code, you can run tests locally with these commands:
+- **Running Tests Locally**: Run tests locally with these commands:
 
 ```bash
+#unit test
+npm test
+```
+
+```bash
+#integration test
+cd backend/
 npm test
 ```
 
@@ -521,7 +532,7 @@ You can view test results both in the CI pipeline on GitHub and locally in your 
      - In this tab, you’ll see all triggered workflows, such as those from pushes or pull requests.
      - The latest workflow appears at the top with statuses like ✔️ success, ❌ failure, or ⏳ in progress.
    - **Select the Workflow**:
-     - Click on the workflow to see its details. This opens a page showing each job created from the `.yml` file (e.g., build).
+     - Click on the workflow to see its details. This opens a page showing each job created from the `test-suite.yml` file (e.g., build).
    - **View the Job Log**:
      - Click on the job (e.g., build) to check logs for each step.
      - Logs show details for steps like dependency installation, test execution, and any errors or failures.
