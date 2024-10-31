@@ -586,13 +586,11 @@ Add new test files within the `src/__test__` directory, following these steps:
 #unit test
 npm test
 ```
-
 ```bash
 #integration test
 cd backend/
 npm test
 ```
-   - Check that tests produce expected outcomes without breaking existing functionality.
 
 4. **Commit and Push**:
    - After validating new tests locally, select the branch associated with the new test (e.g., `sprint2-unit-test`).
