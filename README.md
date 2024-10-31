@@ -334,7 +334,7 @@ Our team uses the following tools for testing :
         - **Install Dependencies**:  
           - Runs `npm install` to install all project dependencies as specified in `package-lock.json`, ensuring consistent dependency versions.
           - Installs project dependencies in the root for frontend and then specifically in the ./backend folder for backend.
-          - 
+            
         - **Environment Setup for Backend**:  
           - Creating a .env file within the ./backend folder and securely injecting secret environment variables from GitHub secret for Strapi API authentication, tokens, and other sensitive keys is essential for maintaining security and functionality.
             
@@ -584,11 +584,13 @@ Add new test files within the `src/__test__` directory, following these steps:
      
 ```bash
 #unit test
+yarn
 npm test
 ```
 ```bash
 #integration test
 cd backend/
+yarn
 npm test
 ```
 
