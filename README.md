@@ -291,34 +291,22 @@ Our team uses the following tools for testing :
     ```
 	2. Install denpendency for backend
     ```bash
-		cd backend/
+    cd backend/
     yarn 
     ```
 	3. Create or modify the .env file:
-	-	Run the deploy-script.sh script to set up the environment, or
+	- Run the deploy-script.sh script to set up the environment, or
 	- Generate a secret key manually with:
-		``` bash
-		openssl rand -base64 32
-		```
-
-- For setting up Integration Testing Steps:
-
-1. Ensure that you have modified the `.env` file.
-2. Change `http.js` to use your public IPv4 address (if you are testing on your machine, it should be set to `localhost`).
-3. Run the Strapi app.
-4. Complete the registration process.
-5. Access the Strapi Admin Panel:
-
-   - Go to your Strapi admin panel (usually at `http://<your-ip-address>:1337/admin`).
-   - Navigate to the **Roles** section:
-     - Go to **Settings**.
-     - Click on **Users & Permissions Plugin**.
-     - Select **Roles**.
-   
-6. Edit the Role:
-   - Select the role that your request is using (e.g., Public or Authenticated).
-   - Ensure that the role has permission to create entries for your pet collection type. Look for permissions related to the **create** action for the pets model.
-
+     ``` bash
+     openssl rand -base64 32
+     ```
+- for the CI pipeline ensure to setting up GitHub secret first:
+  1. Go to your repository on GitHub.
+  2. Navigate to Settings > Secrets and variables > Actions.
+  3. Click New repository secret.
+  4. Provide a name (e.g., `APP_KEYS`, `API_TOKEN_SALT`, `ADMIN_JWT_SECRET`, `TRANSFER_TOKEN_SALT`, `JWT_SECRET`) and value (the secret data itself).
+  5. Save the secret.
+  6. The names of the secrets are case-sensitive, so ensure consistency in naming when referring to them in workflows.
 
 - In our project, the CI pipeline automatically runs whenever code is updated (through push or pull requests) in every branch and follows these steps:
 
@@ -326,7 +314,8 @@ Our team uses the following tools for testing :
        The pipeline automatically runs on any `push` or `pull_request` event to any branch (`'*'`). This ensures the workflow is triggered for all updates across branches.
 
     2. **Job Setup (Run-Test-Suite)**  
-       The job is configured to run on different operating systems using a matrix strategy (`ubuntu-24.04`, `windows-latest`, `macos-latest`), ensuring compatibility across environments. Different Node.js versions (`16.x`, `22.x`, and `node`) are also tested, ensuring the code runs smoothly on multiple versions of Node.js.
+       - The job is configured to run on different operating systems using a matrix strategy (`ubuntu-24.04`, `windows-latest`, `macos-latest`), ensuring compatibility across environments. Different Node.js versions (`16.x`, `22.x`, and `node`) are also tested, ensuring the code runs smoothly on multiple versions of Node.js.
+       - fail-fast: false lets all matrix combinations run, even if one fails, providing complete test results.
 
     3. **Steps**:
         - **System Information**:
@@ -343,8 +332,12 @@ Our team uses the following tools for testing :
           - Lists all files in the repository with `ls`, helping confirm that the code is available and accessible for subsequent steps.
         
         - **Install Dependencies**:  
-          - Runs `npm ci` to install all project dependencies as specified in `package-lock.json`, ensuring consistent dependency versions.
-        
+          - Runs `npm install` to install all project dependencies as specified in `package-lock.json`, ensuring consistent dependency versions.
+          - Installs project dependencies in the root for frontend and then specifically in the ./backend folder for backend.
+          - 
+        - **Environment Setup for Backend**:  
+          - Creating a .env file within the ./backend folder and securely injecting secret environment variables from GitHub secret for Strapi API authentication, tokens, and other sensitive keys is essential for maintaining security and functionality.
+            
         - **Run Test Suite**:  
           - Runs `npm test` to execute the automated tests.
           - The environment variables (`APP_KEYS`, `API_TOKEN_SALT`, `ADMIN_JWT_SECRET`, `TRANSFER_TOKEN_SALT`, `JWT_SECRET`) are set using GitHub secrets, securely providing necessary values for tests.
@@ -370,7 +363,7 @@ npm test
 ```
 
 - **CI Pipeline Process**:
-  1. Every time there’s a push or pull request to any branch (indicated by '*' in the `.yml` file), the pipeline triggers automatically.
+  1. Every time there’s a push or pull request to any branch (indicated by '*' in the `test-suite.yml` file), the pipeline triggers automatically.
   2. GitHub Actions starts running the Run-Test-Suite job, following each step in sequence: checking out code, setting up the environment, installing dependencies, and running the test suite.
   3. The matrix strategy makes the pipeline test the code across multiple operating systems and Node.js versions, as specified, to confirm compatibility across all environments.
 
@@ -453,77 +446,79 @@ The `test-suite.yml` file used for GitHub Actions CI is stored in `.github/workf
 - **Unit Testing**: Focuses on individual functions or modules to confirm they work as expected in isolation. Each unit is tested with a range of inputs to ensure reliable and consistent behavior, catching issues early in development.
 
 ```
-         PASS  src/__test__/CreatePetEntry.test.js (12.769 s)
-	  ● Console
-	    console.log
-	      Submitting data:  {"data":{"name":"Buddy","animal":"Dog","breed":"Golden Retriever","age":"3","location":"Bangkok","sex":"Male"}}
-	      at handleCreateNewPet (src/components/CreatePetEntry.js:58:17)
-	    console.log
-	      All fields are required.
-	      at handleCreateNewPet (src/components/CreatePetEntry.js:42:21)
-	
-	 PASS  src/__test__/EditPetEntry.test.js (13.49 s)
-	-------------------|---------|----------|---------|---------|-------------------
-	File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
-	-------------------|---------|----------|---------|---------|-------------------
-	All files          |   97.67 |      100 |   94.44 |   97.67 |                   
-	 BottomNav.js      |      75 |      100 |      50 |      75 | 20                
-	 CreatePetEntry.js |     100 |      100 |     100 |     100 |                   
-	 EditPetEntry.js   |     100 |      100 |     100 |     100 |                   
-	-------------------|---------|----------|---------|---------|-------------------
-	
-	Test Suites: 2 passed, 2 total
-	Tests:       8 passed, 8 total
-	Snapshots:   0 total
-	Time:        14.75 s
+PASS  src/__test__/CreatePetEntry.test.js (12.769 s)
+  ● Console
+    console.log
+      Submitting data:  {"data":{"name":"Buddy","animal":"Dog","breed":"Golden Retriever","age":"3","location":"Bangkok","sex":"Male"}}
+      at handleCreateNewPet (src/components/CreatePetEntry.js:58:17)
+    console.log
+      All fields are required.
+      at handleCreateNewPet (src/components/CreatePetEntry.js:42:21)
+
+ PASS  src/__test__/EditPetEntry.test.js (13.49 s)
+ -------------------|---------|----------|---------|---------|-------------------
+ File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+ -------------------|---------|----------|---------|---------|-------------------
+ All files          |   97.67 |      100 |   94.44 |   97.67 |                   
+  BottomNav.js      |      75 |      100 |      50 |      75 | 20                
+  CreatePetEntry.js |     100 |      100 |     100 |     100 |                   
+  EditPetEntry.js   |     100 |      100 |     100 |     100 |                   
+ -------------------|---------|----------|---------|---------|-------------------
+
+ Test Suites: 2 passed, 2 total
+ Tests:       8 passed, 8 total
+ Snapshots:   0 total
+ Time:        14.75 s
 ```
 
 - **Integration Testing**: Verifies that different parts of the API interact correctly. By testing how modules work together, integration testing ensures data flows smoothly between components, identifying issues that may appear when components are combined.
 
 ```
-	 PASS  tests/pet.test.js (7.835 s)
-	  Pet API
-	    ✓ should create a new pet entry (88 ms)
-	    ✓ should update an existing pet entry (44 ms)
-	    ✓ should retrieve all pets (13 ms)
-	    ✓ should handle missing required fields (10 ms)
-	    ✓ should handle updating non-existing pet (12 ms)
-	    ✓ should retrieve a pet by ID (12 ms)
-	    ✓ should delete a pet entry (31 ms)
-	    ✓ should handle retrieving a non-existing pet by ID (13 ms)
-	
-	-------------------------|---------|----------|---------|---------|-------------------
-	File                     | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
-	-------------------------|---------|----------|---------|---------|-------------------
-	All files                |     100 |      100 |     100 |     100 |                   
-	 config                  |     100 |      100 |     100 |     100 |                   
-	  admin.js               |     100 |      100 |     100 |     100 |                   
-	  api.js                 |     100 |      100 |     100 |     100 |                   
-	  database.js            |     100 |      100 |     100 |     100 |                   
-	  middlewares.js         |     100 |      100 |     100 |     100 |                   
-	  server.js              |     100 |      100 |     100 |     100 |                   
-	 src                     |     100 |      100 |     100 |     100 |                   
-	  index.js               |     100 |      100 |     100 |     100 |                   
-	 src/api/pet/controllers |     100 |      100 |     100 |     100 |                   
-	  pet.js                 |     100 |      100 |     100 |     100 |                   
-	 src/api/pet/routes      |     100 |      100 |     100 |     100 |                   
-	  pet.js                 |     100 |      100 |     100 |     100 |                   
-	 src/api/pet/services    |     100 |      100 |     100 |     100 |                   
-	  pet.js                 |     100 |      100 |     100 |     100 |                   
-	-------------------------|---------|----------|---------|---------|-------------------
-	Test Suites: 1 passed, 1 total
-	Tests:       8 passed, 8 total
-	Snapshots:   0 total
-	Time:        7.96 s
+PASS  tests/pet.test.js (7.835 s)
+  Pet API
+    ✓ should create a new pet entry (88 ms)
+    ✓ should update an existing pet entry (44 ms)
+    ✓ should retrieve all pets (13 ms)
+    ✓ should handle missing required fields (10 ms)
+    ✓ should handle updating non-existing pet (12 ms)
+    ✓ should retrieve a pet by ID (12 ms)
+    ✓ should delete a pet entry (31 ms)
+    ✓ should handle retrieving a non-existing pet by ID (13 ms)
+
+ -------------------------|---------|----------|---------|---------|-------------------
+ File                     | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+ -------------------------|---------|----------|---------|---------|-------------------
+ All files                |     100 |      100 |     100 |     100 |                   
+  config                  |     100 |      100 |     100 |     100 |                   
+   admin.js               |     100 |      100 |     100 |     100 |                   
+   api.js                 |     100 |      100 |     100 |     100 |                   
+   database.js            |     100 |      100 |     100 |     100 |                   
+   middlewares.js         |     100 |      100 |     100 |     100 |                   
+   server.js              |     100 |      100 |     100 |     100 |                   
+  src                     |     100 |      100 |     100 |     100 |                   
+   index.js               |     100 |      100 |     100 |     100 |                   
+  src/api/pet/controllers |     100 |      100 |     100 |     100 |                   
+   pet.js                 |     100 |      100 |     100 |     100 |                   
+  src/api/pet/routes      |     100 |      100 |     100 |     100 |                   
+   pet.js                 |     100 |      100 |     100 |     100 |                   
+  src/api/pet/services    |     100 |      100 |     100 |     100 |                   
+   pet.js                 |     100 |      100 |     100 |     100 |                   
+ -------------------------|---------|----------|---------|---------|-------------------
+ Test Suites: 1 passed, 1 total
+ Tests:       8 passed, 8 total
+ Snapshots:   0 total
+ Time:        7.96 s
 ```
 - **Continuous Integration**
   As part of our CI setup, every push or pull request automatically triggers the test suite using GitHub Actions (configured in `.github/workflows/test-suite.yml`). This CI process runs both unit and integration tests across multiple environments, providing:
 	- **Immediate Feedback**: Notifications alert us to any failed tests, enabling quick fixes and reducing the risk of breaking changes.
 	- **Cross-Platform Compatibility**: The CI pipeline runs tests on different operating systems (e.g., `macOS`, `Ubuntu`, `Windows`) and Node.js versions, ensuring consistent performance across environments.
+ ![Screenshot 2024-11-01 000330](https://github.com/user-attachments/assets/639fe6aa-ac1a-4350-965f-25d0362fd518)
+
  
 ## Viewing Test Results 
 
-You can view test results both in the CI pipeline on GitHub and locally in your terminal. Here’s how:
+You can view test results both in the CI pipeline on GitHub and locally in your terminal. by following this steps:
 
 ### 1. Viewing Test Results in GitHub Actions
    - **Go to the Repository on GitHub**:
@@ -538,15 +533,22 @@ You can view test results both in the CI pipeline on GitHub and locally in your 
      - Logs show details for steps like dependency installation, test execution, and any errors or failures.
    - **Notifications and Test Reports**:
      - If a test fails, GitHub Actions provides error details, showing which assertions did not pass.
+    ![Screenshot 2024-11-01 003733](https://github.com/user-attachments/assets/c72dbf9e-3b75-42af-a8f0-d2862a48eb4c)
+
 
 ### 2. Viewing Test Results in Terminal (Local Testing)
    - **Run Tests Locally**:
      - Run tests with the command:
-     
-       ```bash
-       npm test
-       ```
+```bash
+#unit test
+npm test
+```
 
+```bash
+#integration test
+cd backend/
+npm test
+```
      - Results will appear in the terminal in real-time.
 
    - **Test Results**:
@@ -554,9 +556,11 @@ You can view test results both in the CI pipeline on GitHub and locally in your 
        - Number of tests passed and failed
        - Time taken per test
        - Error details for any failed assertions
+         
    - **Summary**:
      - At the end, the terminal provides a summary, such as `Tests: 10 passed, 2 failed`, giving an overview of the test outcomes.
-
+![Screenshot 2024-11-01 002436](https://github.com/user-attachments/assets/92a88b19-0fe7-46a4-80f8-a794b0e43118)
+![Screenshot 2024-11-01 002814](https://github.com/user-attachments/assets/1c0f2e3b-a6b2-4acb-8d12-20857bda9f90)
 
 ## Adding New Tests
 
@@ -577,9 +581,16 @@ Add new test files within the `src/__test__` directory, following these steps:
 3. **Run Tests Locally**:
    - Ensure that new tests pass locally by running:
      
-     ```bash
-     npm test
-     ```
+```bash
+#unit test
+npm test
+```
+
+```bash
+#integration test
+cd backend/
+npm test
+```
    - Check that tests produce expected outcomes without breaking existing functionality.
 
 4. **Commit and Push**:
