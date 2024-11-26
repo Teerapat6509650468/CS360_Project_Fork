@@ -117,7 +117,6 @@ echo "Creating or overwriting the .env file..."
 echo "REACT_APP_STRAPI_IP_ADDRESS=$public_ip" >> $ENV_FILE
 echo "REACT_APP_STRAPI_PORT=$strapi_port" >> $ENV_FILE
 
-
 echo ".env file generated with secret keys."
 
 cd backend

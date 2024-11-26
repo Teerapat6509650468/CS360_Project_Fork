@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from 'react';
+import Swal from "sweetalert2";
 
 // mui components
 import {
@@ -30,20 +31,38 @@ export default function CreatePetEntry() {
     const [age, setAge] = useState("");
     const [location, setLocation] = useState("");
     const [sex, setSex] = useState("");
-
+    const [ageType, setAgeType] = useState("");
+    
     // axios
     const { createNewPet } = usePetContext();
 
     const handleCreateNewPet = (event) => {
-        event.preventDefault(); // Prevent default form submission
+        event.preventDefault(); 
+        
+        if(ageType === "Unknown_Age") {
+            setAge(0);
+        }
 
         // Validate required fields
-        if (!name || !animal || !breed || !age || !location || !sex) {
-            console.log("All fields are required.");
-
-            return; // Don't proceed if validation fails
+        if (!name || !animal || !breed || !location || !sex || (!age && ageType !== "Unknown_Age")) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'All fields are required.',
+            });
+            return;
         }
-        
+
+        // Validate age only if ageType is not "Unknown_Age"
+        if (ageType !== "Unknown_Age" && (age < 1 || age > 250)) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Age must be between 1 and 250.',
+            });
+            return;
+        }
+
         const data = JSON.stringify({
             "data": {
                 "name": name,
@@ -51,18 +70,18 @@ export default function CreatePetEntry() {
                 "breed": breed,
                 "age": age,
                 "location": location,
-                "sex": sex
+                "sex": sex,
+                "ageType": ageType,
             }
         });
-    
-        console.log("Submitting data: ", data); // For debugging purposes
-        createNewPet(data); // Call the function
+
+        createNewPet(data);
     };    
 
     return (
         <Box
             component="form"
-            onSubmit={handleCreateNewPet} // Handle form submission
+            onSubmit={handleCreateNewPet}
             sx={{
                 '& .MuiTextField-root': { m: 1, width: '50ch' },
                 display: 'flex',
@@ -80,7 +99,7 @@ export default function CreatePetEntry() {
                     id="filled-name"
                     label="Name"
                     variant="filled"
-                    onChange={(e)=>setName(e.target.value)}
+                    onChange={(e) => setName(e.target.value)}
                 />
                 <FormControl variant="filled" sx={{ m: 1, width: '50ch' }}>
                     <InputLabel id="select-animal-label">Animal *</InputLabel>
@@ -90,8 +109,8 @@ export default function CreatePetEntry() {
                         value={animal}
                         onChange={(e) => setAnimal(e.target.value)}
                         variant="filled"
-                        sx={{ textAlign: 'left' }} 
-                        inputProps={{ sx: { textAlign: 'left' } }} 
+                        sx={{ textAlign: 'left' }}
+                        inputProps={{ sx: { textAlign: 'left' } }}
                     >
                         <MenuItem value="">
                             <em>None</em>
@@ -106,22 +125,41 @@ export default function CreatePetEntry() {
                     id="filled-breed-input"
                     label="Breed"
                     variant="filled"
-                    onChange={(e)=>setBreed(e.target.value)}
+                    onChange={(e) => setBreed(e.target.value)}
                 />
                 <TextField
                     required
                     id="filled-location-input"
                     label="Location"
                     variant="filled"
-                    onChange={(e)=>setLocation(e.target.value)}
+                    onChange={(e) => setLocation(e.target.value)}
                 />
+                <FormControl variant="filled" sx={{ m: 1, width: '50ch' }}>
+                    <InputLabel id="select-ageType-label">Age Type *</InputLabel>
+                    <Select
+                        labelId="select-ageType-label"
+                        id="ageType"
+                        value={ageType}
+                        onChange={(e) => setAgeType(e.target.value)}
+                        variant="filled"
+                        sx={{ textAlign: 'left' }}
+                        inputProps={{ sx: { textAlign: 'left' } }}
+                    >
+                        <MenuItem value="">
+                            <em>None</em>
+                        </MenuItem>
+                        <MenuItem value="Unknown_Age">Unknown Age</MenuItem>
+                        <MenuItem value="Month">Month</MenuItem>
+                        <MenuItem value="Year">Year</MenuItem>
+                    </Select>
+                </FormControl>
                 <TextField
                     required
                     id="filled-age"
                     label="Age"
                     type="number"
                     variant="filled"
-                    onChange={(e)=>setAge(e.target.value)}
+                    onChange={(e) => setAge(e.target.value)}
                 />
                 <FormControl variant="filled" sx={{ m: 1, width: '50ch' }}>
                     <InputLabel id="select-sex-label">Sex *</InputLabel>
@@ -131,8 +169,8 @@ export default function CreatePetEntry() {
                         value={sex}
                         onChange={(e) => setSex(e.target.value)}
                         variant="filled"
-                        sx={{ textAlign: 'left' }} 
-                        inputProps={{ sx: { textAlign: 'left' } }} 
+                        sx={{ textAlign: 'left' }}
+                        inputProps={{ sx: { textAlign: 'left' } }}
                     >
                         <MenuItem value="">
                             <em>None</em>
@@ -143,12 +181,12 @@ export default function CreatePetEntry() {
                 </FormControl>
             </div>
             <div>
-            <Button type="submit" variant="outlined" startIcon={<Add />}>
-                Add Pet Entry
-            </Button>
+                <Button type="submit" variant="outlined" startIcon={<Add />}>
+                    Add Pet Entry
+                </Button>
             </div>
             <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
-                <BottomNav/>
+                <BottomNav />
             </Paper>
         </Box>
     );

@@ -31,20 +31,30 @@ export default function PetList() {
             <List>
                 {
                     pets && pets.map(
-                        ({id, attributes: {name, animal, breed, location, age, sex}}, i)=>(
-                        <PetListItem
-                            key={i}
-                            id={id}
-                            petType={animal}
-                            petFieldData={[
-                                {icon: <PersonOutline/>, attrib: name},
-                                {icon: <PetsOutlined/>, attrib: breed},
-                                {icon: <LocationOn/>, attrib: location},
-                                {icon: <PunchClockOutlined/>, attrib: age},
-                                {icon: <TransgenderOutlined/>, attrib: sex}
-                            ]}
-                        />
-                    ))
+                        ({id, attributes: {name, animal, breed, location, age, sex, ageType}}, i)=> {
+
+                            let ageDisplay = age;
+                            if(ageType === "Unknown_Age"){
+                                ageDisplay = "Unknown";
+                            }
+                            else{
+                                ageDisplay = age + " " + ageType;
+                            }
+                            return (
+                                <PetListItem
+                                    key={i}
+                                    id={id}
+                                    petType={animal}
+                                    petFieldData={[
+                                        {icon: <PersonOutline/>, attrib: name},
+                                        {icon: <PetsOutlined/>, attrib: breed},
+                                        {icon: <LocationOn/>, attrib: location},
+                                        {icon: <PunchClockOutlined/>, attrib: ageDisplay},
+                                        {icon: <TransgenderOutlined/>, attrib: sex}
+                                    ]}
+                                />
+                            )
+                        })
                 }
             </List>
             <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
