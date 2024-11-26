@@ -130,15 +130,6 @@ echo ".env file generated with secret keys."
 cd ..
 }
 
-deploy() {
-yarn build
-cd backend
-yarn build
-cd ..
-pm2 start ecosystem.config.js
-yarn start
-}
-
 configPM2() {
     local current_dir=$(pwd)
     echo "Configuring ecosystem.config.js file..."
@@ -166,6 +157,17 @@ configPM2() {
 EOL
 }
 
+deploy() {
+yarn build
+cd backend
+yarn build
+cd ..
+if [ ! -f "ecosystem.config.js" ]; then
+  configPM2
+pm2 start ecosystem.config.js
+yarn start
+}
+
 # Function to set up the project
 ProjectSetup() {
   echo -e "${CYAN}Setting up project ...${NC}"
@@ -174,7 +176,6 @@ ProjectSetup() {
   frontendSetup
   backendSetup
   projectConfig
-  configPM2
   deploy
 }
 
