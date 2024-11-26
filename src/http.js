@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const ipAddress = process.env.REACT_APP_STRAPI_IP_ADDRESS || 'localhos=t';
-const port = process.env.REACT_APP_STRAPI_PORT || 133;
+const ipAddress = process.env.REACT_APP_STRAPI_IP_ADDRESS || 'localhost';
+const port = process.env.REACT_APP_STRAPI_PORT || 1337;
 
 export default axios.create({
 
