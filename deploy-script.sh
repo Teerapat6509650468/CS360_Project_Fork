@@ -4,6 +4,7 @@ source ~/.bashrc
 
 REPO_URL="https://github.com/Kwandao6509650245/CS360_Project.git"
 public_ip=$(curl -s http://checkip.amazonaws.com)
+strapi_port=1337
 
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
@@ -104,9 +105,21 @@ generateSecretkey() {
 
 
 projectConfig() {
-cd src
-sed -i "s/var url=\"[^\"]*\";/var url=\"$public_ip\";/g" http.js
-cd ..
+# Define the path to your .env file
+ENV_FILE=".env"
+
+# Create the .env file or clear the existing content
+echo "Creating or overwriting the .env file..."
+# Clear the .env file first
+> $ENV_FILE
+
+# Populate the .env file with secret keys
+echo "REACT_APP_STRAPI_IP_ADDRESS=$public_ip" >> $ENV_FILE
+echo "REACT_APP_STRAPI_PORT=$strapi_port" >> $ENV_FILE
+
+
+echo ".env file generated with secret keys."
+
 cd backend
 
 # Define the path to your .env file
@@ -120,7 +133,7 @@ echo "Creating or overwriting the .env file..."
 # Populate the .env file with secret keys
 echo "HOST=0.0.0.0" >> $ENV_FILE
 echo "IP_ADDRESS=$public_ip" >> $ENV_FILE
-echo "PORT=1337" >> $ENV_FILE
+echo "PORT=$strapi_port" >> $ENV_FILE
 echo 'APP_KEYS="'"$(generateSecretkey)"','"$(generateSecretkey)"'"' >> $ENV_FILE
 echo "API_TOKEN_SALT=$(generateSecretkey)" >> $ENV_FILE
 echo "ADMIN_JWT_SECRET=$(generateSecretkey)" >> $ENV_FILE

@@ -1,8 +1,7 @@
 import axios from 'axios';
-require('dotenv').config({ path: '../backend/.env'});
 
-const ipAddress = process.env.IP_ADDRESS || 'localhost';
-const port = process.env.PORT || 1337;
+const ipAddress = process.env.REACT_APP_STRAPI_IP_ADDRESS || 'localhos=t';
+const port = process.env.REACT_APP_STRAPI_PORT || 133;
 
 export default axios.create({
 
