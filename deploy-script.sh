@@ -165,6 +165,7 @@ yarn build
 cd ..
 if [ ! -f "ecosystem.config.js" ]; then
   configPM2
+fi
 pm2 start ecosystem.config.js
 yarn start
 }
