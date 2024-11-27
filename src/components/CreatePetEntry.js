@@ -12,16 +12,18 @@ import {
     Select,
     FormControl,
     InputLabel,
-    MenuItem
+    MenuItem,
+    IconButton
 } from '@mui/material';
 
 // icons components
-import { Add } from '@mui/icons-material';
+import { Add, Brightness7, Brightness4 } from '@mui/icons-material';
 
 // custom components
 import BottomNav from './BottomNav';
 
 import { usePetContext } from '../contexts/PetContext';
+import { useDarkMode } from '../contexts/DarkModeContext';
 
 export default function CreatePetEntry() {
     // input data
@@ -32,15 +34,17 @@ export default function CreatePetEntry() {
     const [location, setLocation] = useState("");
     const [sex, setSex] = useState("");
     const [ageType, setAgeType] = useState("");
-    
-    // axios
+
     const { createNewPet } = usePetContext();
+    const { darkMode, toggleDarkMode } = useDarkMode();
 
     const handleCreateNewPet = (event) => {
         event.preventDefault(); 
+
+        let finalAge = age;
         
-        if(ageType === "Unknown_Age") {
-            setAge(0);
+        if (ageType === "Unknown_Age") {
+            finalAge = 0;
         }
 
         // Validate required fields
@@ -68,7 +72,7 @@ export default function CreatePetEntry() {
                 "name": name,
                 "animal": animal,
                 "breed": breed,
-                "age": age,
+                "age": finalAge,
                 "location": location,
                 "sex": sex,
                 "ageType": ageType,
@@ -85,15 +89,50 @@ export default function CreatePetEntry() {
             sx={{
                 '& .MuiTextField-root': { m: 1, width: '50ch' },
                 display: 'flex',
-                flexDirection: 'column'
+                flexDirection: 'column',
+                bgcolor: darkMode ? 'background.default' : '#fff',
+                color: darkMode ? 'text.primary' : 'inherit',
+                borderRadius: 2,
+                p: 2
             }}
             noValidate
             autoComplete="off"
         >
+            <Box
+                sx={{
+                    position: 'relative',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    mb: 2,
+                }}
+            >
+            <Typography
+                    variant="h3"
+                    gutterBottom
+                    component="div"
+                    sx={{
+                        position: 'absolute',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                    }}
+            >
+                Add new Pet entry
+            </Typography>
+
+                <IconButton
+                    onClick={toggleDarkMode}
+                    color="inherit"
+                    aria-label="toggle dark mode"
+                    sx={{
+                     marginLeft: 'auto',
+                    }}
+                >
+                    {darkMode ? <Brightness7 /> : <Brightness4 />}
+                </IconButton>
+            </Box>
+
             <div>
-                <Typography variant="h3" gutterBottom component="div">
-                    Add new Pet entry
-                </Typography>
                 <TextField
                     required
                     id="filled-name"
@@ -109,8 +148,6 @@ export default function CreatePetEntry() {
                         value={animal}
                         onChange={(e) => setAnimal(e.target.value)}
                         variant="filled"
-                        sx={{ textAlign: 'left' }}
-                        inputProps={{ sx: { textAlign: 'left' } }}
                     >
                         <MenuItem value="">
                             <em>None</em>
@@ -142,8 +179,6 @@ export default function CreatePetEntry() {
                         value={ageType}
                         onChange={(e) => setAgeType(e.target.value)}
                         variant="filled"
-                        sx={{ textAlign: 'left' }}
-                        inputProps={{ sx: { textAlign: 'left' } }}
                     >
                         <MenuItem value="">
                             <em>None</em>
@@ -169,8 +204,6 @@ export default function CreatePetEntry() {
                         value={sex}
                         onChange={(e) => setSex(e.target.value)}
                         variant="filled"
-                        sx={{ textAlign: 'left' }}
-                        inputProps={{ sx: { textAlign: 'left' } }}
                     >
                         <MenuItem value="">
                             <em>None</em>
