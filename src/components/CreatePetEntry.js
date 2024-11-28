@@ -172,10 +172,10 @@ export default function CreatePetEntry() {
                     onChange={(e) => setLocation(e.target.value)}
                 />
                 <FormControl variant="filled" sx={{ m: 1, width: '50ch' }}>
-                    <InputLabel id="select-ageType-label">Age Type *</InputLabel>
+                    <InputLabel id="select-aType-label">Age Type *</InputLabel>
                     <Select
-                        labelId="select-ageType-label"
-                        id="ageType"
+                        labelId="select-aType-label"
+                        id="aType"
                         value={ageType}
                         onChange={(e) => setAgeType(e.target.value)}
                         variant="filled"
