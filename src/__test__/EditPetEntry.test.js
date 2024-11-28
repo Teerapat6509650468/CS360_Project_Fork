@@ -4,6 +4,7 @@ import EditPetEntry from '../components/EditPetEntry';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import { usePetContext } from '../contexts/PetContext';
+import { useDarkMode } from '../contexts/DarkModeContext';
 
 // Mock PetContext
 jest.mock('../contexts/PetContext', () => ({

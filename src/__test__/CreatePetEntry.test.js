@@ -4,6 +4,8 @@ import CreatePetEntry from '../components/CreatePetEntry';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
 import { usePetContext } from '../contexts/PetContext';
+import { useDarkMode } from '../contexts/DarkModeContext';
+
 
 // Mock PetContext at the top level
 jest.mock('../contexts/PetContext', () => ({
