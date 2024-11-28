@@ -29,6 +29,10 @@ describe('CreatePetEntry Component', () => {
         usePetContext.mockReturnValue({
             createNewPet: mockCreateNewPet,
         });
+
+        useDarkMode.mockReturnValue({
+            darkMode: false,
+        });
     });
 
     // it should always pass this test case.

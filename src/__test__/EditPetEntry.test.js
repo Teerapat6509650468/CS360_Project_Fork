@@ -40,6 +40,10 @@ describe('EditPetEntry Component', () => {
             petId: mockPetId,
             petData: mockPetData
         });
+
+        useDarkMode.mockReturnValue({
+            darkMode: false,
+        });
     });
 
     // it should always pass this test case.
