@@ -10,6 +10,10 @@ jest.mock('../contexts/PetContext', () => ({
     usePetContext: jest.fn(),
 }));
 
+jest.mock('../contexts/DarkModeContext', () => ({
+    useDarkmode: jest.fn(),
+}));
+
 describe('CreatePetEntry Component', () => {
     let mockCreateNewPet;
 
