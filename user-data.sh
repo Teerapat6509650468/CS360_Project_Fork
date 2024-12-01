@@ -1,20 +1,32 @@
 #!/bin/bash
+
 # Update and install Docker
-sudo apt-get update -y
-sudo apt-get install -y docker.io
+echo "Updating and installing Docker..."
+sudo apt-get update -y || exit 1
+sudo apt-get install -y docker.io || exit 1
 
 # Start Docker service
-sudo systemctl start docker
-sudo systemctl enable docker
+echo "Starting Docker service..."
+sudo systemctl start docker || exit 1
+sudo systemctl enable docker || exit 1
 
 # ตรวจสอบว่า Docker ทำงานได้หรือไม่
+echo "Checking Docker status..."
 sudo systemctl status docker || exit 1
 
-# Pull Docker image 
-docker pull myapp:latest
+# ตรวจสอบเวอร์ชั่นของ Docker
+docker --version || exit 1
+
+# Pull Docker image
+echo "Pulling Docker image 'myapp:latest'..."
+docker pull myapp:latest || exit 1
 
 # Run the application in a Docker container
-docker run -d -p 80:80 myapp:latest
+echo "Running Docker container..."
+docker run -d -p 80:80 myapp:latest || exit 1
 
 # ตรวจสอบว่า container ทำงานหรือไม่
-docker ps
+echo "Checking Docker container status..."
+docker ps || exit 1
+
+echo "Docker container is running successfully!"
