@@ -115,3 +115,32 @@ jobs:
           fi
 
           echo "Docker container deployed successfully."
+
+          # Step 7: Wait for the instance to be running
+          RETRIES=10
+          COUNT=0
+          INSTANCE_STATUS="pending"
+          while [ "$INSTANCE_STATUS" != "running" ] && [ $COUNT -lt $RETRIES ]; do
+            INSTANCE_STATUS=$(aws ec2 describe-instances \
+              --instance-ids $INSTANCE_ID \
+              --query 'Reservations[0].Instances[0].State.Name' \
+              --output text)
+            echo "Instance status: $INSTANCE_STATUS"
+            sleep 30
+            COUNT=$((COUNT + 1))
+          done
+
+          if [ "$INSTANCE_STATUS" != "running" ]; then
+            echo "Error: Instance is not running after retries. Current status: $INSTANCE_STATUS."
+            exit 1
+          fi
+
+          echo "Instance is now running."
+
+          # Step 8: Output the instance public DNS
+          INSTANCE_PUBLIC_DNS=$(aws ec2 describe-instances \
+            --instance-ids $INSTANCE_ID \
+            --query 'Reservations[0].Instances[0].PublicDnsName' \
+            --output text)
+          echo "Instance Public DNS: $INSTANCE_PUBLIC_DNS"
+
