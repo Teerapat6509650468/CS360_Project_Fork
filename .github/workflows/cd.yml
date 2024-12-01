@@ -3,7 +3,7 @@ name: CD - Deploy to EC2 with Docker
 on:
   push:
     branches:
-      - sprint3-workflows
+      - sprint3-workflows  
 
 jobs:
   check-image-and-deploy:
@@ -18,7 +18,7 @@ jobs:
       - name: Check if Docker Image Exists
         id: check_image
         run: |
-          REPOSITORY="finalsprinttodoapp/myapp"  # แก้ไขให้ถูกต้อง
+          REPOSITORY="${{ secrets.DOCKER_USERNAME }}/myapp"
           TAG="latest"
           
           # ใช้ curl เพื่อตรวจสอบ Docker image
@@ -52,7 +52,7 @@ jobs:
         run: |
           # Define instance details
           INSTANCE_ID=$(aws ec2 run-instances \
-            --image-id ami-06b21ccaeff8cd686 \
+            --image-id ami-0866a3c8686eaeeba \
             --instance-type t2.micro \
             --key-name ${{ secrets.AWS_KP_NAME }} \
             --security-group-ids ${{ secrets.AWS_SG_ID }} \
@@ -87,5 +87,3 @@ jobs:
             sudo docker run -d -p 80:80 ${{ secrets.DOCKER_USERNAME }}/myapp:latest
           EOF
 
-          # Optionally output public DNS for final access
-          echo "Application deployed successfully. Access it via http://$INSTANCE_PUBLIC_DNS"
