@@ -621,7 +621,7 @@ npm test
 
 ## Adding New Tests
 
-Add new test files within the `src/__test__` directory, following these steps:
+Add new test files within the `src/__test__` or `backend/tests/` directory, following these steps:
 
 1. **Create Test Files**:
    - For **unit tests**, add files under `src/__test__/`.
