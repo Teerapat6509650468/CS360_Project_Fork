@@ -43,6 +43,10 @@ The backend for this project is based on the Pet Adoption Backend developed by H
   - [How to Deploy and Run the Project Manually](#how-to-deploy-and-run-the-project-manually)
   - [How to Deploy and Run the Project Using the Provided Bash Script](#how-to-deploy-and-run-the-project-using-the-provided-bash-script)
   - [Unit and Integration Testing Overview](#unit-and-integration-testing-overview)
+    - [Unit Tests](#unit-tests)
+    - [Integration Tests](#integration-tests)
+    - [Testing Tools Used](#testing-tools-used)
+    - [CI/CD Integration with GitHub Actions](#cicd-integration-with-github-actions)
   - [Setting Up Tests](#setting-up-tests)
   - [Running Tests & CI Pipeline Process](#running-tests)
   - [Test File Structure](#test-file-structure)
@@ -296,12 +300,44 @@ Once you have configured the permissions as needed, click the `Save` button in t
 
 
 ## Unit and Integration Testing Overview
-Our team uses the following tools for testing :
-- **Jest**: Used for unit testing individual functions or modules, ensuring that each component works as expected in isolation.
-- **Supertest**: Handles integration testing, focusing on how different parts of the application interact, especially useful for testing API endpoints.
-- **Babel**: Transpiles ES6+ JavaScript code to ensure compatibility with Jest, allowing the use of modern JavaScript features in tests.
-- **GitHub Actions**: Automates testing in CI/CD. Each push and pull request triggers the GitHub Actions workflow, running our test suite in various environments (e.g., macos-latest, ubuntu-24.04). This setup ensures consistent test results across platforms and notifies us immediately if any tests fail, providing valuable feedback on code quality before merging.
+We use Jest for unit testing and Supertest for integration testing in the pet-adoption project. Below is an overview of the test cases and features that are tested.
 
+### Total Test Cases
+- Unit Tests: 6 test cases
+- Integration Tests: 8 test cases
+- Total Test Cases: 14 test cases
+
+### Test Feature
+1. Unit Tests (6 test cases):
+Unit tests are designed to test individual functions or modules, ensuring that each component works as expected in isolation.
+- CreatePetEntry Component
+  - TC1 : Handles input changes from Create Pet Entry
+  - TC2 : Calls createNewPet on button click with correct data
+  - TC3 : Does not call createNewPet if required fields are not filled
+- EditPetEntry Component
+  - TC4 : Handles input changes from Edit Pet Entry
+  - TC5 : Calls updatePet on button click with correct data
+  - TC6 : Should not have the same values as the initial mock repo after editing
+    
+2. Integration Tests (8 test cases):
+Integration tests are used to validate how different parts of the application work together, ensuring the entire flow works as expected.
+- TC1 : CREATE a new pet entry (POST /api/pets)
+- TC2 : UPDATE an existing pet entry (PUT /api/pets/:id)
+- TC3 : GET all pets (GET /api/pets)
+- TC4 : Handle missing required fields (POST /api/pets with missing data)
+- TC5 : Handle updates for non-existing pet (PUT /api/pets/:id for non-existing ID)
+- TC6 : RETRIEVE a pet by ID (GET /api/pets/:id)
+- TC7 : DELETE a pet entry (DELETE /api/pets/:id)
+- TC8 : HANDLE retrieving a non-existing pet by ID (GET /api/pets/:id for non-existing ID)
+
+### Testing Tools Used
+- Jest: Used for unit testing, ensuring that individual functions (such as pet entry functions and form validation) work correctly in isolation.
+Supertest: Used for integration testing, focusing on API endpoints and the interaction between frontend and backend.
+- Babel: Transpiles ES6+ JavaScript code to ensure compatibility with Jest, allowing modern - 
+- JavaScript features in tests.
+
+### CI/CD Integration with GitHub Actions
+- GitHub Actions: Automates the testing process in CI/CD. Every push and pull request triggers the GitHub Actions workflow, which runs the test suite in various environments (e.g., macOS, Ubuntu). This ensures consistent test results across platforms and provides immediate feedback on any test failures, helping maintain code quality before merging.
 
 ## Setting Up Tests
 
