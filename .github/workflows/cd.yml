@@ -50,7 +50,6 @@ jobs:
           AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
         run: |
-          # Define instance details
           INSTANCE_ID=$(aws ec2 run-instances \
             --image-id ami-0866a3c8686eaeeba \
             --instance-type t2.micro \
@@ -62,17 +61,22 @@ jobs:
 
           echo "Instance ID: $INSTANCE_ID"
 
-          # Wait for the instance to be running
+          # Step 5: Debugging Instance Status
+          # ตรวจสอบสถานะของ instance
+          aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[0].Instances[0].State.Name' --output text
+          aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[0].Instances[0].StateTransitionReason' --output text
+
+          # Step 6: Wait for the instance to be running
           aws ec2 wait instance-running --instance-ids $INSTANCE_ID
 
-          # Output the instance public DNS
+          # Step 7: Output the instance public DNS
           INSTANCE_PUBLIC_DNS=$(aws ec2 describe-instances \
             --instance-ids $INSTANCE_ID \
             --query 'Reservations[0].Instances[0].PublicDnsName' \
             --output text)
           echo "Instance Public DNS: $INSTANCE_PUBLIC_DNS"
 
-          # Deploy Docker image to the EC2 instance
+          # Step 8: Deploy Docker image to the EC2 instance
           ssh -o StrictHostKeyChecking=no -i ${{ secrets.AWS_KP_NAME }}.pem ubuntu@$INSTANCE_PUBLIC_DNS << EOF
             # Install Docker on EC2
             sudo apt-get update -y
