@@ -50,6 +50,7 @@ jobs:
           AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
         run: |
+          # Step 1: Create EC2 instance
           INSTANCE_ID=$(aws ec2 run-instances \
             --image-id ami-0866a3c8686eaeeba \
             --instance-type t2.micro \
@@ -61,7 +62,7 @@ jobs:
 
           echo "Instance ID: $INSTANCE_ID"
 
-          # Step 5: Verify EC2 Instance Creation
+          # Step 2: Verify EC2 Instance Creation
           if [ $? -ne 0 ]; then
             echo "Error: EC2 instance creation failed."
             exit 1
@@ -69,21 +70,27 @@ jobs:
 
           echo "EC2 instance created successfully with ID: $INSTANCE_ID"
 
-          # Step 6: Debugging Instance Status
-          aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[0].Instances[0].State.Name' --output text
-          aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[0].Instances[0].StateTransitionReason' --output text
+          # Step 3: Debugging Instance Status
+          INSTANCE_STATUS=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[0].Instances[0].State.Name' --output text)
+          echo "Instance status: $INSTANCE_STATUS"
+          
+          if [ "$INSTANCE_STATUS" != "running" ]; then
+            echo "Error: Instance is not running. Current status: $INSTANCE_STATUS."
+            exit 1
+          fi
 
-          # Step 7: Wait for the instance to be running
+          # Step 4: Wait for the instance to be running
           aws ec2 wait instance-running --instance-ids $INSTANCE_ID
+          echo "Instance is now running."
 
-          # Step 8: Output the instance public DNS
+          # Step 5: Get Public DNS of the EC2 instance
           INSTANCE_PUBLIC_DNS=$(aws ec2 describe-instances \
             --instance-ids $INSTANCE_ID \
             --query 'Reservations[0].Instances[0].PublicDnsName' \
             --output text)
           echo "Instance Public DNS: $INSTANCE_PUBLIC_DNS"
 
-          # Step 9: Deploy Docker image to the EC2 instance
+          # Step 6: Deploy Docker image to the EC2 instance
           ssh -o StrictHostKeyChecking=no -i ${{ secrets.AWS_KP_NAME }}.pem ubuntu@$INSTANCE_PUBLIC_DNS << EOF
             echo "Installing Docker on EC2 instance..."
             sudo apt-get update -y
