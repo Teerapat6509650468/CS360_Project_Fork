@@ -70,18 +70,36 @@ jobs:
 
           echo "EC2 instance created successfully with ID: $INSTANCE_ID"
 
-          # Step 3: Wait for the instance to be running
+          # Step 3: Debugging Instance Status
+          INSTANCE_STATUS=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[0].Instances[0].State.Name' --output text)
+          echo "Instance status: $INSTANCE_STATUS"
+          
+          if [ "$INSTANCE_STATUS" == "shutting-down" ]; then
+            echo "Error: Instance is shutting down. Creating a new instance..."
+            # Recreate EC2 instance if it's shutting down
+            INSTANCE_ID=$(aws ec2 run-instances \
+              --image-id ami-0866a3c8686eaeeba \
+              --instance-type t2.micro \
+              --key-name ${{ secrets.AWS_KP_NAME }} \
+              --security-group-ids ${{ secrets.AWS_SG_ID }} \
+              --user-data file://user-data.sh \
+              --query 'Instances[0].InstanceId' \
+              --output text)
+            echo "New instance created with ID: $INSTANCE_ID"
+          fi
+
+          # Step 4: Wait for the instance to be running
           aws ec2 wait instance-running --instance-ids $INSTANCE_ID
           echo "Instance is now running."
 
-          # Step 4: Get Public DNS of the EC2 instance
+          # Step 5: Get Public DNS of the EC2 instance
           INSTANCE_PUBLIC_DNS=$(aws ec2 describe-instances \
             --instance-ids $INSTANCE_ID \
             --query 'Reservations[0].Instances[0].PublicDnsName' \
             --output text)
           echo "Instance Public DNS: $INSTANCE_PUBLIC_DNS"
 
-          # Step 5: Deploy Docker image to the EC2 instance
+          # Step 6: Deploy Docker image to the EC2 instance
           ssh -o StrictHostKeyChecking=no -i ${{ secrets.AWS_KP_NAME }}.pem ubuntu@$INSTANCE_PUBLIC_DNS << EOF
             echo "Installing Docker on EC2 instance..."
             sudo apt-get update -y
