@@ -1,10 +1,10 @@
-name: CD - Deploy to EC2 with Docker (Human trigger)
+name: CD - Deploy to EC2 with Docker 
 
 on:
   push:
     branches:
-      - sprint3-workflows  # เปลี่ยนจาก 'main' เป็น 'sprint3-workflows'
-  # workflow_dispatch:  # สามารถ uncomment ได้หากต้องการ trigger ด้วยมือ (manual trigger)
+      - sprint3-workflows  
+  
 
 jobs:
   check-image-and-deploy:
@@ -14,12 +14,12 @@ jobs:
       # Step 1: Checkout code
       - name: Checkout Repository
         uses: actions/checkout@v3    
-        
+
       # Step 2: Check if Docker Image Exists
       - name: Check if Docker Image Exists
         id: check_image
         run: |
-          REPOSITORY="${{ secrets.DOCKER_USERNAME }}/cs360_calc_image"  # Replace with your DockerHub repository name
+          REPOSITORY="${{ secrets.DOCKER_USERNAME }}/cs360_calc_image"  # ใช้ชื่อ repository ที่ถูกต้องจาก Docker Hub
           TAG="latest"
           RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -u "${{ secrets.DOCKER_USERNAME }}:${{ secrets.DOCKER_TOKEN }}" https://hub.docker.com/v2/repositories/${REPOSITORY}/tags/${TAG}/)
           if [ "$RESPONSE" -ne 200 ]; then
