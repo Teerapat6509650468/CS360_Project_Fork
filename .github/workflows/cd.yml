@@ -1,4 +1,4 @@
-name: CD - Deploy to EC2 with Docker
+name: CD - Deploy to EC2 with Docker 
 
 on:
   push:
