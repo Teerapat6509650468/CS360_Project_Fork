@@ -18,7 +18,7 @@ jobs:
       - name: Check if Docker Image Exists
         id: check_image
         run: |
-          REPOSITORY="finalsprinttodoapp/myapp"  # แก้ชื่อ repository ให้ตรงกับที่คุณใช้
+          REPOSITORY="finalsprinttodoapp/myapp"  
           TAG="latest"
           
           # ใช้ curl เพื่อตรวจสอบ Docker image
@@ -61,32 +61,50 @@ jobs:
 
           echo "Instance ID: $INSTANCE_ID"
 
-          # Step 5: Debugging Instance Status
-          # ตรวจสอบสถานะของ instance
+          # Step 5: Verify EC2 Instance Creation
+          if [ $? -ne 0 ]; then
+            echo "Error: EC2 instance creation failed."
+            exit 1
+          fi
+
+          echo "EC2 instance created successfully with ID: $INSTANCE_ID"
+
+          # Step 6: Debugging Instance Status
           aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[0].Instances[0].State.Name' --output text
           aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[0].Instances[0].StateTransitionReason' --output text
 
-          # Step 6: Wait for the instance to be running
+          # Step 7: Wait for the instance to be running
           aws ec2 wait instance-running --instance-ids $INSTANCE_ID
 
-          # Step 7: Output the instance public DNS
+          # Step 8: Output the instance public DNS
           INSTANCE_PUBLIC_DNS=$(aws ec2 describe-instances \
             --instance-ids $INSTANCE_ID \
             --query 'Reservations[0].Instances[0].PublicDnsName' \
             --output text)
           echo "Instance Public DNS: $INSTANCE_PUBLIC_DNS"
 
-          # Step 8: Deploy Docker image to the EC2 instance
+          # Step 9: Deploy Docker image to the EC2 instance
           ssh -o StrictHostKeyChecking=no -i ${{ secrets.AWS_KP_NAME }}.pem ubuntu@$INSTANCE_PUBLIC_DNS << EOF
-            # Install Docker on EC2
+            echo "Installing Docker on EC2 instance..."
             sudo apt-get update -y
             sudo apt-get install -y docker.io
             sudo systemctl start docker
             sudo systemctl enable docker
-            
-            # Pull Docker image from DockerHub
+            echo "Docker installation completed."
+
+            echo "Pulling Docker image from DockerHub..."
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/myapp:latest
-            
-            # Run Docker container
+
+            echo "Running Docker container on EC2 instance..."
             sudo docker run -d -p 80:80 ${{ secrets.DOCKER_USERNAME }}/myapp:latest
+
+            echo "Checking Docker container status..."
+            sudo docker ps
           EOF
+
+          if [ $? -ne 0 ]; then
+            echo "Error: Docker container deployment failed."
+            exit 1
+          fi
+
+          echo "Docker container deployed successfully."
