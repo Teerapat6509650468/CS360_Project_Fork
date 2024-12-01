@@ -1,4 +1,4 @@
-name: CD - Deploy to EC2 with Docker
+name: CD - Deploy to EC2 with Docker 
 
 on:
   push:
@@ -18,7 +18,7 @@ jobs:
       - name: Check if Docker Image Exists
         id: check_image
         run: |
-          REPOSITORY="${{ secrets.DOCKER_USERNAME }}/myapp"
+          REPOSITORY="finalsprinttodoapp/myapp"  # แก้ชื่อ repository ให้ตรงกับที่คุณใช้
           TAG="latest"
           
           # ใช้ curl เพื่อตรวจสอบ Docker image
@@ -86,4 +86,3 @@ jobs:
             # Run Docker container
             sudo docker run -d -p 80:80 ${{ secrets.DOCKER_USERNAME }}/myapp:latest
           EOF
-
