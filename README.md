@@ -30,6 +30,27 @@ The web application serves as a platform for managing and facilitating pet adopt
 
 The backend for this project is based on the Pet Adoption Backend developed by Hubertnare, which is built using Strapi V4. We appreciate their contribution and have integrated their solution into our project.
 
+## Table of Contents
+
+- [CS360 1/2567 Term Project: FurEveryHome](#cs360-12567-term-project-fureveryhome)
+  - [Group Information](#group-information)
+  - [Members](#members)
+  - [Project Goal](#project-goal)
+    - [Features](#features)
+    - [Technologies Used](#technologies-used)
+  - [Setting Up an EC2 Instance](#setting-up-an-ec2-instance)
+  - [System Requirements](#system-requirements)
+  - [How to Deploy and Run the Project Manually](#how-to-deploy-and-run-the-project-manually)
+  - [How to Deploy and Run the Project Using the Provided Bash Script](#how-to-deploy-and-run-the-project-using-the-provided-bash-script)
+  - [Unit and Integration Testing Overview](#unit-and-integration-testing-overview)
+  - [Setting Up Tests](#setting-up-tests)
+  - [Running Tests & CI Pipeline Process](#running-tests)
+  - [Test File Structure](#test-file-structure)
+  - [CI Configuration](#ci-configuration)
+  - [Test Coverage Include Continuous Integration](#test-coverage)
+  - [Viewing Test Results](#viewing-test-results)
+  - [Adding New Tests](#adding-new-tests)
+
 ## Setting Up an EC2 Instance
 
 1. Log in to AWS Console
@@ -206,7 +227,7 @@ After selecting the Public role, you will see a list of available API permission
 - Save Changes
 Once you have configured the permissions as needed, click the `Save` button in the lower-right corner to apply the changes.
   
-## How to deploy and run the project using the provided bash script [Specify the bash script path in the repo]
+## How to deploy and run the project using the provided bash script 
 
 Ensure you are connected to your EC2 instance before proceeding. <br>
 
