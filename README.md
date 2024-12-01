@@ -44,8 +44,6 @@ The backend for this project is based on the Pet Adoption Backend developed by H
   - [How to Deploy and Run the Project Using the Provided Bash Script](#how-to-deploy-and-run-the-project-using-the-provided-bash-script)
   - [Unit and Integration Testing Overview](#unit-and-integration-testing-overview)
     - [Test Feature](#test-feature)
-      - [Unit Tests](#unit-tests)
-      - [Integration Tests](#integration-tests)
     - [Testing Tools Used](#testing-tools-used)
     - [CI/CD Integration with GitHub Actions](#cicd-integration-with-github-actions)
   - [Setting Up Tests](#setting-up-tests)
