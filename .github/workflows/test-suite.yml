@@ -51,11 +51,13 @@ jobs:
     - name: Set up env backend
       working-directory: ./backend
       run: |
-        echo "APP_KEYS=${{ secrets.APP_KEYS }}" >> .env
-        echo "API_TOKEN_SALT=${{ secrets.API_TOKEN_SALT }}" >> .env
-        echo "ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }}" >> .env
-        echo "TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }}" >> .env
-        echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+         npm test
+      env: 
+        APP_KEYS: ${{ env.APP_KEYS }}
+        API_TOKEN_SALT: ${{ env.API_TOKEN_SALT }}
+        ADMIN_JWT_SECRET: ${{ env.ADMIN_JWT_SECRET }}
+        TRANSFER_TOKEN_SALT: ${{ env.TRANSFER_TOKEN_SALT }}
+        JWT_SECRET: ${{ env.JWT_SECRET }}
 
     #Run test suite
     - name: Run test suite
