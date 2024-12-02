@@ -53,11 +53,11 @@ jobs:
       run: |
          npm test
       env: 
-        APP_KEYS: ${{ env.APP_KEYS }}
-        API_TOKEN_SALT: ${{ env.API_TOKEN_SALT }}
-        ADMIN_JWT_SECRET: ${{ env.ADMIN_JWT_SECRET }}
-        TRANSFER_TOKEN_SALT: ${{ env.TRANSFER_TOKEN_SALT }}
-        JWT_SECRET: ${{ env.JWT_SECRET }}
+        APP_KEYS: ${{ secrets.APP_KEYS }}
+        API_TOKEN_SALT: ${{ secrets.API_TOKEN_SALT }}
+        ADMIN_JWT_SECRET: ${{ secrets.ADMIN_JWT_SECRET }}
+        TRANSFER_TOKEN_SALT: ${{ secrets.TRANSFER_TOKEN_SALT }}
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
     #Run test suite
     - name: Run test suite
