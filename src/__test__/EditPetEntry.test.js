@@ -24,7 +24,8 @@ describe('EditPetEntry Component', () => {
         breed: 'Persian',
         age: "4",
         location: 'New York',
-        sex: 'Male'
+        sex: 'Male',
+        ageType: 'Year',
     };
 
     beforeEach(() => {
