@@ -41,7 +41,7 @@ jobs:
 
       # Step 3: Set AWS Credentials in Environment Variables
       - name: Set AWS Credentials
-        if: ${{ steps.check_image.outcome == 'success' }}
+        if: ${{ steps.check_image_backend.outcome == 'success' }} || ${{ steps.check_image_frontend.outcome == 'success' }}
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
