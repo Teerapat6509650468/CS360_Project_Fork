@@ -55,7 +55,7 @@ export default function EditPetEntry() {
         }
 
         // Validate age only if ageType is not "Unknown_Age"
-        if (ageType !== "Unknown_Age" && (age < 1 || age > 250)) {
+        if (ageType !== "Unknown" && (age < 1 || age > 250)) {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',

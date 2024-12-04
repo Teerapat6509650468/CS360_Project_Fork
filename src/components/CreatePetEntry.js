@@ -46,7 +46,7 @@ export default function CreatePetEntry() {
         if (ageType === "Unknown") {
             finalAge = 0;
         }
-        
+
         // Validate required fields
         if (!name || !animal || !breed || !location || !sex || (!finalAge && ageType !== "Unknown")) {
             Swal.fire({
@@ -58,7 +58,7 @@ export default function CreatePetEntry() {
         }
 
         // Validate age only if ageType is not "Unknown_Age"
-        if (ageType !== "Unknown_Age" && (age < 1 || age > 250)) {
+        if (ageType !== "Unknown" && (age < 1 || age > 250)) {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
