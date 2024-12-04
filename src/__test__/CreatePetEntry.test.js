@@ -43,7 +43,7 @@ describe('CreatePetEntry Component', () => {
         expect(screen.getByLabelText(/animal \*/i)).toBeInTheDocument();
         expect(screen.getByLabelText(/breed/i)).toBeInTheDocument();
         expect(screen.getByLabelText(/location/i)).toBeInTheDocument();
-        expect(screen.getByLabelText(/age/i)).toBeInTheDocument();
+        expect(screen.getByLabelText(/^age$/i)).toBeInTheDocument();
         expect(screen.getByLabelText(/sex \*/i)).toBeInTheDocument();
         expect(screen.getByLabelText(/age type \*/i)).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /add pet entry/i })).toBeInTheDocument();
@@ -72,7 +72,7 @@ describe('CreatePetEntry Component', () => {
         await userEvent.type(screen.getByLabelText(/location/i), 'Bangkok');
 
         // Simulate typing in the age input
-        await userEvent.type(screen.getByLabelText(/age/i), '3');
+        await userEvent.type(screen.getByLabelText(/^age$/i), '3');
 
         // Open the select for sex
         const sexSelect = screen.getByLabelText(/sex/i);
@@ -86,7 +86,7 @@ describe('CreatePetEntry Component', () => {
         expect(screen.getByLabelText(/name/i)).toHaveValue('Buddy');
         expect(screen.getByLabelText(/breed/i)).toHaveValue('Golden Retriever');
         expect(screen.getByLabelText(/location/i)).toHaveValue('Bangkok');
-        expect(screen.getByLabelText(/age/i)).toHaveValue(3);
+        expect(screen.getByLabelText(/^age$/i)).toHaveValue(3);
         expect(await screen.findByText('Dog')).toBeInTheDocument(); // Ensure the selected value is displayed
         expect(await screen.findByText('Male')).toBeInTheDocument(); // Ensure the selected value is displayed
     });
@@ -108,7 +108,7 @@ describe('CreatePetEntry Component', () => {
 
         await userEvent.type(screen.getByLabelText(/location/i), 'Bangkok');
 
-        await userEvent.type(screen.getByLabelText(/age/i), '3');
+        await userEvent.type(screen.getByLabelText(/^age$/i), '3');
 
         const sexSelect = screen.getByLabelText(/sex/i);
         await userEvent.click(sexSelect);
