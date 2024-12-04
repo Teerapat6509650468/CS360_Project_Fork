@@ -135,21 +135,23 @@ describe('CreatePetEntry Component', () => {
         // Click the "Add Pet Entry" button
         const addButton = screen.getByRole('button', { name: /add pet entry/i });
         await userEvent.click(addButton);
-
+        
         // Check if createNewPet was called with the correct data
-        expect(mockCreateNewPet).toHaveBeenCalledWith(
-            JSON.stringify({
+        await waitFor(() => {
+            expect(mockCreateNewPet).toHaveBeenCalledWith(
+              JSON.stringify({
                 data: {
-                    name: 'Buddy',
-                    animal: 'Dog',
-                    breed: 'Golden Retriever',
-                    ageType: 'Year',
-                    age: '3', // Keeping age as a string to match the received value
-                    location: 'Bangkok',
-                    sex: 'Male',
+                  name: 'Buddy',
+                  animal: 'Dog',
+                  breed: 'Golden Retriever',
+                  age: '3',
+                  location: 'Bangkok',
+                  sex: 'Male',
+                  ageType: 'Year',
                 },
-            })
-        );               
+              })
+            );
+        });        
     });
 
     // TC3 : Does not call createNewPet if required fields are not filled
