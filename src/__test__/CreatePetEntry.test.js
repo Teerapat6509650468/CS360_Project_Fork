@@ -71,7 +71,16 @@ describe('CreatePetEntry Component', () => {
         // Simulate typing in the location input
         await userEvent.type(screen.getByLabelText(/location/i), 'Bangkok');
 
+        // Open the select for age
+        const ageSelect = screen.getByLabelText(/age type \*/i);
+        await userEvent.click(ageSelect);
+
+        // Select the "Unknow" option from the dropdown
+        const unknowOption = await screen.findByText('Year');
+        await userEvent.click(unknowOption);
+
         // Simulate typing in the age input
+        await userEvent.click(dogOption);
         await userEvent.type(screen.getByLabelText(/^age$/i), '3');
 
         // Open the select for sex
@@ -89,6 +98,7 @@ describe('CreatePetEntry Component', () => {
         expect(screen.getByLabelText(/^age$/i)).toHaveValue(3);
         expect(await screen.findByText('Dog')).toBeInTheDocument(); // Ensure the selected value is displayed
         expect(await screen.findByText('Male')).toBeInTheDocument(); // Ensure the selected value is displayed
+        expect(await screen.findByText('Year')).toBeInTheDocument(); // Ensure the selected value is displayed
     });
 
     // TC2 : Calls createNewPet on button click with correct data
@@ -108,6 +118,12 @@ describe('CreatePetEntry Component', () => {
 
         await userEvent.type(screen.getByLabelText(/location/i), 'Bangkok');
 
+
+        const ageSelect = screen.getByLabelText(/age type \*/i);
+        await userEvent.click(ageSelect);
+        const unknowOption = await screen.findByText('Year');
+        await userEvent.click(unknowOption);
+
         await userEvent.type(screen.getByLabelText(/^age$/i), '3');
 
         const sexSelect = screen.getByLabelText(/sex/i);
@@ -126,6 +142,7 @@ describe('CreatePetEntry Component', () => {
                     name: 'Buddy',
                     animal: 'Dog',
                     breed: 'Golden Retriever',
+                    ageType: 'Year',
                     age: "3", // Keeping age as a string to match the received value
                     location: 'Bangkok',
                     sex: 'Male',

@@ -146,13 +146,13 @@ export default function EditPetEntry() {
                         <MenuItem value="">
                             <em>None</em>
                         </MenuItem>
-                        <MenuItem value="Unknown_Age">Unknown Age</MenuItem>
+                        <MenuItem value="Unknown">Unknown</MenuItem>
                         <MenuItem value="Month">Month</MenuItem>
                         <MenuItem value="Year">Year</MenuItem>
                     </Select>
                 </FormControl>
                 <FormControl variant="filled">
-                    <InputLabel id="filled-age-label">Age</InputLabel>
+                    <InputLabel id="filled-age-label"></InputLabel>
                     <TextField
                         id="filled-age"
                         label="Age"
