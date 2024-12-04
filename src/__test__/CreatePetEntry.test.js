@@ -143,10 +143,10 @@ describe('CreatePetEntry Component', () => {
                     name: 'Buddy',
                     animal: 'Dog',
                     breed: 'Golden Retriever',
-                    ageType: 'Year',
                     age: '3', // Keeping age as a string to match the received value
                     location: 'Bangkok',
                     sex: 'Male',
+                    ageType: 'Year',
                 },
             })
         );               
