@@ -183,19 +183,20 @@ export default function CreatePetEntry() {
                         <MenuItem value="">
                             <em>None</em>
                         </MenuItem>
-                        <MenuItem value="Unknown_Age">Unknown Age</MenuItem>
+                        <MenuItem value="Unknown">Unknown</MenuItem>
                         <MenuItem value="Month">Month</MenuItem>
                         <MenuItem value="Year">Year</MenuItem>
                     </Select>
                 </FormControl>
-                <TextField
-                    required
-                    id="filled-age"
-                    label="Age"
-                    type="number"
-                    variant="filled"
-                    onChange={(e) => setAge(e.target.value)}
-                />
+                <FormControl variant="filled">
+                    <InputLabel id="filled-age-label">Age</InputLabel>
+                    <TextField
+                        id="filled-age"
+                        label="Age"
+                        type="number"
+                        variant="filled"
+                    />
+                </FormControl>
                 <FormControl variant="filled" sx={{ m: 1, width: '50ch' }}>
                     <InputLabel id="select-sex-label">Sex *</InputLabel>
                     <Select

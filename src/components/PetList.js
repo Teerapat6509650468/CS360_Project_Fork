@@ -80,7 +80,7 @@ export default function PetList() {
                             i
                         ) => {
                             let ageDisplay = age;
-                            if (ageType === 'Unknown_Age') {
+                            if (ageType === 'Unknown') {
                                 ageDisplay = 'Unknown';
                             } else {
                                 ageDisplay = age + ' ' + ageType;
