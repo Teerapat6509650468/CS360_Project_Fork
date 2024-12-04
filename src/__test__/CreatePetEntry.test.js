@@ -104,7 +104,7 @@ describe('CreatePetEntry Component', () => {
 
     // TC2 : Calls createNewPet on button click with correct data
     test('calls createNewPet on button click with correct data', async () => {
-        render(<CreatePetEntry createNewPet={mockCreateNewPet} />);
+        render(<CreatePetEntry />);
 
         // Simulate typing in the form fields
         await userEvent.type(screen.getByLabelText(/name/i), 'Buddy');
@@ -152,8 +152,8 @@ describe('CreatePetEntry Component', () => {
     });
 
     // TC7 : Calls createNewPet on button click with correct data and Unknown age input
-    test('calls createNewPet on button click with correct data', async () => {
-        render(<CreatePetEntry createNewPet={mockCreateNewPet} />);
+    test('calls createNewPet on button click with correct data and Unknown age input', async () => {
+        render(<CreatePetEntry />);
 
         // Simulate typing in the form fields
         await userEvent.type(screen.getByLabelText(/name/i), 'Buddy');
@@ -199,8 +199,8 @@ describe('CreatePetEntry Component', () => {
     });
 
     // TC8 : Calls createNewPet on button click with correct data and Month age input
-    test('calls createNewPet on button click with correct data', async () => {
-        render(<CreatePetEntry createNewPet={mockCreateNewPet} />);
+    test('calls createNewPet on button click with correct data Month age input', async () => {
+        render(<CreatePetEntry />);
 
         // Simulate typing in the form fields
         await userEvent.type(screen.getByLabelText(/name/i), 'Buddy');
