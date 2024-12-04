@@ -39,7 +39,17 @@ jobs:
           fi
           echo "Docker image pet_adopt_backend exists. Proceeding to deployment."
 
-      # Step 3: Create EC2 Instance and Deploy the Application
+      # Step 3: Set AWS Credentials in Environment Variables
+      - name: Set AWS Credentials
+        if: ${{ steps.check_image.outcome == 'success' }}
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: echo "AWS credentials set."
+
+      # Step 4: Create EC2 Instance and Deploy the Application
       - name: Create EC2 Instance and Deploy the Application
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
