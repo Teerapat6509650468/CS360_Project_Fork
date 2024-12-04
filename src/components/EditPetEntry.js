@@ -151,14 +151,15 @@ export default function EditPetEntry() {
                         <MenuItem value="Year">Year</MenuItem>
                     </Select>
                 </FormControl>
-                <TextField
-                    required
-                    id="filled-age"
-                    label="Age"
-                    type="number"
-                    variant="outlined"
-                    onChange={(e) => setAge(e.target.value)}
-                />
+                <FormControl variant="filled">
+                    <InputLabel id="filled-age-label">Age</InputLabel>
+                    <TextField
+                        id="filled-age"
+                        label="Age"
+                        type="number"
+                        variant="filled"
+                    />
+                </FormControl>
                 <FormControl variant="outlined" sx={{ m: 1, width: '50ch' }}>
                     <InputLabel id="select-sex-label">Sex *</InputLabel>
                     <Select

@@ -189,7 +189,7 @@ export default function CreatePetEntry() {
                     </Select>
                 </FormControl>
                 <FormControl variant="filled">
-                    <InputLabel id="filled-age-label">Age</InputLabel>
+                    <InputLabel id="filled-age-label"></InputLabel>
                     <TextField
                         id="filled-age"
                         label="Age"
