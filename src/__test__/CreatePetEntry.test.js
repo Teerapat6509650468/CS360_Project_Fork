@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import CreatePetEntry from '../components/CreatePetEntry';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
@@ -135,23 +135,21 @@ describe('CreatePetEntry Component', () => {
         // Click the "Add Pet Entry" button
         const addButton = screen.getByRole('button', { name: /add pet entry/i });
         await userEvent.click(addButton);
-        
+
         // Check if createNewPet was called with the correct data
-        await waitFor(() => {
-            expect(mockCreateNewPet).toHaveBeenCalledWith(
-              JSON.stringify({
+        expect(mockCreateNewPet).toHaveBeenCalledWith(
+            JSON.stringify({
                 data: {
-                  name: 'Buddy',
-                  animal: 'Dog',
-                  breed: 'Golden Retriever',
-                  age: '3',
-                  location: 'Bangkok',
-                  sex: 'Male',
-                  ageType: 'Year',
+                    name: 'Buddy',
+                    animal: 'Dog',
+                    breed: 'Golden Retriever',
+                    ageType: 'Year',
+                    age: '3', // Keeping age as a string to match the received value
+                    location: 'Bangkok',
+                    sex: 'Male',
                 },
-              })
-            );
-        });        
+            })
+        );               
     });
 
     // TC3 : Does not call createNewPet if required fields are not filled

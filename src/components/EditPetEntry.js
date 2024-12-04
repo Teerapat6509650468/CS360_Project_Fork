@@ -38,12 +38,14 @@ export default function EditPetEntry() {
 
     const handleEditPet = () => {
 
-        if(ageType === "Unknown_Age") {
-            setAge(0);
+        let finalAge = age;
+        
+        if (ageType === "Unknown") {
+            finalAge = 0;
         }
 
         // Validate required fields
-        if (!name || !animal || !breed || !location || !sex || (!age && ageType !== "Unknown_Age")) {
+        if (!name || !animal || !breed || !location || !sex || (!finalAge && ageType !== "Unknown")) {
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -67,7 +69,7 @@ export default function EditPetEntry() {
                 "name": name,
                 "animal": animal,
                 "breed": breed,
-                "age": age,
+                "age": finalAge,
                 "location": location,
                 "sex": sex,
                 "ageType": ageType,
@@ -157,6 +159,7 @@ export default function EditPetEntry() {
                         id="filled-age"
                         label="Age"
                         type="number"
+                        onChange={(e) => setAge(e.target.value)}
                         variant="filled"
                     />
                 </FormControl>
