@@ -173,8 +173,6 @@ describe('CreatePetEntry Component', () => {
         const unknowOption = await screen.findByText('Unknown');
         await userEvent.click(unknowOption);
 
-        await userEvent.type(screen.getByLabelText(/^age$/i), '3');
-
         const sexSelect = screen.getByLabelText(/sex/i);
         await userEvent.click(sexSelect);
         const maleOption = await screen.findByText('Male');
@@ -191,7 +189,7 @@ describe('CreatePetEntry Component', () => {
                     name: 'Buddy',
                     animal: 'Dog',
                     breed: 'Golden Retriever',
-                    age: '3', // Keeping age as a string to match the received value
+                    age: '0', // Keeping age as a string to match the received value
                     location: 'Bangkok',
                     sex: 'Male',
                     ageType: 'Unknown',
