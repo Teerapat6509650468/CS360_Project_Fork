@@ -100,10 +100,11 @@ describe('CreatePetEntry Component', () => {
         expect(await screen.findByText('Male')).toBeInTheDocument(); // Ensure the selected value is displayed
         expect(await screen.findByText('Year')).toBeInTheDocument(); // Ensure the selected value is displayed
     });
+    
 
     // TC2 : Calls createNewPet on button click with correct data
     test('calls createNewPet on button click with correct data', async () => {
-        render(<CreatePetEntry />);
+        render(<CreatePetEntry createNewPet={mockCreateNewPet} />);
 
         // Simulate typing in the form fields
         await userEvent.type(screen.getByLabelText(/name/i), 'Buddy');
