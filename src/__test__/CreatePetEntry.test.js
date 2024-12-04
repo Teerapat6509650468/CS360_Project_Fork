@@ -151,6 +151,100 @@ describe('CreatePetEntry Component', () => {
         );               
     });
 
+    // TC7 : Calls createNewPet on button click with correct data and Unknown age input
+    test('calls createNewPet on button click with correct data', async () => {
+        render(<CreatePetEntry createNewPet={mockCreateNewPet} />);
+
+        // Simulate typing in the form fields
+        await userEvent.type(screen.getByLabelText(/name/i), 'Buddy');
+
+        const animalSelect = screen.getByLabelText(/animal \*/i);
+        await userEvent.click(animalSelect);
+        const dogOption = await screen.findByText('Dog');
+        await userEvent.click(dogOption);
+
+        await userEvent.clear(screen.getByLabelText(/breed/i));
+        await userEvent.type(screen.getByLabelText(/breed/i), 'Golden Retriever');
+
+        await userEvent.type(screen.getByLabelText(/location/i), 'Bangkok');
+
+        const ageSelect = screen.getByLabelText(/age type \*/i);
+        await userEvent.click(ageSelect);
+        const unknowOption = await screen.findByText('Unknown');
+        await userEvent.click(unknowOption);
+
+        const sexSelect = screen.getByLabelText(/sex/i);
+        await userEvent.click(sexSelect);
+        const maleOption = await screen.findByText('Male');
+        await userEvent.click(maleOption);
+
+        // Click the "Add Pet Entry" button
+        const addButton = screen.getByRole('button', { name: /add pet entry/i });
+        await userEvent.click(addButton);
+
+        // Check if createNewPet was called with the correct data
+        expect(mockCreateNewPet).toHaveBeenCalledWith(
+            JSON.stringify({
+                data: {
+                    name: 'Buddy',
+                    animal: 'Dog',
+                    breed: 'Golden Retriever',
+                    age: '0', // Keeping age as a string to match the received value
+                    location: 'Bangkok',
+                    sex: 'Male',
+                    ageType: 'Unknown',
+                },
+            })
+        );               
+    });
+
+    // TC8 : Calls createNewPet on button click with correct data and Month age input
+    test('calls createNewPet on button click with correct data', async () => {
+        render(<CreatePetEntry createNewPet={mockCreateNewPet} />);
+
+        // Simulate typing in the form fields
+        await userEvent.type(screen.getByLabelText(/name/i), 'Buddy');
+
+        const animalSelect = screen.getByLabelText(/animal \*/i);
+        await userEvent.click(animalSelect);
+        const dogOption = await screen.findByText('Dog');
+        await userEvent.click(dogOption);
+
+        await userEvent.clear(screen.getByLabelText(/breed/i));
+        await userEvent.type(screen.getByLabelText(/breed/i), 'Golden Retriever');
+
+        await userEvent.type(screen.getByLabelText(/location/i), 'Bangkok');
+
+        const ageSelect = screen.getByLabelText(/age type \*/i);
+        await userEvent.click(ageSelect);
+        const unknowOption = await screen.findByText('Month');
+        await userEvent.click(unknowOption);
+
+        const sexSelect = screen.getByLabelText(/sex/i);
+        await userEvent.click(sexSelect);
+        const maleOption = await screen.findByText('Male');
+        await userEvent.click(maleOption);
+
+        // Click the "Add Pet Entry" button
+        const addButton = screen.getByRole('button', { name: /add pet entry/i });
+        await userEvent.click(addButton);
+
+        // Check if createNewPet was called with the correct data
+        expect(mockCreateNewPet).toHaveBeenCalledWith(
+            JSON.stringify({
+                data: {
+                    name: 'Buddy',
+                    animal: 'Dog',
+                    breed: 'Golden Retriever',
+                    age: '0', // Keeping age as a string to match the received value
+                    location: 'Bangkok',
+                    sex: 'Male',
+                    ageType: 'Month',
+                },
+            })
+        );               
+    });
+
     // TC3 : Does not call createNewPet if required fields are not filled
     test('does not call createNewPet if required fields are not filled', async () => {
         render(<CreatePetEntry />);
