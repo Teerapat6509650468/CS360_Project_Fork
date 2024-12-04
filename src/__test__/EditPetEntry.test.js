@@ -83,6 +83,14 @@ describe('EditPetEntry Component', () => {
         // Simulate typing in the location input
         await userEvent.type(screen.getByLabelText(/location/i), 'New York');
 
+        // Open the select for age
+        const ageSelect = screen.getByLabelText(/age type \*/i);
+        await userEvent.click(ageSelect);
+
+        // Select the "Unknow" option from the dropdown
+        const unknowOption = await screen.findByText('Year');
+        await userEvent.click(unknowOption);
+
         // Simulate typing in the age input
         await userEvent.type(screen.getByLabelText(/^age$/i), '4');
 
@@ -101,6 +109,7 @@ describe('EditPetEntry Component', () => {
         expect(screen.getByLabelText(/^age$/i)).toHaveValue(4);
         expect(await screen.findByText('Cat')).toBeInTheDocument(); // Ensure the selected value is displayed
         expect(await screen.findByText('Male')).toBeInTheDocument(); // Ensure the selected value is displayed
+        expect(await screen.findByText('Year')).toBeInTheDocument(); // Ensure the selected value is displayed
     });
 
     // TC5 : Calls updatePet on button click with correct data
@@ -119,6 +128,11 @@ describe('EditPetEntry Component', () => {
         await userEvent.type(screen.getByLabelText(/breed/i), 'Persian');
 
         await userEvent.type(screen.getByLabelText(/location/i), 'New York');
+
+        const ageSelect = screen.getByLabelText(/age type \*/i);
+        await userEvent.click(ageSelect);
+        const unknowOption = await screen.findByText('Year');
+        await userEvent.click(unknowOption);
 
         await userEvent.type(screen.getByLabelText(/^age$/i), '4');
 
@@ -166,6 +180,11 @@ describe('EditPetEntry Component', () => {
 
         await userEvent.clear(screen.getByLabelText(/location/i));
         await userEvent.type(screen.getByLabelText(/location/i), 'Los Angeles');
+
+        const ageSelect = screen.getByLabelText(/age type \*/i);
+        await userEvent.click(ageSelect);
+        const unknowOption = await screen.findByText('Year');
+        await userEvent.click(unknowOption);
 
         await userEvent.clear(screen.getByLabelText(/^age$/i));
         await userEvent.type(screen.getByLabelText(/^age$/i), '5');

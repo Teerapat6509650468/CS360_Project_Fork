@@ -119,7 +119,6 @@ describe('CreatePetEntry Component', () => {
 
         await userEvent.type(screen.getByLabelText(/location/i), 'Bangkok');
 
-
         const ageSelect = screen.getByLabelText(/age type \*/i);
         await userEvent.click(ageSelect);
         const unknowOption = await screen.findByText('Year');
