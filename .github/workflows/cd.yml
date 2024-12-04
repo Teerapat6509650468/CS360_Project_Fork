@@ -22,15 +22,11 @@ jobs:
         run: |
           REPOSITORY="${{ secrets.DOCKER_USERNAME }}/pet_adopt_frontend"  
           TAG="latest"
-          
-          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -u "${{ secrets.DOCKER_USERNAME }}:${{ secrets.DOCKER_TOKEN }}" \
-            "https://hub.docker.com/v2/repositories/${REPOSITORY}/tags/${TAG}/")
-          
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -u "${{ secrets.DOCKER_USERNAME }}:${{ secrets.DOCKER_TOKEN }}" https://hub.docker.com/v2/repositories/${REPOSITORY}/tags/${TAG}/)
           if [ "$RESPONSE" -ne 200 ]; then
-              echo "Docker image not found: ${REPOSITORY}:${TAG}. Exiting workflow."
+              echo "Docker image not found. Exiting workflow."
               exit 1
           fi
-          
           echo "Docker image pet_adopt_frontend exists. Proceeding to deployment."
 
       - name: Check if Docker Image pet_adopt_backend Exists
@@ -38,15 +34,11 @@ jobs:
         run: |
           REPOSITORY="${{ secrets.DOCKER_USERNAME }}/pet_adopt_backend"  
           TAG="latest"
-          
-          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -u "${{ secrets.DOCKER_USERNAME }}:${{ secrets.DOCKER_TOKEN }}" \
-            "https://hub.docker.com/v2/repositories/${REPOSITORY}/tags/${TAG}/")
-          
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -u "${{ secrets.DOCKER_USERNAME }}:${{ secrets.DOCKER_TOKEN }}" https://hub.docker.com/v2/repositories/${REPOSITORY}/tags/${TAG}/)
           if [ "$RESPONSE" -ne 200 ]; then
-              echo "Docker image not found: ${REPOSITORY}:${TAG}. Exiting workflow."
+              echo "Docker image not found. Exiting workflow."
               exit 1
           fi
-          
           echo "Docker image pet_adopt_backend exists. Proceeding to deployment."
 
       # Step 3: Create EC2 Instance and Deploy the Application
