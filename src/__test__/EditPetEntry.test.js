@@ -142,6 +142,7 @@ describe('EditPetEntry Component', () => {
                     age: "4", // Keeping age as a string to match the received value
                     location: 'New York',
                     sex: 'Male',
+                    ageType: 'Year',
                 },
             })
         );
@@ -189,6 +190,7 @@ describe('EditPetEntry Component', () => {
                     age: "5",                  // Changed from "4" to "5"
                     location: 'Los Angeles',   // Changed from 'New York' to 'Los Angeles'
                     sex: 'Female',             // Changed from 'Male' to 'Female'
+                    ageType: 'Year',
                 },
             })
         );
