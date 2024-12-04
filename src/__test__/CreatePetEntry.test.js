@@ -44,8 +44,8 @@ describe('CreatePetEntry Component', () => {
         expect(screen.getByLabelText(/breed/i)).toBeInTheDocument();
         expect(screen.getByLabelText(/location/i)).toBeInTheDocument();
         expect(screen.getByLabelText(/^age$/i)).toBeInTheDocument();
-        expect(screen.getByLabelText(/sex \*/i)).toBeInTheDocument();
         expect(screen.getByLabelText(/age type \*/i)).toBeInTheDocument();
+        expect(screen.getByLabelText(/sex \*/i)).toBeInTheDocument();
         expect(screen.getByRole('button', { name: /add pet entry/i })).toBeInTheDocument();
     });
 
