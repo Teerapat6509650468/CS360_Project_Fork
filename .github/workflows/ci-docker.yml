@@ -39,7 +39,7 @@ jobs:
 
   # Step 2: Build Docker Image
   build-docker-frontend:
-#    needs: test-source-code #ต้อง test-source-code ก่อน build docker image
+    needs: [build-docker-backend, test-docker-image-backend]
     runs-on: ubuntu-latest
 
     steps:
