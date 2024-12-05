@@ -242,9 +242,9 @@ ssh -i <your-key.pem> ec2-user@<your-ec2-instance-ip>
 
 Follow these steps to deploy and run the project using the provided bash script. <br>
 **1. Set up and run the script**
-- Navigate to the utils/ directory :
+- Navigate to root directory :
 ```bash
-cd CS360_Project/utils/
+cd CS360_Project
 ```
 - Change permission deploy-script.sh and run script :
 ```bash
