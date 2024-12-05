@@ -39,7 +39,7 @@ jobs:
 
   # Step 2: Build Docker Image
   build-docker-frontend:
-    needs: [build-docker-backend, test-docker-image-backend]
+#    needs: [build-docker-backend, test-docker-image-backend]
     runs-on: ubuntu-latest
 
     steps:
@@ -117,7 +117,7 @@ jobs:
           docker rm test-backend
           
   test-docker-image-frontend:
-    needs: [build-docker-frontend, test-docker-image-backend]
+    needs: build-docker-frontend
     runs-on: ubuntu-latest
 
     steps:
