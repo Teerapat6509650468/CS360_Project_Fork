@@ -96,8 +96,7 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }} # Use the token here
 
-      - name: Pull and Run Docker Image
-        working-directory: ./backend        
+      - name: Pull and Run Docker Image       
         run: |
           docker pull ${{ secrets.DOCKER_USERNAME }}/petadopt_backend:latest
           docker run -d --name test-backend ${{ secrets.DOCKER_USERNAME }}/petadopt_backend:latest
