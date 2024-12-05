@@ -96,10 +96,16 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }} # Use the token here
 
-      - name: Pull and Run Docker Image       
+      - name: Pull and Run Docker Image
         run: |
           docker pull ${{ secrets.DOCKER_USERNAME }}/petadopt_backend:latest
-          docker run -d --name test-backend ${{ secrets.DOCKER_USERNAME }}/petadopt_backend:latest
+          docker run -d --name test-backend \
+          -e APP_KEYS=${{ secrets.APP_KEYS }} \
+          -e API_TOKEN_SALT=${{ secrets.API_TOKEN_SALT }} \
+          -e ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }} \
+          -e TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }} \
+          -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+          ${{ secrets.DOCKER_USERNAME }}/petadopt_backend:latest
         env: 
             APP_KEYS: ${{ secrets.APP_KEYS }}
             API_TOKEN_SALT: ${{ secrets.API_TOKEN_SALT }}
