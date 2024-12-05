@@ -16,29 +16,29 @@ jobs:
         uses: actions/checkout@v3    
 
       # Step 2: Check if Docker Image Exists
-      - name: Check if Docker Image pet_adopt_frontend Exists
+      - name: Check if Docker Image petadopt_frontend Exists
         id: check_image_frontend
         run: |
-          REPOSITORY="${{ secrets.DOCKER_USERNAME }}/pet_adopt_frontend"  
+          REPOSITORY="${{ secrets.DOCKER_USERNAME }}/petadopt_frontend"  
           TAG="latest"
           RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -u "${{ secrets.DOCKER_USERNAME }}:${{ secrets.DOCKER_TOKEN }}" https://hub.docker.com/v2/repositories/${REPOSITORY}/tags/${TAG}/)
           if [ "$RESPONSE" -ne 200 ]; then
               echo "Docker image not found. Exiting workflow."
               exit 1
           fi
-          echo "Docker image pet_adopt_frontend exists. Proceeding to deployment."
+          echo "Docker image petadopt_frontend exists. Proceeding to deployment."
 
-      - name: Check if Docker Image pet_adopt_backend Exists
+      - name: Check if Docker Image petadopt_backend Exists
         id: check_image_backend
         run: |
-          REPOSITORY="${{ secrets.DOCKER_USERNAME }}/pet_adopt_backend"  
+          REPOSITORY="${{ secrets.DOCKER_USERNAME }}/petadopt_backend"  
           TAG="latest"
           RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -u "${{ secrets.DOCKER_USERNAME }}:${{ secrets.DOCKER_TOKEN }}" https://hub.docker.com/v2/repositories/${REPOSITORY}/tags/${TAG}/)
           if [ "$RESPONSE" -ne 200 ]; then
               echo "Docker image not found. Exiting workflow."
               exit 1
           fi
-          echo "Docker image pet_adopt_backend exists. Proceeding to deployment."
+          echo "Docker image petadopt_backend exists. Proceeding to deployment."
 
       # Step 3: Set AWS Credentials in Environment Variables
       - name: Set AWS Credentials
