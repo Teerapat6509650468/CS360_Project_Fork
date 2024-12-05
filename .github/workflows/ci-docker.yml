@@ -45,8 +45,6 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-        with:
-          ref: sprint3-docker
 
       - name: Log in to DockerHub
         uses: docker/login-action@v2
@@ -69,8 +67,6 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-        with:
-          ref: sprint3-docker
           
       - name: Log in to DockerHub
         uses: docker/login-action@v2
@@ -102,18 +98,12 @@ jobs:
 
       - name: Pull and Run Docker Image
         run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/petadopt_backend:latest
-          docker run -d --name test-backend ${{ secrets.DOCKER_USERNAME }}/petadopt_backend:latest
+          docker pull ${{ secrets.DOCKER_USERNAME }}/pet_adopt_backend:latest
+          docker run -d --name test-backend ${{ secrets.DOCKER_USERNAME }}/pet_adopt_backend:latest
 
       - name: Run Automated Tests in Docker Container
         run: |
           docker exec test-backend npm test   
-        env: 
-            APP_KEYS: ${{ secrets.APP_KEYS }}
-            API_TOKEN_SALT: ${{ secrets.API_TOKEN_SALT }}
-            ADMIN_JWT_SECRET: ${{ secrets.ADMIN_JWT_SECRET }}
-            TRANSFER_TOKEN_SALT: ${{ secrets.TRANSFER_TOKEN_SALT }}
-            JWT_SECRET: ${{ secrets.JWT_SECRET }}  
             
       - name: Clean Up Docker Container
         run: |
