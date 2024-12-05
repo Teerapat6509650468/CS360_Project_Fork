@@ -53,7 +53,6 @@ jobs:
           password: ${{ secrets.DOCKER_TOKEN }} # Use the token here
 
       - name: Build Docker Image
-        working-directory: ./CS360_Project
         run: |
           docker build -t ${{ secrets.DOCKER_USERNAME }}/pet_adopt_frontend:latest .
 
