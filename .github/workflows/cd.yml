@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - sprint3-workflows  
+  workflow_dispatch:
 
 jobs:
   check-image-and-deploy:
@@ -60,10 +61,11 @@ jobs:
           # Step 1: Create EC2 instance
           INSTANCE_ID=$(aws ec2 run-instances \
             --image-id ami-0866a3c8686eaeeba \
-            --instance-type t2.micro \
+            --instance-type t2.medium \
             --key-name ${{ secrets.AWS_KP_NAME }} \
             --security-group-ids ${{ secrets.AWS_SG_ID }} \
             --user-data file://user-data.sh \
+            --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=pet adoption}]' \
             --query 'Instances[0].InstanceId' \
             --output text)
 
@@ -94,18 +96,6 @@ jobs:
             --query 'Reservations[0].Instances[0].PublicDnsName' \
             --output text)
           echo "Instance Public DNS: $INSTANCE_PUBLIC_DNS"
-
-          # Step 4: Deploy Docker image to the EC2 instance
-          ssh -o StrictHostKeyChecking=no -i ${{ secrets.AWS_KP_NAME }}.pem ubuntu@$INSTANCE_PUBLIC_DNS << EOF
-            sudo apt-get update -y
-            sudo apt-get install -y docker.io
-            sudo systemctl start docker
-            sudo systemctl enable docker
-
-            sudo docker pull ${{ secrets.DOCKER_USERNAME }}/myapp:latest
-            sudo docker run -d -p 80:80 ${{ secrets.DOCKER_USERNAME }}/myapp:latest
-            sudo docker ps
-          EOF
 
           if [ $? -ne 0 ]; then
             echo "Error: Docker container deployment failed."
