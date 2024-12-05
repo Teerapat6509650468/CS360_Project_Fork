@@ -53,6 +53,16 @@ The backend for this project is based on the Pet Adoption Backend developed by H
   - [Test Coverage Include Continuous Integration](#test-coverage)
   - [Viewing Test Results](#viewing-test-results)
   - [Adding New Tests](#adding-new-tests)
+  - [CI/CD Pipeline Overview](#cicd-pipeline-overview)  
+    - [CI/CD Pipeline Structure](#cicd-pipeline-structure)  
+      - [Continuous Integration (CI)](#1-continuous-integration-ci)  
+      - [Continuous Deployment (CD)](#2-continuous-deployment-cd)  
+    - [Workflow Configuration](#workflow-configuration)  
+    - [Triggering the CI/CD Pipeline](#triggering-the-cicd-pipeline)  
+      - [Automatic Triggers](#1-automatic-triggers)  
+      - [Manual Trigger](#2-manual-trigger)  
+    - [Environment Variables and Secrets](#environment-variables-and-secrets)   
+    - [Monitoring and Logs](#monitoring-and-logs)  
 
 ## Setting Up an EC2 Instance
 
@@ -659,3 +669,65 @@ npm test
   
 6. **Merge to Main Branch**:
    - After ensuring that all tests pass successfully, you can merge your branch into the main branch.
+
+## CI/CD Pipeline Overview
+
+This project integrates a **Continuous Integration (CI)** and **Continuous Deployment (CD)** pipeline to automate the testing, building, and deployment processes. This ensures consistent quality, fast feedback, and efficient delivery of features and bug fixes.
+
+### CI/CD Pipeline Structure
+
+#### 1. Continuous Integration (CI)
+The CI pipeline runs every time code is pushed to the repository or a pull request is made. The key components include:
+
+- **Automated Testing**:
+  - **Unit Tests**: The pipeline runs all the automated unit tests using Jest to ensure no breaking changes are introduced.
+  - **Integration Tests**: Ensures that the various parts of the application interact correctly.
+
+- **Build Verification**:
+  - The application is built for different environments (e.g., development, production) to ensure that there are no build issues. It checks that the application works across different versions of Node.js.
+
+#### 2. Continuous Deployment (CD)
+Once the CI pipeline successfully completes, the CD pipeline is responsible for deploying the application to different environments, ensuring the latest version is live without manual intervention. The key components include:
+
+- **Staging Deployment**: Automatically deploys to a staging environment to validate the latest changes in a live setting.
+- **Production Deployment**: After successful tests in staging, the application is deployed to the production environment.
+- **Environment Variables**: Deployment steps use environment variables for configuration (e.g., API keys, database URLs) to keep sensitive information secure.
+
+### Workflow Configuration
+
+The CI/CD workflows are defined as YAML files within the .github/workflows directory. These workflows define each of the jobs, such as testing, building, and deploying, and specify when and how they should be triggered.
+
+The key workflows in this project include:
+
+- **Test Workflow**: test-suite.yml  
+  This workflow runs on each push or pull request. It performs tasks such as running unit tests and integration tests.
+
+-  **CI Docker Workflow**: ci-docker.yml  
+  This workflow builds and tests the Docker container for the application. It ensures that the application works correctly within the container environment, which is especially important for deployment consistency.
+
+- **Deployment Workflow**: cd.yml  
+  This workflow is triggered manually or automatically upon merging into the main branch. It handles deployment to the staging and production environments.
+
+### Triggering the CI/CD Pipeline
+
+#### 1. Automatic Triggers
+- **Push to Branch**: The pipeline is triggered when changes are pushed to any branch, especially the main branch.
+- **Pull Requests**: Whenever a pull request is created or updated, the CI pipeline will run to ensure the new code does not break existing functionality.
+
+#### 2. Manual Trigger
+- **GitHub Actions**: You can also manually trigger the workflow from the GitHub interface. Navigate to the "Actions" tab, select the desired workflow, and click "Run workflow" to trigger the process.
+
+### Environment Variables and Secrets
+Environment variables and secrets such as database connection strings, API keys, and other sensitive data are stored securely in GitHub's Secrets and are accessed within the workflows using ${{ secrets.SECRET_NAME }}
+
+## How Secrets Are Stored in GitHub
+1. Navigate to the Settings tab of your repository.
+2. Select Secrets and variables > Actions from the side menu.
+3. Click New repository secret to add a new secret.
+4. Enter the name of the secret (e.g., DOCKER_USERNAME) and its value.
+5. Save the secret.
+
+### Monitoring and Logs
+- **Pipeline Logs**: Each step of the pipeline generates logs that can be accessed in the GitHub Actions interface. If any step fails, these logs can be examined to identify the issue.
+  
+- **Notifications**: You can set up GitHub notifications or integrate with Slack or email to notify the team when a build fails or succeeds.
