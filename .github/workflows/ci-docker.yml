@@ -77,12 +77,12 @@ jobs:
       - name: Build Docker Image
         working-directory: ./backend
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/petadopt_backend:latest .
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/pet_adopt_backend:latest .
 
       - name: Push Docker Image to DockerHub
         working-directory: ./backend
         run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/petadopt_backend:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/pet_adopt_backend:latest
 
   # Step 3: Test Docker Image
   test-docker-image-backend:
@@ -98,8 +98,8 @@ jobs:
 
       - name: Pull and Run Docker Image       
         run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/petadopt_backend:latest
-          docker run -d --name test-backend ${{ secrets.DOCKER_USERNAME }}/petadopt_backend:latest
+          docker pull ${{ secrets.DOCKER_USERNAME }}/pet_adopt_backend:latest
+          docker run -d --name test-backend ${{ secrets.DOCKER_USERNAME }}/pet_adopt_backend:latest
 
       - name: Run Automated Tests in Docker Container
         run: |
