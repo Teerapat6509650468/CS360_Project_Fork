@@ -102,8 +102,8 @@ jobs:
 
       - name: Pull and Run Docker Image
         run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/pet_adopt_backend:latest
-          docker run -d --name test-backend ${{ secrets.DOCKER_USERNAME }}/pet_adopt_backend:latest
+          docker pull ${{ secrets.DOCKER_USERNAME }}/petadopt_backend:latest
+          docker run -d --name test-backend ${{ secrets.DOCKER_USERNAME }}/petadopt_backend:latest
 
       - name: Run Automated Tests in Docker Container
         run: |
