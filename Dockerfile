@@ -13,9 +13,6 @@ RUN yarn install --network-timeout 1000000 --ignore-platform
 # Copy the rest of the React project
 COPY . .
 
-# Set environment to production
-ENV NODE_ENV production
-
 # Build the React app for production
 RUN yarn build
 

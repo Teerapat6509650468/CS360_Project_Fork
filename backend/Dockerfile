@@ -16,9 +16,6 @@ RUN yarn install --network-timeout 1000000 --ignore-platform
 # Copy the rest of the project
 COPY . .
 
-# Set environment to production
-ENV NODE_ENV production
-
 # Rebuild better-sqlite3 for the current platform
 RUN npm rebuild better-sqlite3
 
