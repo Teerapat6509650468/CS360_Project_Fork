@@ -87,7 +87,7 @@ jobs:
 
   # Step 3: Test Docker Image
   test-docker-image-frontend:
-    needs: [build-docker-frontend,build-docker-backend]
+    needs: build-docker-frontend
     runs-on: ubuntu-latest
 
     steps:
@@ -99,8 +99,8 @@ jobs:
 
       - name: Pull and Run Docker Image
         run: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}//pet_adopt_frontend:latest
-          docker run -d --name test-frontend ${{ secrets.DOCKER_USERNAME }}//pet_adopt_frontend:latest
+          docker pull ${{ secrets.DOCKER_USERNAME }}/pet_adopt_frontend:latest
+          docker run -d --name test-frontend ${{ secrets.DOCKER_USERNAME }}/pet_adopt_frontend:latest
 
       - name: Run Automated Tests in Docker Container
         run: |
@@ -110,3 +110,28 @@ jobs:
         run: |
           docker stop test-frontend
           docker rm test-frontend
+
+  test-docker-image-backend:
+    needs: build-docker-backend
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Log in to DockerHub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_TOKEN }} # Use the token here
+
+      - name: Pull and Run Docker Image
+        run: |
+          docker pull ${{ secrets.DOCKER_USERNAME }}/pet_adopt_backend:latest
+          docker run -d --name test-backend ${{ secrets.DOCKER_USERNAME }}/pet_adopt_backend:latest
+
+      - name: Run Automated Tests in Docker Container
+        run: |
+          docker exec test-backend npm test 
+
+      - name: Clean Up Docker Container
+        run: |
+          docker stop test-backend
+          docker rm test-backend
