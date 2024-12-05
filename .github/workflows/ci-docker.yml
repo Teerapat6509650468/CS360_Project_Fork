@@ -84,6 +84,7 @@ jobs:
           docker build -t ${{ secrets.DOCKER_USERNAME }}/pet_adopt_backend:latest .
 
       - name: Push Docker Image to DockerHub
+        working-directory: ./backend
         run: |
           docker push ${{ secrets.DOCKER_USERNAME }}/pet_adopt_backend:latest
 
@@ -107,8 +108,6 @@ jobs:
       - name: Run Automated Tests in Docker Container
         run: |
           docker exec test-frontend npm test 
-        env: 
-            NODE_ENV: test 
             
       - name: Clean Up Docker Container
         run: |
@@ -133,9 +132,7 @@ jobs:
 
       - name: Run Automated Tests in Docker Container
         run: |
-          docker exec test-backend npm test
-        env: 
-            NODE_ENV: test    
+          docker exec test-backend npm test   
 
       - name: Clean Up Docker Container
         run: |
