@@ -72,3 +72,42 @@ jobs:
             --query 'Reservations[0].Instances[0].PublicDnsName' \
             --output text)
           echo "Instance Public DNS: $INSTANCE_PUBLIC_DNS"
+
+          # Get Public IP
+          PUBLIC_IP=$(aws ec2 describe-instances \
+            --instance-ids $INSTANCE_ID \
+            --query 'Reservations[0].Instances[0].PublicIpAddress' \
+            --output text)
+          echo "PUBLIC_IP=$PUBLIC_IP" >> $GITHUB_ENV
+
+      # Add SSH Key for Deployment
+      - name: Configure SSH
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > HelloWorld.pem
+          chmod 400 HelloWorld.pem
+
+      # Create .env File on EC2
+      - name: Create .env File on EC2
+        env:
+          PUBLIC_IP: ${{ env.PUBLIC_IP }}
+          APP_KEYS: ${{ secrets.APP_KEYS }}
+          API_TOKEN_SALT: ${{ secrets.API_TOKEN_SALT }}
+          ADMIN_JWT_SECRET: ${{ secrets.ADMIN_JWT_SECRET }}
+          TRANSFER_TOKEN_SALT: ${{ secrets.TRANSFER_TOKEN_SALT }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ec2-key.pem ubuntu@$PUBLIC_IP << 'EOF'
+            # Create the .env file with GitHub Secrets
+            cat <<EOT > .env
+            HOST=0.0.0.0
+            PORT=1337
+            APP_KEYS=$APP_KEYS
+            API_TOKEN_SALT=$API_TOKEN_SALT
+            ADMIN_JWT_SECRET=$ADMIN_JWT_SECRET
+            TRANSFER_TOKEN_SALT=$TRANSFER_TOKEN_SALT
+            JWT_SECRET=$JWT_SECRET
+            PUBLIC_IPV4=$PUBLIC_IP
+            EOT
+
+            echo ".env file created on EC2 instance at /home/ubuntu/.env"
+            EOF
