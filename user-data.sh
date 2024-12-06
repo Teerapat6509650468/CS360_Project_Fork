@@ -2,8 +2,8 @@
 
 # Update the package manager and install Docker
 # Add Docker's official GPG key:
-sudo apt-get update
-sudo apt-get install ca-certificates curl
+sudo apt-get update -y
+sudo apt-get install -y ca-certificates curl
 sudo install -m 0755 -d /etc/apt/keyrings
 sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
 sudo chmod a+r /etc/apt/keyrings/docker.asc
@@ -13,8 +13,8 @@ echo \
   "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
   $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
   sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+sudo apt-get update -y
+sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
 # Start Docker service and enable it to start on boot
 sudo systemctl enable docker.service
@@ -42,9 +42,9 @@ echo "PUBLIC_IPV4=${IPV4}" >> /home/ubuntu/.env
 echo "Updated .env with EC2 IPv4: $IPV4"
 
 # Pull and run the Docker containers for the React and Strapi applications
-sudo docker run -d -p 3000:3000 --name react-app -v /home/ec2-user/.env:/app/.env teerapat1811/react-app:latest
+sudo docker run -d -p 3000:3000 --name react-app -v /home/ubuntu/.env:/app/.env teerapat1811/react-app:latest
 
-sudo docker run -d -p 1337:1337 --name strapi-app -v /home/ec2-user/.env:/app/.env teerapat1811/strapi-app:latest
+sudo docker run -d -p 1337:1337 --name strapi-app -v /home/ubuntu/.env:/app/.env teerapat1811/strapi-app:latest
 
 # Print the status of the running Docker containers
 docker ps
