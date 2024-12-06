@@ -117,13 +117,10 @@ jobs:
             # Add the ubuntu user to the docker group so they can use Docker without sudo
             sudo groupadd docker
             sudo usermod -aG docker ubuntu
-      
-            # Verify Docker installation
-            docker --version
             
             # Pull and run the React app container
-            docker pull teerapat1811/react-app:latest
-            docker run -d --name react-app \
+            sudo docker pull teerapat1811/react-app:latest
+            sudo docker run -d --name react-app \
               -p 3000:3000 \
               -e APP_KEYS=${{ secrets.APP_KEYS }} \
               -e API_TOKEN_SALT=${{ secrets.API_TOKEN_SALT }} \
@@ -133,8 +130,8 @@ jobs:
               teerapat1811/react-app:latest
       
             # Pull and run the Strapi app container
-            docker pull teerapat1811/strapi-app:latest
-            docker run -d --name strapi-app \
+            sudo docker pull teerapat1811/strapi-app:latest
+            sudo docker run -d --name strapi-app \
               -p 1337:1337 \
               -e APP_KEYS=${{ secrets.APP_KEYS }} \
               -e API_TOKEN_SALT=${{ secrets.API_TOKEN_SALT }} \
