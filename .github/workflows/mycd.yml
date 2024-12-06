@@ -32,25 +32,7 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
         run: echo "AWS credentials set."
 
-      # Step 4: Inject secrets into user-data.sh
-      - name: Inject secrets into user-data.sh
-        run: |
-          awk '
-          BEGIN {
-            secrets["APP_KEYS"] = "${{ secrets.APP_KEYS }}"
-            secrets["API_TOKEN_SALT"] = "${{ secrets.API_TOKEN_SALT }}"
-            secrets["ADMIN_JWT_SECRET"] = "${{ secrets.ADMIN_JWT_SECRET }}"
-            secrets["TRANSFER_TOKEN_SALT"] = "${{ secrets.TRANSFER_TOKEN_SALT }}"
-            secrets["JWT_SECRET"] = "${{ secrets.JWT_SECRET }}"
-          }
-          {
-            for (key in secrets) {
-              gsub("PLACEHOLDER_" key, secrets[key])
-            }
-            print
-          }' user-data.sh > user-data.sh.tmp && mv user-data.sh.tmp user-data.sh
-
-      # Step 5: Create EC2 Instance and Deploy the Application
+      # Step 4: Create EC2 Instance and Deploy the Application
       - name: Create EC2 Instance and Deploy the Application
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
