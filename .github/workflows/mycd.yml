@@ -83,11 +83,17 @@ jobs:
           echo "EC2 instance is ready at $INSTANCE_PUBLIC_IP"
 
       # Step 5: Pull and Run Docker Images
+      - name: Create SSH Key File
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
+          chmod 600 key.pem
+      
+      - name: Wait for EC2 Instance Initialization
+        run: sleep 30
+      
       - name: Pull and Run Docker Images
         run: |
-          ssh -o StrictHostKeyChecking=no -i ${{ secrets.AWS_KP_NAME }}.pem ec2-user@${{ env.PUBLIC_IPV4 }} << EOF
-
-            # Create the .env file using touch and echo
+          ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@${{ env.PUBLIC_IPV4 }} <<EOF
             touch .env
             echo "APP_KEYS=${{ secrets.APP_KEYS }}" >> .env
             echo "API_TOKEN_SALT=${{ secrets.API_TOKEN_SALT }}" >> .env
@@ -95,13 +101,12 @@ jobs:
             echo "TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }}" >> .env
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
             echo "PUBLIC_IPV4=${{ env.PUBLIC_IPV4 }}" >> .env
-
-            # Pull and run the React app
+      
             docker pull teerapat1811/react-app:latest
             docker run -d --name react-app --env-file .env -p 3000:3000 teerapat1811/react-app:latest
-
-            # Pull and run the Strapi app
+      
             docker pull teerapat1811/strapi-app:latest
             docker run -d --name strapi-app --env-file .env -p 1337:1337 teerapat1811/strapi-app:latest
-            EOF
+          EOF
+
             
