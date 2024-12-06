@@ -72,3 +72,37 @@ jobs:
             --query 'Reservations[0].Instances[0].PublicDnsName' \
             --output text)
           echo "Instance Public DNS: $INSTANCE_PUBLIC_DNS"
+
+          # Get the public IP of the new instance
+            INSTANCE_PUBLIC_IP=$(aws ec2 describe-instances \
+              --instance-ids $INSTANCE_ID \
+              --query 'Reservations[0].Instances[0].PublicIpAddress' \
+              --output text)
+          fi
+
+          echo "PUBLIC_IPV4=$INSTANCE_PUBLIC_IP" >> $GITHUB_ENV
+          echo "EC2 instance is ready at $INSTANCE_PUBLIC_IP"
+
+      # Step 5: Pull and Run Docker Images
+      - name: Pull and Run Docker Images
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ${{ secrets.AWS_KP_NAME }}.pem ec2-user@${{ env.PUBLIC_IPV4 }} << EOF
+
+            # Create the .env file using touch and echo
+            touch .env
+            echo "APP_KEYS=${{ secrets.APP_KEYS }}" >> .env
+            echo "API_TOKEN_SALT=${{ secrets.API_TOKEN_SALT }}" >> .env
+            echo "ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }}" >> .env
+            echo "TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }}" >> .env
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+            echo "PUBLIC_IPV4=${{ env.PUBLIC_IPV4 }}" >> .env
+
+            # Pull and run the React app
+            docker pull teerapat1811/react-app:latest
+            docker run -d --name react-app --env-file .env -p 3000:3000 teerapat1811/react-app:latest
+
+            # Pull and run the Strapi app
+            docker pull teerapat1811/strapi-app:latest
+            docker run -d --name strapi-app --env-file .env -p 1337:1337 teerapat1811/strapi-app:latest
+            EOF
+            
