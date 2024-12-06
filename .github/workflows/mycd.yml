@@ -96,7 +96,7 @@ jobs:
           TRANSFER_TOKEN_SALT: ${{ secrets.TRANSFER_TOKEN_SALT }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: |
-          ssh -o StrictHostKeyChecking=no -i ec2-key.pem ubuntu@$PUBLIC_IP << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i HelloWorld.pem ubuntu@$PUBLIC_IP << 'EOF'
             # Create the .env file with GitHub Secrets
             cat <<EOT > .env
             HOST=0.0.0.0
