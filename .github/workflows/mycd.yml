@@ -96,6 +96,8 @@ jobs:
           TRANSFER_TOKEN_SALT: ${{ secrets.TRANSFER_TOKEN_SALT }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: |
+          echo "Waiting for EC2 to be accessible..."
+          sleep 100 
           ssh -o StrictHostKeyChecking=no -i HelloWorld.pem ubuntu@$PUBLIC_IP << 'EOF'
             # Create the .env file with GitHub Secrets
             cat <<EOT > .env
