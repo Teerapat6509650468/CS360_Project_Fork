@@ -35,11 +35,20 @@ jobs:
       # Step 4: Inject secrets into user-data.sh
       - name: Inject secrets into user-data.sh
         run: |
-          sed -i "s/PLACEHOLDER_APP_KEYS/$(echo '${{ secrets.APP_KEYS }}' | sed 's/[\/&]/\\&/g')/g" user-data.sh
-          sed -i "s/PLACEHOLDER_API_TOKEN_SALT/$(echo '${{ secrets.API_TOKEN_SALT }}' | sed 's/[\/&]/\\&/g')/g" user-data.sh
-          sed -i "s/PLACEHOLDER_ADMIN_JWT_SECRET/$(echo '${{ secrets.ADMIN_JWT_SECRET }}' | sed 's/[\/&]/\\&/g')/g" user-data.sh
-          sed -i "s/PLACEHOLDER_TRANSFER_TOKEN_SALT/$(echo '${{ secrets.TRANSFER_TOKEN_SALT }}' | sed 's/[\/&]/\\&/g')/g" user-data.sh
-          sed -i "s/PLACEHOLDER_JWT_SECRET/$(echo '${{ secrets.JWT_SECRET }}' | sed 's/[\/&]/\\&/g')/g" user-data.sh
+          awk '
+          BEGIN {
+            secrets["APP_KEYS"] = "${{ secrets.APP_KEYS }}"
+            secrets["API_TOKEN_SALT"] = "${{ secrets.API_TOKEN_SALT }}"
+            secrets["ADMIN_JWT_SECRET"] = "${{ secrets.ADMIN_JWT_SECRET }}"
+            secrets["TRANSFER_TOKEN_SALT"] = "${{ secrets.TRANSFER_TOKEN_SALT }}"
+            secrets["JWT_SECRET"] = "${{ secrets.JWT_SECRET }}"
+          }
+          {
+            for (key in secrets) {
+              gsub("PLACEHOLDER_" key, secrets[key])
+            }
+            print
+          }' user-data.sh > user-data.sh.tmp && mv user-data.sh.tmp user-data.sh
 
       # Step 5: Create EC2 Instance and Deploy the Application
       - name: Create EC2 Instance and Deploy the Application
