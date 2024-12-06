@@ -55,6 +55,7 @@ sudo docker run -d -p 3000:3000 --name react-app \
   teerapat1811/react-app:latest
 
 # Strapi app
+docker pull teerapat1811/strapi-app:latest
 sudo docker run -d -p 1337:1337 --name strapi-app \
   -e REACT_APP_BASE_URL=${IPV4} \
   -e HOST=0.0.0.0 \
