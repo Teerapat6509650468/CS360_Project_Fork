@@ -42,6 +42,8 @@ echo "PUBLIC_IPV4=${IPV4}" >> /home/ubuntu/.env
 echo "Updated .env with EC2 IPv4: $IPV4"
 
 # Pull and run the Docker containers for the React and Strapi applications
+docker pull teerapat1811/react-app:latest
+docker pull teerapat1811/strapi-app:latest
 # React app
 sudo docker run -d -p 3000:3000 --name react-app \
   -e REACT_APP_BASE_URL=${IPV4} \
