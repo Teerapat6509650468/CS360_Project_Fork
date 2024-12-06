@@ -15,9 +15,6 @@ sudo usermod -aG docker ec2-user
 TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
 IPV4=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/public-ipv4)
 
-# Write the EC2 public IPv4 address to the .env file
-echo "REACT_APP_BASE_URL=http://${IPV4}:1337/" > /home/ec2-user/.env
-
 # Update the .env file with environment variables (GitHub secrets replaced here)
 echo "HOST=0.0.0.0" >> /home/ec2-user/.env
 echo "PORT=1337" >> /home/ec2-user/.env
