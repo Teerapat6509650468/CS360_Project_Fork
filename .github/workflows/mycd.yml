@@ -47,11 +47,11 @@ jobs:
           AWS_REGION: ${{ secrets.AWS_REGION }}
         run: |
           # Inject secrets into user-data.sh
-          sed -i "s|{{APP_KEYS}}|${{ secrets.APP_KEYS }}|g" user-data.sh
-          sed -i "s|{{API_TOKEN_SALT}}|${{ secrets.API_TOKEN_SALT }}|g" user-data.sh
-          sed -i "s|{{ADMIN_JWT_SECRET}}|${{ secrets.ADMIN_JWT_SECRET }}|g" user-data.sh
-          sed -i "s|{{TRANSFER_TOKEN_SALT}}|${{ secrets.TRANSFER_TOKEN_SALT }}|g" user-data.sh
-          sed -i "s|{{JWT_SECRET}}|${{ secrets.JWT_SECRET }}|g" user-data.sh
+          sed -i 's/PLACEHOLDER_APP_KEYS/${{ secrets.APP_KEYS }}/g' user-data.sh
+          sed -i 's/PLACEHOLDER_API_TOKEN_SALT/${{ secrets.API_TOKEN_SALT }}/g' user-data.sh
+          sed -i 's/PLACEHOLDER_ADMIN_JWT_SECRET/${{ secrets.ADMIN_JWT_SECRET }}/g' user-data.sh
+          sed -i 's/PLACEHOLDER_TRANSFER_TOKEN_SALT/${{ secrets.TRANSFER_TOKEN_SALT }}/g' user-data.sh
+          sed -i 's/PLACEHOLDER_JWT_SECRET/${{ secrets.JWT_SECRET }}/g' user-data.sh
           
           # Define instance details
           INSTANCE_ID=$(aws ec2 run-instances \
