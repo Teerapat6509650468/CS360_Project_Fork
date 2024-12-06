@@ -1,4 +1,4 @@
-name: CD - Deploy to EC2 with Docker
+name: CD - Deploy to EC2 with Docker (Human Trigger)
 on:
   workflow_dispatch:
 jobs:
@@ -35,12 +35,11 @@ jobs:
       # Step 4: Inject secrets into user-data.sh
       - name: Inject secrets into user-data.sh
         run: |
-          # Inject secrets into user-data.sh
-          sed -i "s/PLACEHOLDER_APP_KEYS/${{ secrets.APP_KEYS }}/g" user-data.sh
-          sed -i "s/PLACEHOLDER_API_TOKEN_SALT/${{ secrets.API_TOKEN_SALT }}/g" user-data.sh
-          sed -i "s/PLACEHOLDER_ADMIN_JWT_SECRET/${{ secrets.ADMIN_JWT_SECRET }}/g" user-data.sh
-          sed -i "s/PLACEHOLDER_TRANSFER_TOKEN_SALT/${{ secrets.TRANSFER_TOKEN_SALT }}/g" user-data.sh
-          sed -i "s/PLACEHOLDER_JWT_SECRET/${{ secrets.JWT_SECRET }}/g" user-data.sh
+          sed -i "s/PLACEHOLDER_APP_KEYS/$(echo '${{ secrets.APP_KEYS }}' | sed 's/[\/&]/\\&/g')/g" user-data.sh
+          sed -i "s/PLACEHOLDER_API_TOKEN_SALT/$(echo '${{ secrets.API_TOKEN_SALT }}' | sed 's/[\/&]/\\&/g')/g" user-data.sh
+          sed -i "s/PLACEHOLDER_ADMIN_JWT_SECRET/$(echo '${{ secrets.ADMIN_JWT_SECRET }}' | sed 's/[\/&]/\\&/g')/g" user-data.sh
+          sed -i "s/PLACEHOLDER_TRANSFER_TOKEN_SALT/$(echo '${{ secrets.TRANSFER_TOKEN_SALT }}' | sed 's/[\/&]/\\&/g')/g" user-data.sh
+          sed -i "s/PLACEHOLDER_JWT_SECRET/$(echo '${{ secrets.JWT_SECRET }}' | sed 's/[\/&]/\\&/g')/g" user-data.sh
 
       # Step 5: Create EC2 Instance and Deploy the Application
       - name: Create EC2 Instance and Deploy the Application
