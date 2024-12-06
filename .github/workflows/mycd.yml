@@ -78,7 +78,6 @@ jobs:
               --instance-ids $INSTANCE_ID \
               --query 'Reservations[0].Instances[0].PublicIpAddress' \
               --output text)
-          fi
 
           echo "PUBLIC_IPV4=$INSTANCE_PUBLIC_IP" >> $GITHUB_ENV
           echo "EC2 instance is ready at $INSTANCE_PUBLIC_IP"
