@@ -83,30 +83,35 @@ jobs:
           echo "EC2 instance is ready at $INSTANCE_PUBLIC_IP"
 
       # Step 5: Pull and Run Docker Images
-      - name: Create SSH Key File
+      - name: Pull and Run Docker Containers
         run: |
-          echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
-          chmod 600 key.pem
+          # Write the AWS private key secret to a file
+          echo "${{ secrets.AWS_PRIVATE_KEY }}" > HelloWorld.pem
+          chmod 600 HelloWorld.pem
       
-      - name: Wait for EC2 Instance Initialization
-        run: sleep 30
+          # SSH into EC2 and run the Docker containers with environment variables
+          ssh -o StrictHostKeyChecking=no -i HelloWorld.pem ec2-user@${{ env.PUBLIC_IPV4 }} <<EOF
+            echo "Connected to EC2 instance"
       
-      - name: Pull and Run Docker Images
-        run: |
-          ssh -o StrictHostKeyChecking=no -i key.pem ec2-user@${{ env.PUBLIC_IPV4 }} <<EOF
-            touch .env
-            echo "APP_KEYS=${{ secrets.APP_KEYS }}" >> .env
-            echo "API_TOKEN_SALT=${{ secrets.API_TOKEN_SALT }}" >> .env
-            echo "ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }}" >> .env
-            echo "TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }}" >> .env
-            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
-            echo "PUBLIC_IPV4=${{ env.PUBLIC_IPV4 }}" >> .env
-      
+            # Pull and run the React app container
             docker pull teerapat1811/react-app:latest
-            docker run -d --name react-app --env-file .env -p 3000:3000 teerapat1811/react-app:latest
+            docker run -d --name react-app \
+              -p 3000:3000 \
+              -e APP_KEYS=${{ secrets.APP_KEYS }} \
+              -e API_TOKEN_SALT=${{ secrets.API_TOKEN_SALT }} \
+              -e ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }} \
+              -e TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }} \
+              -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+              teerapat1811/react-app:latest
       
+            # Pull and run the Strapi app container
             docker pull teerapat1811/strapi-app:latest
-            docker run -d --name strapi-app --env-file .env -p 1337:1337 teerapat1811/strapi-app:latest
+            docker run -d --name strapi-app \
+              -p 1337:1337 \
+              -e APP_KEYS=${{ secrets.APP_KEYS }} \
+              -e API_TOKEN_SALT=${{ secrets.API_TOKEN_SALT }} \
+              -e ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }} \
+              -e TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }} \
+              -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
+              teerapat1811/strapi-app:latest
           EOF
-
-            
