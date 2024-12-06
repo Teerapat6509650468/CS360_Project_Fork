@@ -23,31 +23,3 @@ sudo systemctl enable containerd.service
 # Add the ec2-user to the docker group so they can use Docker without sudo
 sudo groupadd docker
 sudo usermod -aG docker ubuntu
-
-# Fetch the instance's Public IPv4 address using EC2 metadata
-TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
-IPV4=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/public-ipv4)
-
-# Update the .env file with environment variables (GitHub secrets replaced here)
-echo "HOST=0.0.0.0" >> /home/ubuntu/.env
-echo "PORT=1337" >> /home/ubuntu/.env
-echo "APP_KEYS=PLACEHOLDER_APP_KEYS" >> /home/ubuntu/.env
-echo "API_TOKEN_SALT=PLACEHOLDER_API_TOKEN_SALT" >> /home/ubuntu/.env
-echo "ADMIN_JWT_SECRET=PLACEHOLDER_ADMIN_JWT_SECRET" >> /home/ubuntu/.env
-echo "TRANSFER_TOKEN_SALT=PLACEHOLDER_TRANSFER_TOKEN_SALT" >> /home/ubuntu/.env
-echo "JWT_SECRET=PLACEHOLDER_JWT_SECRET" >> /home/ubuntu/.env
-echo "PUBLIC_IPV4=${IPV4}" >> /home/ubuntu/.env
-
-# Confirm that the .env file has been updated
-echo "Updated .env with EC2 IPv4: $IPV4"
-
-# Pull and run the Docker containers for the React and Strapi applications
-docker pull teerapat1811/react-app:latest
-docker pull teerapat1811/strapi-app:latest
-
-docker run -d -p 3000:3000 --name react-app -v /home/ubuntu/.env:/app/.env teerapat1811/react-app:latest
-docker run -d -p 1337:1337 --name strapi-app -v /home/ubuntu/.env:/app/.env teerapat1811/strapi-app:latest
-
-# Print the status of the running Docker containers
-docker ps
-
