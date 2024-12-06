@@ -81,6 +81,7 @@ jobs:
 
           echo "PUBLIC_IPV4=$INSTANCE_PUBLIC_IP" >> $GITHUB_ENV
           echo "EC2 instance is ready at $INSTANCE_PUBLIC_IP"
+          sleep 5
 
       # Step 5: Pull and Run Docker Images
       - name: Pull and Run Docker Containers
@@ -90,7 +91,7 @@ jobs:
           chmod 600 HelloWorld.pem
       
           # SSH into EC2 and run the Docker containers with environment variables
-          ssh -o StrictHostKeyChecking=no -i HelloWorld.pem ec2-user@${{ env.PUBLIC_IPV4 }} <<EOF
+          ssh -o StrictHostKeyChecking=no -i HelloWorld.pem ubuntu@${{ env.PUBLIC_IPV4 }} <<EOF
             echo "Connected to EC2 instance"
       
             # Pull and run the React app container
