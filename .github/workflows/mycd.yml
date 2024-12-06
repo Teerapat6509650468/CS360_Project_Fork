@@ -67,3 +67,19 @@ jobs:
             --query 'Reservations[0].Instances[0].PublicDnsName' \
             --output text)
           echo "Instance Public DNS: $INSTANCE_PUBLIC_DNS"
+
+          # Fetch the instance's public IPv4 address using EC2 metadata
+          TOKEN=$(curl -X PUT "http://169.254.169.254/latest/api/token" -H "X-aws-ec2-metadata-token-ttl-seconds: 21600")
+          PUBLIC_IPV4=$(curl -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/public-ipv4)
+          
+          # Create .env file with GitHub secrets and Public IP
+          echo "APP_KEYS=${{ secrets.APP_KEYS }}" > .env
+          echo "API_TOKEN_SALT=${{ secrets.API_TOKEN_SALT }}" >> .env
+          echo "ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }}" >> .env
+          echo "TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }}" >> .env
+          echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+          echo "PUBLIC_IPV4=${PUBLIC_IPV4}" >> .env
+          
+          # Copy .env to the EC2 instance using SCP
+          scp -o StrictHostKeyChecking=no -i ${{ secrets.AWS_PRIVATE_KEY_PATH }} .env ubuntu@$INSTANCE_PUBLIC_DNS:/home/ubuntu/.env
+
