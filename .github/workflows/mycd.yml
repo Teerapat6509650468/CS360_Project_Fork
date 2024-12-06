@@ -19,7 +19,7 @@ jobs:
       - name: Check if Docker Image Exists
         id: check_image
         run: |
-          REPOSITORY="${{ secrets.DOCKER_USERNAME }}/cs360_calc_image"  # Replace with your DockerHub repository name
+          REPOSITORY="${{ secrets.DOCKER_USERNAME }}/react-app"  # Replace with your DockerHub repository name
           TAG="latest"
           RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -u "${{ secrets.DOCKER_USERNAME }}:${{ secrets.DOCKER_TOKEN }}" https://hub.docker.com/v2/repositories/${REPOSITORY}/tags/${TAG}/)
           if [ "$RESPONSE" -ne 200 ]; then
