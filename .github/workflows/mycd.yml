@@ -87,7 +87,7 @@ jobs:
       - name: Pull and Run Docker Containers
         run: |
           # Write the AWS private key secret to a file
-          echo "${{ secrets.AWS_PRIVATE_KEY }}" > HelloWorld.pem
+          echo "${{ secrets.EC2_SSH_KEY }}" > HelloWorld.pem
           chmod 600 HelloWorld.pem
       
           # SSH into EC2 and run the Docker containers with environment variables
