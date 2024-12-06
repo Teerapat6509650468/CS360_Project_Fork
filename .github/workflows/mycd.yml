@@ -80,36 +80,42 @@ jobs:
             --output text)
           echo "PUBLIC_IP=$PUBLIC_IP" >> $GITHUB_ENV
 
-      # Add SSH Key for Deployment
-      - name: Configure SSH
+      - name: Set up SSH for EC2 connection
         run: |
-          echo "${{ secrets.EC2_SSH_KEY }}" > HelloWorld.pem
-          chmod 400 HelloWorld.pem
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
 
-      # Create .env File on EC2
-      - name: Create .env File on EC2
-        env:
-          PUBLIC_IP: ${{ env.PUBLIC_IP }}
-          APP_KEYS: ${{ secrets.APP_KEYS }}
-          API_TOKEN_SALT: ${{ secrets.API_TOKEN_SALT }}
-          ADMIN_JWT_SECRET: ${{ secrets.ADMIN_JWT_SECRET }}
-          TRANSFER_TOKEN_SALT: ${{ secrets.TRANSFER_TOKEN_SALT }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      - name: Wait for EC2 instance to be accessible
         run: |
-          echo "Waiting for EC2 to be accessible..."
-          sleep 100 
-          ssh -o StrictHostKeyChecking=no -i HelloWorld.pem ubuntu@$PUBLIC_IP << 'EOF'
+          # Wait for EC2 instance to be accessible
+          while ! nc -z -v -w30 ${{ secrets.EC2_PUBLIC_IP }} 22; do
+            echo "Waiting for EC2 instance to be accessible..."
+            sleep 30
+          done
+
+      - name: Create .env file on EC2
+        run: |
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+            # Ensure the directory is writable
+            sudo touch /home/ubuntu/.env
+            sudo chmod 644 /home/ubuntu/.env
+
             # Create the .env file with GitHub Secrets
-            cat <<EOT > .env
+            cat <<EOT | sudo tee /home/ubuntu/.env
             HOST=0.0.0.0
             PORT=1337
-            APP_KEYS=$APP_KEYS
-            API_TOKEN_SALT=$API_TOKEN_SALT
-            ADMIN_JWT_SECRET=$ADMIN_JWT_SECRET
-            TRANSFER_TOKEN_SALT=$TRANSFER_TOKEN_SALT
-            JWT_SECRET=$JWT_SECRET
-            PUBLIC_IPV4=$PUBLIC_IP
+            APP_KEYS=${{ secrets.APP_KEYS }}
+            API_TOKEN_SALT=${{ secrets.API_TOKEN_SALT }}
+            ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }}
+            TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            PUBLIC_IPV4=${{ secrets.EC2_PUBLIC_IP }}
             EOT
 
             echo ".env file created on EC2 instance at /home/ubuntu/.env"
-            EOF
+          EOF
+
+      - name: Confirm .env file on EC2
+        run: |
+          ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no ubuntu@${{ secrets.EC2_PUBLIC_IP }} "cat /home/ubuntu/.env"
+
