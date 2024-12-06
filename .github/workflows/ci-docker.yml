@@ -106,12 +106,6 @@ jobs:
           -e TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }} \
           -e JWT_SECRET=${{ secrets.JWT_SECRET }} \
           ${{ secrets.DOCKER_USERNAME }}/petadopt_backend:latest
-        env: 
-            APP_KEYS: ${{ secrets.APP_KEYS }}
-            API_TOKEN_SALT: ${{ secrets.API_TOKEN_SALT }}
-            ADMIN_JWT_SECRET: ${{ secrets.ADMIN_JWT_SECRET }}
-            TRANSFER_TOKEN_SALT: ${{ secrets.TRANSFER_TOKEN_SALT }}
-            JWT_SECRET: ${{ secrets.JWT_SECRET }}
 
       - name: Run Automated Tests in Docker Container
         run: |
