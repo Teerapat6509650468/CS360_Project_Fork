@@ -146,7 +146,7 @@ jobs:
             echo 'sudo docker stop react-appv2' >> /home/ubuntu/update-env-ipv4.sh
             echo 'sudo docker rm react-appv2' >> /home/ubuntu/update-env-ipv4.sh
             echo 'sudo docker run -d --name react-appv2 --env-file /home/ubuntu/.env -p 3000:3000 teerapat1811/react-appv2:latest' >> /home/ubuntu/update-env-ipv4.sh
-            echo 'docker run -d --name strapi-app --env-file /home/ubuntu/.env -p 1337:1337 teerapat1811/strapi-app:latest' >> /home/ubuntu/update-env-ipv4.sh
+            echo 'sudo docker start strapi-app' >> /home/ubuntu/update-env-ipv4.sh
       
             # Change the permission of the script to make it executable
             chmod +x /home/ubuntu/update-env-ipv4.sh
