@@ -52,7 +52,6 @@ jobs:
             --instance-type t2.medium \
             --key-name ${{ secrets.AWS_KP_NAME }} \
             --security-group-ids ${{ secrets.AWS_SG_ID }} \
-            --user-data file://user-data.sh \
             --query 'Instances[0].InstanceId' \
             --output text)
 
