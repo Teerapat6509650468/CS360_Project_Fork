@@ -78,8 +78,8 @@ jobs:
           echo "EC2 instance is ready at $INSTANCE_PUBLIC_IP"
           sleep 5
 
-      # Step 5: Pull and Run Docker Images
-      - name: Pull and Run Docker Containers
+      # Step 5: Create .env file
+      - name: Create .env file
         run: |
           # Write the AWS private key secret to a file
           echo "${{ secrets.EC2_SSH_KEY }}" > HelloWorld.pem
