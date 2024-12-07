@@ -23,3 +23,7 @@ sudo systemctl enable containerd.service
 # Add the ubuntu user to the docker group so they can use Docker without sudo
 sudo groupadd docker
 sudo usermod -aG docker ubuntu
+
+# Pull and run Docker
+sudo docker run -d --name react-appv2 --env-file .env -p 3000:3000 teerapat1811/react-appv2:latest
+sudo docker run -d --name strapi-app --env-file .env -p 1337:1337 teerapat1811/strapi-app:latest
