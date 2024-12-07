@@ -97,3 +97,26 @@ jobs:
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
             echo "REACT_APP_PUBLIC_IPV4=${{ env.PUBLIC_IPV4 }}" >> .env
           EOF
+          
+      # Step 6: Run Docker setup script
+      - name: Run Docker Setup Script
+        run: |
+          ssh -o StrictHostKeyChecking=no -i HelloWorld.pem ubuntu@${{ env.PUBLIC_IPV4 }} <<EOF
+            # Update the package manager and install Docker
+            sudo apt-get update -y
+            sudo apt-get install -y ca-certificates curl
+            sudo install -m 0755 -d /etc/apt/keyrings
+            sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+            sudo chmod a+r /etc/apt/keyrings/docker.asc
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \$(. /etc/os-release && echo "\$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+            sudo apt-get update -y
+            sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+            sudo systemctl enable docker.service
+            sudo systemctl enable containerd.service
+            sudo groupadd docker
+            sudo usermod -aG docker ubuntu
+
+            # Pull and run Docker containers
+            sudo docker run -d --name react-appv2 --env-file .env -p 3000:3000 teerapat1811/react-appv2:latest
+            sudo docker run -d --name strapi-app --env-file .env -p 1337:1337 teerapat1811/strapi-app:latest
+          EOF
