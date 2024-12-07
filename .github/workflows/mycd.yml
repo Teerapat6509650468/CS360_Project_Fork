@@ -105,7 +105,7 @@ jobs:
             echo "ADMIN_JWT_SECRET=${{ secrets.ADMIN_JWT_SECRET }}" >> .env
             echo "TRANSFER_TOKEN_SALT=${{ secrets.TRANSFER_TOKEN_SALT }}" >> .env
             echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
-            echo "REACT_APP_PUBLIC_IPV4=${{ env.PUBLIC_IPV4 }}" >> .env
+            echo "REACT_APP_STRAPI_IP_ADDRESS=${{ env.PUBLIC_IPV4 }}" >> .env
           EOF
           
       # Step 6: Run Docker setup script
